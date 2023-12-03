@@ -6,7 +6,7 @@ import type {
   D1Database,
   KVNamespace,
 } from '@cloudflare/workers-types';
-import type { ResponseCfProperties, LogLevel } from './types';
+import type { ResponseCfProperties, LogLevel, PageProps, Page, Component } from './types';
 import { AssetManifestType } from '@cloudflare/kv-asset-handler/dist/types';
 
 type Mutable<T> = {
@@ -70,7 +70,7 @@ declare global {
     // auth?: Auth | null;
   }
 
-  interface Response extends CFResponse {
+  export interface Response extends CFResponse {
     cf?: ResponseCfProperties;
     webSocket?: WebSocket;
     encodeBody?: 'automatic' | 'manual' | undefined;
@@ -97,6 +97,32 @@ declare global {
         VITE_APP_NAME: string;
         // CFW_VUE_AI_KV_UI: KVNamespace;
         // CFW_VUE_AI: D1Database;
+      };
+    }
+  }
+  namespace Vike {
+    interface PageContext {
+      Page: Page;
+      pageProps?: PageProps;
+      urlPathname: string;
+      Layout: Component;
+      redirectTo?: string;
+      exports: {
+        documentProps?: {
+          title?: string;
+          description?: string;
+        };
+      };
+      // httpResponse: HttpResponse;
+      _allPageIds: string[];
+      isAdmin: boolean;
+      csrfToken: string;
+      callbackUrl: string;
+      cf: ResponseCfProperties;
+      abortReason?: {
+        message: string;
+        notAdmin?: boolean | undefined;
+        noSession?: boolean | undefined;
       };
     }
   }

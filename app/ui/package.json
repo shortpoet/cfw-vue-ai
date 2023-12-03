@@ -1,0 +1,51 @@
+{
+  "name": "ui",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.ts",
+  "scripts": {
+    "secret": "cross-env VITE_APP_BUILDER_API_KEY=$(pass Cloud/builder/public_api_key)",
+    "dev": "cross-env VITE_APP_BUILDER_API_KEY=$(pass Cloud/builder/public_api_key) && vite",
+    "prod": "npm run build && npm run server:prod",
+    "build": "cross-env NODE_ENV=development vite build",
+    "server": "cross-env NODE_ENV=development && node --loader ts-node/esm ./server/index.ts",
+    "server:dev": "npm run server",
+    "server:prod": "cross-env NODE_ENV=production npm run server"
+  },
+  "keywords": [],
+  "author": "CarlosSoriano",
+  "license": "ISC",
+  "dependencies": {
+    "@types/compression": "^1.7.2",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.4.10",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/compiler-sfc": "^3.3.4",
+    "@vue/server-renderer": "^3.3.4",
+    "@vueuse/core": "^10.6.1",
+    "@vueuse/head": "^2.0.0",
+    "compression": "^1.7.4",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.2",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.0",
+    "sirv": "^2.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.9"
+  },
+  "devDependencies": {
+    "@cfw-vue-ai/types": "workspace:*",
+    "@types/markdown-it-link-attributes": "^3.0.4",
+    "@unocss/reset": "^0.58.0",
+    "dotenv": "^16.3.1",
+    "markdown-it-link-attributes": "^4.0.1",
+    "markdown-it-shikiji": "^0.7.6",
+    "unocss": "^0.58.0",
+    "unplugin-vue-markdown": "^0.25.2",
+    "vike": "^0.4.147",
+    "vitest": "^0.34.6",
+    "vue": "^3.3.9"
+  }
+}

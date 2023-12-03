@@ -4,7 +4,7 @@
   "workspaces": [
     "api",
     "ui",
-    "worker"
+    "types"
   ],
   "type": "module",
   "scripts": {
@@ -16,6 +16,8 @@
     "lint": "eslint --ext .ts,.tsx .",
     "========= Wskp": "",
     "api": "pnpm --filter api",
+    "types": "pnpm --filter types",
+    "ui": "pnpm --filter ui",
     "========= Api": "",
     "w:build": "node scripts/build-worker.mjs --entry ./api/src/index.ts --out ./api/build/worker.mjs",
     "w:dev": "pnpm api dev",
