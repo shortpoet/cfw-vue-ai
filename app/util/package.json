@@ -1,18 +1,17 @@
 {
-  "name": "ai-maps-util",
+  "name": "@cfw-vue-ai/util",
   "type": "module",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "source": "index.ts",
   "scripts": {},
   "keywords": [],
   "author": "CarlosSoriano",
   "license": "ISC",
-  "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.3.0",
-    "types": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.0",
+    "@cfw-vue-ai/types": "workspace:*",
     "chalk": "^5.3.0"
   }
 }

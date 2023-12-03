@@ -20,7 +20,8 @@
 import { useHead } from '@vueuse/head';
 import MainNav from '@/ui/src/components/base/MainNav.vue';
 import Footer from '@/ui/src/components/base/Footer.vue';
-import { meta, title, link } from '@/ui/src/renderer/meta';
+import { meta, title, link } from '../renderer/meta';
+
 useHead({
   title,
   meta,

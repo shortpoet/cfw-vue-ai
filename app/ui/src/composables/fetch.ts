@@ -1,5 +1,5 @@
 import { Ref, UnwrapRef, ref } from 'vue';
-import { escapeNestedKeys } from '@/ai-maps-util';
+import { escapeNestedKeys } from '@cfw-vue-ai/util';
 
 export { RequestConfig, FetchError, UseFetchResult, useFetch, USE_FETCH_REQ_INIT };
 

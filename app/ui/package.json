@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@cfw-vue-ai/types": "workspace:*",
+    "@cfw-vue-ai/util": "workspace:*",
     "@types/markdown-it-link-attributes": "^3.0.4",
     "@unocss/reset": "^0.58.0",
     "dotenv": "^16.3.1",
