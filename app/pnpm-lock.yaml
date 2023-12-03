@@ -148,6 +148,9 @@ importers:
       '@cfw-vue-ai/util':
         specifier: workspace:*
         version: link:../util
+      '@iconify-json/carbon':
+        specifier: ^1.1.24
+        version: 1.1.24
       '@types/markdown-it-link-attributes':
         specifier: ^3.0.4
         version: 3.0.4
@@ -1086,6 +1089,12 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.1:
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
+    dev: true
+
+  /@iconify-json/carbon@1.1.24:
+    resolution: {integrity: sha512-Sx4vj3HfQj3yP6a4QzWc1BymDO5uTOGTHeb5it/xaMa196C6+RegNUv1F+Y1h8AJ2Sv93GMI+PyMH0HyqTHEmg==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify/types@2.0.0:

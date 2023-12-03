@@ -46,6 +46,7 @@
     "src/**/*",
     "src/**/*.vue",
     "vite.config.ts",
-    "vue.d.ts"
+    "vue.d.ts",
+    "../bindings.d.ts"
   ]
 }

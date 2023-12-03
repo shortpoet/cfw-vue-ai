@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { toggleDark, toggleLocales, usePageContext } from '@/ui/src/composables/';
+import { toggleDark, toggleLocales, usePageContext } from '../../composables';
 // import { t } from '@/composables/i18n';
 import Link from './Link.vue';
-import DropMenu from './DropMenu.vue';
 
 const pageContext = usePageContext()
 // console.log('pageContext')
@@ -56,7 +55,6 @@ const toggleLangsTitle = ref('Toggle Langs');
     <div i-carbon-logo-github />
     </Link>
 
-    <DropMenu :icon-class="'i-carbon-user-filled'" />
   </nav>
 </template>
 

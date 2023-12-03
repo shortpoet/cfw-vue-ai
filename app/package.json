@@ -11,7 +11,7 @@
     "========= Util": "",
     "wrangle": "tsx scripts/wrangle.ts",
     "wrangle:kv": "tsx scripts/wrangle.ts --cmds kv",
-    "dev": "pnpm run w:dev",
+    "dev": "pnpm run w:dev && pnpm run v:dev",
     "prev": "pnpm run wrangle:kv && pnpm run w:dev",
     "lint": "eslint --ext .ts,.tsx .",
     "========= Wskp": "",
@@ -22,7 +22,10 @@
     "w:build": "node scripts/build-worker.mjs --entry ./api/src/index.ts --out ./api/build/worker.mjs",
     "w:dev": "pnpm api dev",
     "w:deploy": "pnpm api deploy",
-    "prepare": "cd .. && husky install app/.husky"
+    "prepare": "cd .. && husky install app/.husky",
+    "========= Ui": "",
+    "v:build": "pnpm ui build",
+    "v:dev": "pnpm ui dev"
   },
   "devDependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.0",

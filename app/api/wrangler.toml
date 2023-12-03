@@ -14,13 +14,16 @@ port = 8787
 # Note: Use secrets to store sensitive data.
 # Docs: https://developers.cloudflare.com/workers/platform/environment-variables
 [vars]
-VITE_APP_NAME = "cfw-vue-ai"
-VITE_API_VERSION = "0.0.1"
-VITE_UI_VERSION = "0.0.1"
-NODE_ENV = "development"
-WORKER_ENVIRONMENT = "dev"
-LOG_LEVEL = "debug"
-SSR_BASE_PATHS = "index"
+VITE_LOG_LEVEL = 'debug'
+VITE_PORT = 3000
+NODE_ENV = 'development'
+WORKER_ENVIRONMENT = 'dev'
+VITE_APP_NAME = 'cfw-vue-ai'
+VITE_API_VERSION = '0.0.1'
+VITE_UI_VERSION = '0.0.1'
+VITE_APP_URL = 'http://localhost:3000'
+VITE_API_URL = 'http://localhost:3333'
+SSR_BASE_PATHS = 'about,index'
 
 # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
 # Docs: https://developers.cloudflare.com/workers/runtime-apis/kv

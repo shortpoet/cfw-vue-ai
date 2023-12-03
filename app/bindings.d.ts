@@ -32,13 +32,15 @@ declare global {
   };
   interface WorkerEnv {
     // APP
+    NODE_ENV: 'development' | 'production';
+    WORKER_ENVIRONMENT: 'dev' | 'preview' | 'uat' | 'prod';
+    VITE_PORT: string;
     VITE_APP_NAME: string;
     VITE_API_VERSION: string;
     VITE_UI_VERSION: string;
-    NODE_ENV: 'development' | 'production';
-    WORKER_ENVIRONMENT: 'dev' | 'preview' | 'uat' | 'prod';
-    LOG_LEVEL: LogLevel;
-    SSR_BASE_PATHS: string;
+    VITE_LOG_LEVEL: LogLevel;
+    VITE_APP_URL: string;
+    VITE_API_URL: string;
 
     // CLOUDFLARE
     CFW_VUE_AI_KV_UI: KVNamespace;
@@ -80,23 +82,26 @@ declare global {
     interface ProcessEnv {
       NODE_ENV: 'development' | 'production';
       WORKER_ENVIRONMENT: 'dev' | 'preview' | 'uat' | 'prod';
-      LOG_LEVEL: LogLevel;
-      API_VERSION: string;
-      UI_VERSION: string;
+      VITE_PORT: string;
+      VITE_LOG_LEVEL: LogLevel;
       VITE_APP_NAME: string;
-      // CFW_VUE_AI_KV_UI: KVNamespace;
-      // CFW_VUE_AI_DB: D1Database;
+      VITE_API_VERSION: string;
+      VITE_UI_VERSION: string;
+      VITE_APP_URL: string;
+      VITE_API_URL: string;
     }
+
     interface ImportMeta {
       env: {
         NODE_ENV: 'development' | 'production';
         WORKER_ENVIRONMENT: 'dev' | 'preview' | 'uat' | 'prod';
-        LOG_LEVEL: LogLevel;
-        API_VERSION: string;
-        UI_VERSION: string;
+        VITE_PORT: string;
         VITE_APP_NAME: string;
-        // CFW_VUE_AI_KV_UI: KVNamespace;
-        // CFW_VUE_AI: D1Database;
+        VITE_API_VERSION: string;
+        VITE_UI_VERSION: string;
+        VITE_LOG_LEVEL: LogLevel;
+        VITE_APP_URL: string;
+        VITE_API_URL: string;
       };
     }
   }

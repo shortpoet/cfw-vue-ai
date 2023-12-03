@@ -5,11 +5,6 @@
     </a>
     <Link href="/">Home</Link>
     <Link href="/about">About</Link>
-    <Link href="/star-wars">Star Wars</Link>
-    <Link href="/api-data">Api Data</Link>
-    <Link href="/gpt-clone">GPT Clone</Link>
-    <Link href="/openai">Open AI</Link>
-    <Link href="/auth">Auth</Link>
   </div>
 </template>
 
