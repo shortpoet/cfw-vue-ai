@@ -1,12 +1,26 @@
 name = "cfw-vue-ai"
 main = "src/index.ts"
 compatibility_date = "2023-11-21"
+# workers_dev = true # Enable this to use the Workers runtime APIs on localhost
+# node_compat = true # Enable this to use Node.js APIs in your Worker
+
+# [site]
+# bucket = "./app/ui/build/client"
+
+[dev]
+port = 8787
 
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
 # Note: Use secrets to store sensitive data.
 # Docs: https://developers.cloudflare.com/workers/platform/environment-variables
-# [vars]
-# MY_VARIABLE = "production_value"
+[vars]
+VITE_APP_NAME = "cfw-vue-ai"
+VITE_API_VERSION = "0.0.1"
+VITE_UI_VERSION = "0.0.1"
+NODE_ENV = "development"
+WORKER_ENVIRONMENT = "dev"
+LOG_LEVEL = "debug"
+SSR_BASE_PATHS = "index"
 
 # Bind a KV Namespace. Use KV as persistent storage for small key-value pairs.
 # Docs: https://developers.cloudflare.com/workers/runtime-apis/kv

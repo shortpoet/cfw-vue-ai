@@ -32,13 +32,13 @@ declare global {
   };
   interface WorkerEnv {
     // APP
+    VITE_APP_NAME: string;
+    VITE_API_VERSION: string;
+    VITE_UI_VERSION: string;
     NODE_ENV: 'development' | 'production';
     WORKER_ENVIRONMENT: 'dev' | 'preview' | 'uat' | 'prod';
     LOG_LEVEL: LogLevel;
     SSR_BASE_PATHS: string;
-    API_VERSION: string;
-    APP_VERSION: string;
-    VITE_APP_NAME: string;
 
     // CLOUDFLARE
     CFW_VUE_AI_KV_UI: KVNamespace;
