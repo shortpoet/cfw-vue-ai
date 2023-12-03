@@ -1,0 +1,52 @@
+export interface ResponseCfProperties<HostMetadata = unknown> {
+  asn?: number;
+  asOrganization?: string;
+  clientAcceptEncoding?: string;
+  clientTcpRtt?: number;
+  colo?: string;
+  edgeRequestKeepAliveStatus?: IncomingRequestCfPropertiesEdgeRequestKeepAliveStatus;
+  httpProtocol?: string;
+  requestPriority?: string;
+  tlsVersion?: string;
+  tlsCipher?: string;
+  tlsExportedAuthenticator?: IncomingRequestCfPropertiesExportedAuthenticatorMetadata;
+  score?: number;
+  verifiedBot?: boolean;
+  corporateProxy?: boolean;
+  staticResource?: boolean;
+  detectionIds?: number[];
+  ja3Hash?: string;
+  hostMetadata?: HostMetadata;
+  tlsClientAuth?:
+    | IncomingRequestCfPropertiesTLSClientAuth
+    | IncomingRequestCfPropertiesTLSClientAuthPlaceholder;
+  country?: Iso3166Alpha2Code | 'T1';
+  isEUCountry?: '1';
+  continent?: ContinentCode;
+  city?: string;
+  postalCode?: string;
+  latitude?: string;
+  longitude?: string;
+  timezone?: string;
+  region?: string;
+  regionCode?: string;
+  metroCode?: string;
+  certPresented?: '1';
+  certVerified?: Exclude<CertVerificationStatus, 'NONE'>;
+  certRevoked?: '1' | '0';
+  certIssuerDN?: string;
+  certSubjectDN?: string;
+  certIssuerDNRFC2253?: string;
+  certSubjectDNRFC2253?: string;
+  certIssuerDNLegacy?: string;
+  certSubjectDNLegacy?: string;
+  certSerial?: string;
+  certIssuerSerial?: string;
+  certSKI?: string;
+  certIssuerSKI?: string;
+  certFingerprintSHA1?: string;
+  certFingerprintSHA256?: string;
+  certNotBefore?: string;
+  certNotAfter?: string;
+  verifiedBotCategory?: string;
+}

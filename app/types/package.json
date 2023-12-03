@@ -1,0 +1,17 @@
+{
+  "name": "@cfw-vue-ai/types",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.ts",
+  "scripts": {},
+  "keywords": [],
+  "author": "CarlosSoriano",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231025.0",
+    "@cloudflare/kv-asset-handler": "^0.3.0",
+    "@cfw-vue-ai/types": "workspace:*"
+  }
+}

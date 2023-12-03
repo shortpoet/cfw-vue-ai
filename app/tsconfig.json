@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "baseUrl": "..",
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true, // Description: Allow default imports from modules with no default export. This does not affect code emit, just typechecking.
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "preserveConstEnums": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "skipLibCheck": false,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "allowJs": false,
+    "forceConsistentCasingInFileNames": true,
+  },
+  "paths": {
+    "@/*": [
+      "app/*"
+    ]
+  },
+  "include": [
+    "api/**/*",
+    "types/**/*",
+    "bindings.d.ts"
+  ]
+}

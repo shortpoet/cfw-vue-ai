@@ -1,0 +1,21 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "build",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext",
+      "WebWorker"
+    ],
+    "types": [
+      "node",
+      "@cloudflare/workers-types",
+      "itty-router"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "../bindings.d.ts"
+  ]
+}
