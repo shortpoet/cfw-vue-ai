@@ -7,6 +7,7 @@ export { handleStaticAssets };
 import rawManifest from '__STATIC_CONTENT_MANIFEST';
 
 async function handleStaticAssets(request: Request, env: Env, ctx: ExecutionContext) {
+  // console.log(`[worker] [static-assets] handleStaticAssets -> url -> ${request.url}`);
   const DEBUG = env.VITE_LOG_LEVEL === 'debug';
   let options = setCacheOptions(request, DEBUG);
 
@@ -34,11 +35,14 @@ async function handleStaticAssets(request: Request, env: Env, ctx: ExecutionCont
       response.headers.set('X-Frame-Options', 'DENY');
       response.headers.set('Referrer-Policy', 'unsafe-url');
       response.headers.set('Feature-Policy', 'none');
-
+      // console.log(`[worker] [static-assets] handleStaticAssets -> response -> ${request.url}`);
       return response;
     } catch (error: any) {
-      console.log('error', error);
-      return new Response(error.message || error.toString(), { status: 500 });
+      console.log('error getAssetFromKV', error);
+      const msg = `Error thrown while trying to fetch getAssetFromKV ${request.url}: ${
+        error.message || error.toString()
+      }`;
+      return new Response(msg, { status: 500 });
     }
   } catch (e: any) {
     // if an error is thrown try to serve the asset at 404.html
@@ -54,10 +58,12 @@ async function handleStaticAssets(request: Request, env: Env, ctx: ExecutionCont
           status: 404,
         });
       } catch (e: any) {
-        console.log('error', e);
+        console.log('error handleStaticAssets', e);
       }
     }
-
-    return new Response(e.message || e.toString(), { status: 500 });
+    const msg = `Error thrown while trying to fetch handleStaticAssets ${request.url}: ${
+      e.message || e.toString()
+    }`;
+    return new Response(msg, { status: 500 });
   }
 }

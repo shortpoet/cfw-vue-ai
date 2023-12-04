@@ -55,14 +55,13 @@ async function handleFetchEvent(
   let res;
   switch (true) {
     case isAssetURL(url):
-      res = await handleStaticAssets(request, env, ctx);
+      // must early return or assets missing
+      return await handleStaticAssets(request, env, ctx);
     case isAPiURL(url):
       log(`[worker] index.handleFetchEvent -> ${env.VITE_API_VERSION} -> ${url.pathname}`);
       res = await api.handle(request, resp, env, ctx);
       log(`[worker] index.handleFetchEvent -> api response`);
-      // logObjs([res, res.headers]);
-      logWorkerEnd(request, res);
-      return res;
+    // logObjs([res, res.headers]);
     default:
       // this is only logged on page reload due to client routing
       log(
