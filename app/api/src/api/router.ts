@@ -10,6 +10,13 @@ import { OpenAPIRouter } from '@cloudflare/itty-router-openapi';
 import { jsonData, withCfHeaders, withCfSummary } from '../middleware';
 
 import data from './data.json';
+// import handleProxy from '../middleware/proxy';
+// import handleRedirect from '../middleware/redirect';
+
+// case path === '/redirect':
+//   return handleRedirect.fetch(request, env, ctx);
+// case path === '/proxy':
+//   return handleProxy.fetch(request, env, ctx);
 
 const { preflight, corsify } = createCors();
 
@@ -38,10 +45,10 @@ router
   .all('/*', withCfHeaders())
   // .all('/api/*', () => {})
   .get('/json-data', (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
-    jsonData(req, res, env, data),
+    jsonData(req, res, env, data)
   )
   .get('/hello', withCfSummary(), (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
-    jsonData(req, res, env, { hello: 'world' }),
+    jsonData(req, res, env, { hello: 'world' })
   )
   // .all("*", error_handler)
   .all('*', () => error(404, 'Oops... Are you sure about that? FAaFO'));

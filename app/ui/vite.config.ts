@@ -40,6 +40,8 @@ export default ({ mode }: { mode: string }) => {
         [key]: val,
       };
     }, {}),
+    __VUE_OPTIONS_API__: JSON.stringify(true),
+    __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
   };
   return defineConfig({
     envDir,

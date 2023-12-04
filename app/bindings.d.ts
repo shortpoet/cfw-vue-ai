@@ -14,8 +14,8 @@ type Mutable<T> = {
 };
 
 declare global {
-  const __STATIC_CONTENT: KVNamespace;
-  const __STATIC_CONTENT_MANIFEST: AssetManifestType;
+  // const __STATIC_CONTENT: KVNamespace;
+  // const __STATIC_CONTENT_MANIFEST: AssetManifestType;
   const CFW_VUE_AI_KV_UI: KVNamespace;
   const CFW_VUE_AI_DB: D1Database;
   const isWorkerEnv: () => void;
@@ -41,6 +41,7 @@ declare global {
     VITE_LOG_LEVEL: LogLevel;
     VITE_APP_URL: string;
     VITE_API_URL: string;
+    SSR_BASE_PATHS: string;
 
     // CLOUDFLARE
     CFW_VUE_AI_KV_UI: KVNamespace;
@@ -62,6 +63,7 @@ declare global {
   export interface Request extends CFRequest {
     readonly method: string;
     readonly url: string;
+    readonly headers: Headers;
     params?: Record<string, string>;
     query?: Record<string, string>;
     isAuthenticated?: boolean;
@@ -89,6 +91,7 @@ declare global {
       VITE_UI_VERSION: string;
       VITE_APP_URL: string;
       VITE_API_URL: string;
+      SSR_BASE_PATHS: string;
     }
 
     interface ImportMeta {
@@ -102,6 +105,7 @@ declare global {
         VITE_LOG_LEVEL: LogLevel;
         VITE_APP_URL: string;
         VITE_API_URL: string;
+        SSR_BASE_PATHS: string;
       };
     }
   }

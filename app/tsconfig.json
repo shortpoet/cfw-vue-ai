@@ -25,6 +25,7 @@
   "include": [
     "api/**/*",
     "types/**/*",
-    "bindings.d.ts"
+    "bindings.d.ts",
+    "utils/request.ts"
   ]
 }

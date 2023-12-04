@@ -8,39 +8,33 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { ExecutionContext } from "@cloudflare/workers-types";
-import handleProxy from "./middleware/proxy";
-import handleRedirect from "./middleware/redirect";
-import {
-  MethodNotAllowedError,
-  NotFoundError,
-} from "@cloudflare/kv-asset-handler/dist/types";
+import { ExecutionContext } from '@cloudflare/workers-types';
+import { MethodNotAllowedError, NotFoundError } from '@cloudflare/kv-asset-handler/dist/types';
 import {
   isAPiURL,
   isAssetURL,
+  isSSR,
   logWorkerEnd,
   logWorkerStart,
   logger,
-} from "./utils";
-import { Api as api } from "./api";
+} from '@cfw-vue-ai/utils';
+import { Api as api } from './api';
+import { handleStaticAssets } from './static-assets';
+import { handleSsr } from './ssr';
 
-const FILE_LOG_LEVEL = "debug";
+const FILE_LOG_LEVEL = 'debug';
 
 export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext
-  ): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     try {
       logWorkerStart(request);
       return await handleFetchEvent(request, env, ctx);
     } catch (e) {
       console.error(e);
       if (e instanceof NotFoundError) {
-        return new Response("Not Found", { status: 404 });
+        return new Response('Not Found', { status: 404 });
       } else if (e instanceof MethodNotAllowedError) {
-        return new Response("Method Not Allowed", { status: 405 });
+        return new Response('Method Not Allowed', { status: 405 });
       } else {
         return new Response(JSON.stringify(e), { status: 500 });
       }
@@ -55,34 +49,31 @@ async function handleFetchEvent(
 ): Promise<Response> {
   const url = new URL(request.url);
   // const resp = new Response('');
-  const resp = new Response("", { cf: request.cf });
+  const resp = new Response('', { cf: request.cf });
   const log = logger(FILE_LOG_LEVEL, env);
   const path = url.pathname;
   let res;
   switch (true) {
-    case path === "/redirect":
-      return handleRedirect.fetch(request, env, ctx);
-    case path === "/proxy":
-      return handleProxy.fetch(request, env, ctx);
+    case isAssetURL(url):
+      res = await handleStaticAssets(request, env, ctx);
     case isAPiURL(url):
-      log(
-        `[worker] index.handleFetchEvent -> ${env.WORKER_ENVIRONMENT} -> ${url.pathname}`
-      );
+      log(`[worker] index.handleFetchEvent -> ${env.VITE_API_VERSION} -> ${url.pathname}`);
       res = await api.handle(request, resp, env, ctx);
-      log(`[worker] index.handleFetchEvent -> api response ${true}`);
+      log(`[worker] index.handleFetchEvent -> api response`);
       // logObjs([res, res.headers]);
       logWorkerEnd(request, res);
       return res;
     default:
-      return new Response(
-        `Try making requests to:
-        <ul>
-        <li><code><a href="/redirect?redirectUrl=https://example.com/">/redirect?redirectUrl=https://example.com/</a></code>,</li>
-        <li><code><a href="/proxy?modify&proxyUrl=https://example.com/">/proxy?modify&proxyUrl=https://example.com/</a></code>, or</li>
-        <li><code><a href="/api/hello">/api/hello</a></code></li>,
-        <li><code><a href="/api/json-data">/api/json-data</a></code></li>,
-        <li><code><a href="/api/docs">/api/docs</a></code></li>`,
-        { headers: { "Content-Type": "text/html" } }
+      // this is only logged on page reload due to client routing
+      log(
+        `[worker] handleFetchEvent ${url.pathname} is SSR ${isSSR(
+          url,
+          env.SSR_BASE_PATHS.split(',')
+        )}`
       );
+      res =
+        (await handleSsr(request, resp, env, ctx)) ?? new Response('Not Found', { status: 404 });
   }
+  logWorkerEnd(request, res);
+  return res;
 }

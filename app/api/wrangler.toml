@@ -1,11 +1,11 @@
 name = "cfw-vue-ai"
-main = "src/index.ts"
+main = "./build/worker.mjs"
 compatibility_date = "2023-11-21"
-# workers_dev = true # Enable this to use the Workers runtime APIs on localhost
-# node_compat = true # Enable this to use Node.js APIs in your Worker
+# workers_dev = true                # Enable this to use the Workers runtime APIs on localhost
+# node_compat = true                # Enable this to use Node.js APIs in your Worker
 
-# [site]
-# bucket = "./app/ui/build/client"
+[site]
+bucket = "../ui/build/client"
 
 [dev]
 port = 8787
