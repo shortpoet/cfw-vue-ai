@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "workspaces": [
     "api",
-    "ui",
-    "types"
+    "scripts",
+    "types",
+    "utils",
+    "ui"
   ],
   "type": "module",
   "scripts": {

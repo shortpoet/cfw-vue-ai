@@ -1,7 +1,7 @@
 {
-  "name": "ui",
+  "name": "@cfw-vue-ai/ui",
   "type": "module",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "source": "src/index.ts",
   "scripts": {
