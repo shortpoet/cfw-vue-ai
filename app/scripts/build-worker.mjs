@@ -6,7 +6,7 @@ function buildWorker({ entry, out, debug, external } = {}) {
   const define = {
     plugins,
     platform: 'browser',
-    conditions: ['worker', 'browser'],
+    conditions: ['worker', 'browser', 'module'],
     entryPoints: [entry],
     sourcemap: true,
     outfile: out,
@@ -17,8 +17,8 @@ function buildWorker({ entry, out, debug, external } = {}) {
     bundle: true,
     minify: !debug,
     define: {
-      IS_CLOUDFLARE_WORKER: 'true'
-    }
+      IS_CLOUDFLARE_WORKER: 'true',
+    },
   };
   console.log('define', define);
   return esbuild.build(define);
@@ -35,7 +35,8 @@ async function build() {
     // "node:stream",
     // "node:buffer",
     // "node:http",
-    '__STATIC_CONTENT_MANIFEST'
+    // "node:process",
+    '__STATIC_CONTENT_MANIFEST',
   ];
 
   console.log('[build-worker] Building worker...');

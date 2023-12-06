@@ -10,6 +10,7 @@ import { OpenAPIRouter } from '@cloudflare/itty-router-openapi';
 import { jsonData, withCfHeaders, withCfSummary } from '../middleware';
 
 import data from './data.json';
+import { scrapeUrl } from '../middleware/scraping';
 // import handleProxy from '../middleware/proxy';
 // import handleRedirect from '../middleware/redirect';
 
@@ -50,6 +51,12 @@ router
   .get('/hello', withCfSummary(), (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
     jsonData(req, res, env, { hello: 'world' })
   )
+  .get('/scrape', async (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) => {
+    // const { url } = req.query;
+    const url = 'https://www.scrapethissite.com/pages/simple/';
+    const { markdown, favicon, title } = await scrapeUrl(url);
+    return { markdown, favicon, title };
+  })
   // .all("*", error_handler)
   .all('*', () => error(404, 'Oops... Are you sure about that? FAaFO'));
 
