@@ -2,20 +2,17 @@ import { Kysely } from 'kysely';
 import type { JWT, JWTDecodeParams, JWTOptions } from '@auth/core/jwt';
 import { encode, decode } from '@auth/core/jwt';
 import { AdapterAccount, AdapterSession, AdapterUser } from '@auth/core/adapters';
-
-import { Database } from '@/db/src/v1';
-
-import { Env, UserRole, UserType } from '@/types';
-import { getDatabaseFromEnv, q } from '@/db/src';
 import { User } from '@auth/core/types';
-// import jwt from "@auth/core/jwt";
-import { getSessionAndUser, getUser } from '@/db/src/v1/queries';
-import { getCookieAuthToken, uuidv4 } from 'ai-maps-util/index';
+
+import { Database, getDatabaseFromEnv, q } from '@cfw-vue-ai/db/src';
+import { UserRole, UserType } from '@cfw-vue-ai/types';
+import { getCookieAuthToken, uuidv4 } from '@cfw-vue-ai/utils';
 import {
   ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING,
   SESSION_STRATEGY,
-  SessionStrategy
+  SessionStrategy,
 } from '../config/config';
+import { initJWT } from '../jwt';
 
 export function fromDate(time: number, date = Date.now()) {
   return new Date(date + time * 1000);
@@ -24,7 +21,7 @@ export function fromDate(time: number, date = Date.now()) {
 const { type, provider, providerAccountId } = {
   providerAccountId: '8',
   provider: 'credentials',
-  type: 'email' as 'email' | 'oauth' | 'oidc'
+  type: 'email' as 'email' | 'oauth' | 'oidc',
 };
 
 const linkAccount = async (userId: string, db: Kysely<Database>) => {
@@ -37,14 +34,14 @@ const linkAccount = async (userId: string, db: Kysely<Database>) => {
     refresh_token: '',
     scope: '',
     session_state: '',
-    token_type: ''
+    token_type: '',
   };
   const defaults = {
     providerAccountId,
     provider,
     type,
     userId,
-    ...tokenSet
+    ...tokenSet,
   };
 
   account = Object.assign(tokenSet ?? {}, defaults);
@@ -63,9 +60,9 @@ export const authorize = async (
   options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password }),
   };
   console.log('credentials.authorize.request');
   try {
@@ -75,7 +72,7 @@ export const authorize = async (
     const userByAccount = await q.getUserByAccount(
       {
         providerAccountId,
-        provider
+        provider,
       },
       db
     );
@@ -88,21 +85,14 @@ export const authorize = async (
         //   `[worker] [credentials] [authorize] [sessionToken] use JWT ${sessionToken}`
         // );
         try {
-          const secret = env.NEXTAUTH_SECRET;
-          const maxAge = 30 * 24 * 60 * 60; // 30 days
-          const jwt: JWTOptions = {
-            secret,
-            maxAge,
-            encode,
-            decode
-          };
-          session = await jwt.decode({ ...jwt, token: sessionToken });
+          const { jwt, decoded } = await initJWT(env, { sessionToken });
+          session = decoded;
           // console.log(
           //   "[worker] [credentials] [authorize] [sessionToken] decoded JWT",
           //   session
           // );
           if (session && 'sub' in session && session.sub) {
-            user = await getUser(session.sub, db);
+            user = await q.getUser(session.sub, db);
             if (user) {
               const userAndSession = await q.getSessionAndUser(sessionToken, db);
               if (userAndSession) {
@@ -113,14 +103,12 @@ export const authorize = async (
           } else {
           }
         } catch (error) {
-          console.log(
-            '[worker] [credentials] [authorize] [sessionToken] JWT decode error'
-          );
+          console.log('[worker] [credentials] [authorize] [sessionToken] JWT decode error');
           console.error(error);
           // If session can't be verified, treat as no session
         }
       } else {
-        const userAndSession = await getSessionAndUser(sessionToken, db);
+        const userAndSession = await q.getSessionAndUser(sessionToken, db);
         if (userAndSession) {
           session = userAndSession.session;
           user = userAndSession.user;
@@ -134,17 +122,15 @@ export const authorize = async (
     if (userByAccount) {
       if (user) {
         // If the user is already signed in with this account, we don't need to do anything
-        console.log(
-          `[worker] [credentials] [authorize] user by account already signed in`
-        );
+        console.log(`[worker] [credentials] [authorize] user by account already signed in`);
         console.log(user);
         console.log(`[worker] [credentials] [authorize] session`);
         console.log(session);
         if (userByAccount.id === user.id) return user;
-        throw new OAuthAccountNotLinked(
-          'The account is already associated with another user',
-          { provider, providerAccountId }
-        );
+        throw new OAuthAccountNotLinked('The account is already associated with another user', {
+          provider,
+          providerAccountId,
+        });
       }
       session = useJwtSession
         ? {}
@@ -152,7 +138,7 @@ export const authorize = async (
             {
               sessionToken: uuidv4(),
               userId: userByAccount.id,
-              expires: fromDate(sessionMaxAge)
+              expires: fromDate(sessionMaxAge),
             },
             db
           );
@@ -208,7 +194,7 @@ export const authorize = async (
             {
               email,
               emailVerified: null,
-              userType: UserType.Credentials
+              userType: UserType.Credentials,
             },
             db
           );
@@ -222,7 +208,7 @@ export const authorize = async (
               {
                 sessionToken: uuidv4(),
                 userId: user.id,
-                expires: fromDate(sessionMaxAge)
+                expires: fromDate(sessionMaxAge),
               },
               db
             );
@@ -244,7 +230,7 @@ export class AuthError extends Error {
   constructor(message: string | Error | ErrorCause, cause?: ErrorCause) {
     if (message instanceof Error) {
       super(undefined, {
-        cause: { err: message, ...(message.cause as any), ...cause }
+        cause: { err: message, ...(message.cause as any), ...cause },
       });
     } else if (typeof message === 'string') {
       if (cause instanceof Error) {

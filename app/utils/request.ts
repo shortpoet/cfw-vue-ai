@@ -1,4 +1,4 @@
-export { redirectToHttps, isAssetURL, isAPiURL, isJsonURL, isSSR };
+export { redirectToHttps, isAssetURL, isAPiURL, isJsonURL, isSSR, shouldTrustHost };
 
 const redirectToHttps = (url: URL) =>
   url.protocol === 'http:' &&
@@ -16,3 +16,11 @@ const isSSR = (url: URL, ssrPaths: string[]) => {
   // url.pathname.replace(/\/$/, "");
   return ssrPaths.includes(url.pathname.split('/').at(1) || '') || url.pathname === '/';
 };
+
+function shouldTrustHost() {
+  return !!(
+    process.env.AUTH_TRUST_HOST ??
+    process.env.VERCEL ??
+    process.env.NODE_ENV === 'development'
+  );
+}

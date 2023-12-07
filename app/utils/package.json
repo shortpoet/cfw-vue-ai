@@ -1,7 +1,7 @@
 {
   "name": "@cfw-vue-ai/utils",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "source": "index.ts",
   "scripts": {},

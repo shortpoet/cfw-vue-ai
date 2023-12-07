@@ -4,5 +4,4 @@ export * from './config';
 export * from './credentials';
 export * from './jmap';
 export * from './jwt';
-export * from './user';
 export * from './session';

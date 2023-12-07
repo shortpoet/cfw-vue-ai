@@ -1,13 +1,13 @@
 import type { AuthAction } from '@auth/core/types';
 import { Auth } from '@auth/core';
 import { ExecutionContext } from '@cloudflare/workers-types';
-import { Env, Session } from 'types/index';
+// import { Session } from '@auth/core/types';
+import { Session } from '@cfw-vue-ai/types';
 import { IRequest } from 'itty-router';
 import { ACTIONS, AuthConfig, SESSION_STRATEGY, deriveAuthConfig } from '.';
-import { getDatabaseFromEnv } from '@/db/src';
 
 const FILE_LOG_LEVEL = 'debug';
-import { logger, logObjs } from '@/ai-maps-util';
+import { logger, logObjs } from '@cfw-vue-ai/utils';
 /**
  * Create an express/connect compatible Auth.js middleware.
  *
@@ -36,12 +36,7 @@ export const createAuthRequest = async (
 ) => {
   const log = logger(FILE_LOG_LEVEL, env);
 
-  const { authConfig, isAuthAvailable } = await deriveAuthConfig(
-    req,
-    res,
-    env,
-    optionsInit
-  );
+  const { authConfig, isAuthAvailable } = await deriveAuthConfig(req, res, env, optionsInit);
   log(`[worker] [middleware] [auth] [itty] createAuthRequest -> NEW \n`);
   const parsedUrl = new URL(req.url);
   const referrer = req.headers.get('referer');
@@ -62,7 +57,7 @@ export const createAuthRequest = async (
     method: req.method,
     body: req.body,
     // @ts-expect-error: Internal. Check https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1483
-    duplex: 'half'
+    duplex: 'half',
   };
   const request = new Request(parsedUrl, init);
   // logObjs([authConfig, init]);
@@ -93,7 +88,7 @@ export const authMiddlewareItty = async (
 
     const protectedRoutes = [
       // ''
-      '/api/health/debug'
+      '/api/health/debug',
     ];
 
     if (ACTIONS.includes(action as AuthAction) && isApi) {
@@ -113,26 +108,19 @@ export const authMiddlewareItty = async (
         log(
           `[worker] [middleware] [auth] [itty] handleNextAuth -> callback -> POST -> credentials callback SET ON RESPONSE\n`
         );
-        if (
-          req &&
-          req.session &&
-          req.session.sessionToken &&
-          SESSION_STRATEGY === 'database'
-        ) {
+        if (req && req.session && req.session.sessionToken && SESSION_STRATEGY === 'database') {
           const protocol = parsedUrl.protocol;
           const cookieName =
-            protocol === 'https:'
-              ? '__Secure-next-auth.session-token'
-              : 'next-auth.session-token';
+            protocol === 'https:' ? '__Secure-next-auth.session-token' : 'next-auth.session-token';
           const isCookieSecure = protocol === 'https:' ? 'Secure;' : '';
           const newCookie = `${cookieName}=${req.session.sessionToken}; Path=/; HttpOnly; ${isCookieSecure} SameSite=Lax`;
           log(
             `[worker] [middleware] [auth] [itty] handleNextAuth -> callback -> POST -> credentials callback SET ON RESPONSE -> ${newCookie}\n`
           );
-          response.headers.append('Set-Cookie', newCookie);
+          res.headers.append('Set-Cookie', newCookie);
         }
       }
-      response.session = session ?? null;
+      res.session = session ?? null;
       return response;
     }
     return;
@@ -152,12 +140,7 @@ export async function getSessionItty(
   log(`[worker] [middleware] [auth] [itty] getSessionItty -> START\n`);
   const prefix = '/api/auth';
   const optionsInit: Partial<AuthConfig> = { prefix };
-  const { authConfig, isAuthAvailable } = await deriveAuthConfig(
-    req,
-    res,
-    env,
-    optionsInit
-  );
+  const { authConfig, isAuthAvailable } = await deriveAuthConfig(req, res, env, optionsInit);
   const url = new URL(`${prefix}/session`, req.url);
   try {
     const request = new Request(url, { headers: req.headers });
@@ -167,15 +150,9 @@ export async function getSessionItty(
     log(
       `[worker] [middleware] [auth] [itty] getSessionItty.authRequest -> ${req.method}://.${url.pathname}`
     );
-    // DUMPS
-    // console.log(req);
     const response = await Auth(request, authConfig);
-    // console.log('response');
-    // DUMPS
-    // console.log(response);
-
     const { status = 200 } = response;
-    const session: Session | any = await response.json();
+    const session: Session | any = await response.body.json();
     log(`[worker] [middleware] [auth] [itty] getSessionItty.response -> session`);
     console.log(session);
     if (!session || !Object.keys(session).length) return null;
@@ -190,7 +167,6 @@ export async function getSessionItty(
       // if (csrfToken) set("csrf-token", csrfToken.split("|")[0]);
       // if (callbackUrl) set("callback-url", callbackUrl);
       return session;
-      return session?.user?.id ? session.user : null;
     }
     throw new Error(session.message);
   } catch (error) {

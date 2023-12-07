@@ -1,13 +1,13 @@
 import { CredentialsConfig, OAuthConfig, Provider } from '@auth/core/providers';
 
-import { Env, UserRole } from 'types/index';
+import { UserRole } from '@cfw-vue-ai/types';
 import chalk from 'chalk';
 import { sendMail } from '../jmap';
 import Credentials from '@auth/core/providers/credentials';
 import GitHub, { GitHubProfile } from '@auth/core/providers/github';
 import { authorize, fromDate } from '../credentials/authorize';
 import { SESSION_MAX_AGE } from './config';
-import { logger } from '@/ai-maps-util';
+import { logger } from '@cfw-vue-ai/utils';
 const FILE_LOG_LEVEL = 'debug';
 
 export const deriveAuthProviders = (env: Env) => {
@@ -26,10 +26,10 @@ export const deriveAuthProviders = (env: Env) => {
             id: profile.id.toString(),
             name: profile.name,
             email: profile.email,
-            image: profile.avatar_url
+            image: profile.avatar_url,
             // role: profile.role ?? UserRole.User
           };
-        }
+        },
       }) as OAuthConfig<GitHubProfile>
     );
   }
@@ -42,13 +42,7 @@ export const deriveAuthProviders = (env: Env) => {
     maxAge: 24 * 60 * 60,
     name: 'Email',
     options: {},
-    async sendVerificationRequest({
-      identifier,
-      url
-    }: {
-      identifier: string;
-      url: string;
-    }) {
+    async sendVerificationRequest({ identifier, url }: { identifier: string; url: string }) {
       let recipient = '';
       if (identifier && identifier.includes('@')) {
         recipient = identifier.match(/[^@]+/)![0];
@@ -67,14 +61,14 @@ export const deriveAuthProviders = (env: Env) => {
         messageBody,
         from: env.EMAIL_FROM,
         to: identifier,
-        subject
+        subject,
       });
       console.log(response);
       if (!response) {
         const errors = response;
         throw new Error(JSON.stringify(errors, null, 2));
       }
-    }
+    },
   });
 
   // providers.push(

@@ -1,8 +1,9 @@
 packages:
   - 'api/**'
+  - 'db/**'
+  - 'scripts/**'
   - 'types/**'
   - 'ui/**'
   - 'utils/**'
-  - 'scripts/**'
   # exclude packages that are inside test directories
   - '!**/app/test/**'

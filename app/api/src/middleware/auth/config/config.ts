@@ -1,20 +1,18 @@
 import type { AuthConfig as BaseAuthConfig } from '@auth/core/types';
 import Cookies from 'universal-cookie';
-import { Cookie, SessionStore } from '@auth/core/lib/cookie';
 import { Provider } from '@auth/core/providers';
 
-import { Env, UserRole } from 'types/index';
+import { UserRole } from '@cfw-vue-ai/types';
 import {
   getCookieAuthToken,
   logSignin,
   shouldTrustHost,
   uuidv4,
   logger,
-  logObjs
-} from '@/ai-maps-util/index';
-import { deriveDatabaseAdapter, getDatabaseFromEnv, KyselyAdapter, q } from '@/db/src';
+  logObjs,
+} from '@cfw-vue-ai/utils';
+import { deriveDatabaseAdapter, getDatabaseFromEnv, KyselyAdapter, q } from '@cfw-vue-ai/db/src';
 import { fromDate } from '../credentials/authorize';
-import { getSessionAndUser } from '@/db/src/v1/queries';
 import { deriveAuthProviders, deriveSecretsFromEnv } from '.';
 
 const FILE_LOG_LEVEL = 'debug';
@@ -22,7 +20,7 @@ const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 const SESSION_UPDATE_AGE = 60 * 60 * 24; // 24 hours
 enum SessionStrategy {
   JWT = 'jwt',
-  Database = 'database'
+  Database = 'database',
 }
 const SESSION_STRATEGY = SessionStrategy.Database;
 const AUTH_ROUTE_PREFIX = '/api/auth';
@@ -35,7 +33,7 @@ export {
   SessionStrategy,
   SESSION_STRATEGY,
   AUTH_ROUTE_PREFIX,
-  ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING
+  ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING,
 };
 export interface AuthConfig extends BaseAuthConfig {
   /**
@@ -79,7 +77,7 @@ const deriveAuthConfig = async (
       session: {
         strategy: SESSION_STRATEGY,
         maxAge: SESSION_MAX_AGE,
-        updateAge: SESSION_UPDATE_AGE
+        updateAge: SESSION_UPDATE_AGE,
       },
       providers,
       adapter,
@@ -100,7 +98,7 @@ const deriveAuthConfig = async (
             const cookieName = SESSION_COOKIE_NAME;
             const sessionToken = getCookieAuthToken(req, 'cookie', cookieName) || '';
             const sessionExpiry = fromDate(SESSION_MAX_AGE);
-            const userAndSession = await getSessionAndUser(sessionToken, db);
+            const userAndSession = await q.getSessionAndUser(sessionToken, db);
             log(`[worker] auth.config -> callbacks.signIn -> userAndSession -> \n`);
             console.log(userAndSession);
             if (isApi && action === 'callback' && req.method === 'POST') {
@@ -112,7 +110,7 @@ const deriveAuthConfig = async (
                   {
                     sessionToken: sessionToken,
                     userId: user.id,
-                    expires: sessionExpiry
+                    expires: sessionExpiry,
                   },
                   db
                 );
@@ -130,15 +128,13 @@ const deriveAuthConfig = async (
             );
             console.log(sessionToken);
             cookies.set(SESSION_COOKIE_NAME, sessionToken, {
-              expires: sessionExpiry
+              expires: sessionExpiry,
             });
             res.headers.set(SESSION_COOKIE_NAME, sessionToken);
             // req.user = user;
             if (user) {
               const roleUser = await q.getRoleUser(user.id, db);
-              log(
-                `[worker] auth.config -> callbacks.signIn -> SET user and session on REQ\n`
-              );
+              log(`[worker] auth.config -> callbacks.signIn -> SET user and session on REQ\n`);
               req.user = roleUser;
             }
             return true;
@@ -155,7 +151,7 @@ const deriveAuthConfig = async (
           if (!db) return token;
           const sessionToken = req.session?.sessionToken || '';
           // return null;
-          const sessionAndUser = await getSessionAndUser(sessionToken, db);
+          const sessionAndUser = await q.getSessionAndUser(sessionToken, db);
           log(`[worker] auth.config -> callbacks.jwt -> sessionAndUser -> \n`);
           console.log(sessionAndUser);
           return { sessionToken, ...session };
@@ -169,17 +165,18 @@ const deriveAuthConfig = async (
             user = await adapter.getUserByEmail(session?.user?.email);
           }
           log(`[worker] auth.config -> callbacks.session -> user -> \n`);
-          // console.log(user);
+          console.log(user);
           console.log('isAdmin');
           console.log(user?.roles?.includes(UserRole.Admin));
           return user
             ? {
                 ...session,
+                sessionToken: token.sessionToken,
                 token,
-                user: { ...session.user, ...user, token }
+                user: { ...session.user, ...user, token },
               }
             : { ...session, token };
-        }
+        },
       },
       events: {
         createUser: async ({ user }) => {
@@ -189,9 +186,7 @@ const deriveAuthConfig = async (
           const idAsNumber = Number(user.id);
           if (idAsNumber === 1) {
             isAdmin = true;
-            log(
-              `[worker] auth.config -> events.createUser -> user -> ${user.id} -> IS ADMIN`
-            );
+            log(`[worker] auth.config -> events.createUser -> user -> ${user.id} -> IS ADMIN`);
             await q.setUserIsAdmin(user.id, isAdmin, env);
           }
         },
@@ -204,9 +199,7 @@ const deriveAuthConfig = async (
             const db = getDatabaseFromEnv(env);
             if (!db) return;
             const roleUser = await q.getRoleUser(user.id, db);
-            log(
-              `[worker] auth.config -> callbacks.signIn -> SET user and session on REQ\n`
-            );
+            log(`[worker] auth.config -> callbacks.signIn -> SET user and session on REQ\n`);
             req.user = roleUser;
           }
           if (
@@ -216,17 +209,13 @@ const deriveAuthConfig = async (
             log(
               `[worker] auth.config -> events.signIn -> update account access token -> ${account?.access_token}\n`
             );
-            q.updateAccount(
-              _account?.id || '',
-              { access_token: account?.access_token },
-              env
-            );
+            q.updateAccount(_account?.id || '', { access_token: account?.access_token }, env);
           }
-        }
-      }
+        },
+      },
     },
     isAuthAvailable,
-    isGlobalReadOnly
+    isGlobalReadOnly,
   };
 };
 

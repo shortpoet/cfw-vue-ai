@@ -1,6 +1,5 @@
-import { q } from '@ai-maps/db/src';
-import { Env } from '@/types';
-import { uuidv4 } from '@/ai-maps-util';
+import { q } from '@cfw-vue-ai/db/src';
+import { uuidv4 } from '@cfw-vue-ai/utils';
 
 export const getUsersFind = async (
   req: Request,
@@ -11,12 +10,12 @@ export const getUsersFind = async (
   const result = await q.getAllUsers(env);
   if (!result) {
     return new Response('No value found', {
-      status: 404
+      status: 404,
     });
   }
   return new Response(JSON.stringify(result), {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   });
 };

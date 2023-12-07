@@ -1,6 +1,6 @@
 {
   "name": "@cfw-vue-ai/api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",
@@ -18,8 +18,12 @@
     "wrangler": "^3.19.0"
   },
   "dependencies": {
+    "@auth/core": "^0.18.4",
+    "@cfw-vue-ai/db": "workspace:^",
     "@cloudflare/itty-router-openapi": "^1.0.5",
+    "kysely": "^0.26.3",
     "openai": "^4.20.1",
+    "universal-cookie": "^6.1.1",
     "vike": "^0.4.147"
   }
 }

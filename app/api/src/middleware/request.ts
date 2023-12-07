@@ -1,11 +1,13 @@
-/* eslint-disable indent */
-import { badResponse } from "./response";
-import { ListOptions } from "../../../types";
+import { badResponse } from './response';
+import { ListOptions } from '@cfw-vue-ai/types';
 
-const FILE_LOG_LEVEL = "debug";
+const FILE_LOG_LEVEL = 'debug';
 
 export const withListOptions = (request: Request) => {
   const { query } = request;
+  if (!query) {
+    return;
+  }
   const { limit, cursor, indexKey } = query;
 
   const listOptions = {} as ListOptions;
@@ -13,13 +15,11 @@ export const withListOptions = (request: Request) => {
     const limitAsNumber = Number(limit);
 
     if (limitAsNumber !== limitAsNumber) {
-      return badResponse(new Error("[limit] query must be a number."));
+      return badResponse(new Error('[limit] query must be a number.'));
     }
 
     if (limitAsNumber > 1000 || limitAsNumber < 1) {
-      return badResponse(
-        new Error("[limit] query must be between 1 and 1000."),
-      );
+      return badResponse(new Error('[limit] query must be between 1 and 1000.'));
     }
 
     listOptions.limit = limitAsNumber;
@@ -36,11 +36,9 @@ export const withListOptions = (request: Request) => {
 };
 
 export const withCfSummary =
-  ({ level = "basic" } = {}) =>
+  ({ level = 'basic' } = {}) =>
   async (request: Request, env: Env) => {
-    console.log(
-      `[worker] middlware.withCfSummary -> ${request.method} -> ${request.url}`,
-    );
+    console.log(`[worker] middlware.withCfSummary -> ${request.method} -> ${request.url}`);
     request.cf_summary = request.cf
       ? {
           longitude: request.cf.longitude,
@@ -60,20 +58,18 @@ export const withCfSummary =
       : {};
   };
 export const withCfHeaders =
-  ({ level = "basic" } = {}) =>
+  ({ level = 'basic' } = {}) =>
   async (request: Request, res: Response, env: Env) => {
-    console.log(
-      `[worker] middlware.withCfHeaders -> ${request.method} -> ${request.url}`,
-    );
+    console.log(`[worker] middlware.withCfHeaders -> ${request.method} -> ${request.url}`);
     const { cf } = request;
     if (cf) {
       const { colo, clientTcpRtt } = cf;
       if (clientTcpRtt) {
-        res.headers.set("x-client-tcp-rtt", clientTcpRtt.toString());
+        res.headers.set('x-client-tcp-rtt', clientTcpRtt.toString());
       }
       if (colo) {
-        res.headers.set("x-colo", colo.toString());
+        res.headers.set('x-colo', colo.toString());
       }
     }
-    res.headers.set("x-api-env", env.NODE_ENV);
+    res.headers.set('x-api-env', env.NODE_ENV);
   };

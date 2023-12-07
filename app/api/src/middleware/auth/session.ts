@@ -1,17 +1,16 @@
-import { Env, UserRole } from '@/types/index';
+import { UserRole } from '@cfw-vue-ai/types';
 const FILE_LOG_LEVEL = 'debug';
-import { getCookieAuthToken, logger, logObjs } from '@/ai-maps-util/index';
+import { getCookieAuthToken, logger, logObjs } from '@cfw-vue-ai/utils';
 import { unauthorizedResponse } from '../response';
 import { getSessionItty } from './middleware-itty';
-import { getDatabaseFromEnv, q } from '@/db/src';
+import { getDatabaseFromEnv, q } from '@cfw-vue-ai/db/src';
 
 export const withSession =
   ({ required = true } = {}) =>
   async (req: Request, res: Response, env: Env, ctx: ExecutionContext) => {
     const log = logger(FILE_LOG_LEVEL, env);
     // log(`[worker] [middleware] [auth] [withSession] -> ${req.method} -> ${req.url}`);
-    if (required)
-      log(`[worker] [middleware] [auth] [withSession]  -> required -> ${required} `);
+    if (required) log(`[worker] [middleware] [auth] [withSession]  -> required -> ${required} `);
     const session = await getSessionItty(req, res, env);
     // log(`[worker] [middleware] [auth] [withSession] -> session ->`);
     // logObjs([session]);
@@ -27,9 +26,7 @@ export const withSession =
     if (!db || !session?.sessionToken) return;
     const dbSession = await q.getSession(session.sessionToken, db);
     if (dbSession) {
-      log(
-        `[worker] [middleware] [auth] [withSession] -> setting req.session to dbSession ->`
-      );
+      log(`[worker] [middleware] [auth] [withSession] -> setting req.session to dbSession ->`);
       req.session = dbSession;
     }
     // return res;

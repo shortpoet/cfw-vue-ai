@@ -1,10 +1,11 @@
 import { IRequest } from 'itty-router';
 import { OpenAPIRouter } from '@cloudflare/itty-router-openapi';
 
-import { jsonData, unauthorizedResponse, withAuth } from '../middleware';
-import { Env, UserRole } from '@/types';
-import { corsify } from '../v1';
-import { logObjs, logger } from '@/ai-maps-util/index';
+import { UserRole } from '@cfw-vue-ai/types';
+import { logObjs, logger } from '@cfw-vue-ai/utils';
+import { corsify } from '../router';
+import { jsonData, unauthorizedResponse, withAuth } from '../../middleware';
+import { debugRes, healthCheck, healthCheckJson } from '../../controllers';
 
 const FILE_LOG_LEVEL = 'debug';
 

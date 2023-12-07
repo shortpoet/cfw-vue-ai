@@ -1,10 +1,8 @@
-import { Env } from "types";
-
 export { sendMail };
 
 interface AuthParams {
   headers: {
-    "Content-Type": string;
+    'Content-Type': string;
     Authorization: string;
   };
   authUrl: string;
@@ -13,7 +11,7 @@ interface AuthParams {
 
 const getAuthParams = async (env: Env): Promise<AuthParams> => ({
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${env.JMAP_TOKEN}`,
   },
   authUrl: `https://api.fastmail.com/.well-known/jmap`,
@@ -21,12 +19,9 @@ const getAuthParams = async (env: Env): Promise<AuthParams> => ({
   username: env.EMAIL_SERVER_USER,
 });
 
-const getSession = async (
-  authUrl: string,
-  headers: Record<string, string>
-): Promise<any> => {
+const getSession = async (authUrl: string, headers: Record<string, string>): Promise<any> => {
   const response = await fetch(authUrl, {
-    method: "GET",
+    method: 'GET',
     headers,
   });
   return response.json();
@@ -38,18 +33,16 @@ const mailboxQuery = async (
   headers: Record<string, string>
 ): Promise<any> => {
   const response = await fetch(apiUrl, {
-    method: "POST",
+    method: 'POST',
     headers,
     body: JSON.stringify({
-      using: ["urn:ietf:params:jmap:core", "urn:ietf:params:jmap:mail"],
-      methodCalls: [
-        ["Mailbox/query", { accountId, filter: { name: "Drafts" } }, "a"],
-      ],
+      using: ['urn:ietf:params:jmap:core', 'urn:ietf:params:jmap:mail'],
+      methodCalls: [['Mailbox/query', { accountId, filter: { name: 'Drafts' } }, 'a']],
     }),
   });
   const data: any = await response.json();
 
-  return await data["methodResponses"][0][1].ids[0];
+  return await data['methodResponses'][0][1].ids[0];
 };
 
 const identityQuery = async (
@@ -59,20 +52,20 @@ const identityQuery = async (
   headers: Record<string, string>
 ): Promise<any> => {
   const response = await fetch(apiUrl, {
-    method: "POST",
+    method: 'POST',
     headers,
     body: JSON.stringify({
       using: [
-        "urn:ietf:params:jmap:core",
-        "urn:ietf:params:jmap:mail",
-        "urn:ietf:params:jmap:submission",
+        'urn:ietf:params:jmap:core',
+        'urn:ietf:params:jmap:mail',
+        'urn:ietf:params:jmap:submission',
       ],
-      methodCalls: [["Identity/get", { accountId, ids: null }, "a"]],
+      methodCalls: [['Identity/get', { accountId, ids: null }, 'a']],
     }),
   });
   const data: any = await response.json();
 
-  return await data["methodResponses"][0][1].list.filter(
+  return await data['methodResponses'][0][1].list.filter(
     (identity: any) => identity.email === username
   )[0].id;
 };
@@ -97,16 +90,16 @@ const draftResponse = async ({
   identityId,
   username,
   headers,
-  messageBody = "Hi! \n\n" +
-    "This email may not look like much, but I sent it with JMAP, a protocol \n" +
-    "designed to make it easier to manage email, contacts, calendars, and more of \n" +
-    "your digital life in general. \n\n" +
-    "Pretty cool, right? \n\n" +
-    "-- \n" +
-    "This email sent from my next-generation email system at Fastmail. \n",
+  messageBody = 'Hi! \n\n' +
+    'This email may not look like much, but I sent it with JMAP, a protocol \n' +
+    'designed to make it easier to manage email, contacts, calendars, and more of \n' +
+    'your digital life in general. \n\n' +
+    'Pretty cool, right? \n\n' +
+    '-- \n' +
+    'This email sent from my next-generation email system at Fastmail. \n',
   from = username,
   to = username,
-  subject = "Hello, world!",
+  subject = 'Hello, world!',
 }: DraftParams): Promise<any> => {
   const draftObject = {
     from: [{ email: from }],
@@ -114,29 +107,29 @@ const draftResponse = async ({
     subject,
     keywords: { $draft: true },
     mailboxIds: { [draftId]: true },
-    bodyValues: { body: { value: messageBody, charset: "utf-8" } },
-    textBody: [{ partId: "body", type: "text/plain" }],
+    bodyValues: { body: { value: messageBody, charset: 'utf-8' } },
+    textBody: [{ partId: 'body', type: 'text/plain' }],
   };
 
   const response = await fetch(apiUrl, {
-    method: "POST",
+    method: 'POST',
     headers,
     body: JSON.stringify({
       using: [
-        "urn:ietf:params:jmap:core",
-        "urn:ietf:params:jmap:mail",
-        "urn:ietf:params:jmap:submission",
+        'urn:ietf:params:jmap:core',
+        'urn:ietf:params:jmap:mail',
+        'urn:ietf:params:jmap:submission',
       ],
       methodCalls: [
-        ["Email/set", { accountId, create: { draft: draftObject } }, "a"],
+        ['Email/set', { accountId, create: { draft: draftObject } }, 'a'],
         [
-          "EmailSubmission/set",
+          'EmailSubmission/set',
           {
             accountId,
-            onSuccessDestroyEmail: ["#sendIt"],
-            create: { sendIt: { emailId: "#draft", identityId } },
+            onSuccessDestroyEmail: ['#sendIt'],
+            create: { sendIt: { emailId: '#draft', identityId } },
           },
-          "b",
+          'b',
         ],
       ],
     }),
@@ -163,7 +156,7 @@ const sendMail = async ({
   const { headers, authUrl, username } = await getAuthParams(env);
   const session = await getSession(authUrl, headers);
   const apiUrl = session.apiUrl;
-  const accountId = session.primaryAccounts["urn:ietf:params:jmap:mail"];
+  const accountId = session.primaryAccounts['urn:ietf:params:jmap:mail'];
   const draftId = await mailboxQuery(apiUrl, accountId, headers);
   const identityId = await identityQuery(apiUrl, accountId, username, headers);
   return await draftResponse({

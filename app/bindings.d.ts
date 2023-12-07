@@ -6,8 +6,21 @@ import type {
   D1Database,
   KVNamespace,
 } from '@cloudflare/workers-types';
-import type { ResponseCfProperties, LogLevel, PageProps, Page, Component } from './types';
+import { Session } from '@auth/core/types';
 import { AssetManifestType } from '@cloudflare/kv-asset-handler/dist/types';
+import type {
+  ResponseCfProperties,
+  LogLevel,
+  PageProps,
+  Page,
+  Component,
+  ListOptions,
+  User,
+  // Session,
+  UserRole,
+  UserType,
+} from './types';
+import { Database } from './db/src';
 
 type Mutable<T> = {
   -readonly [K in keyof T]-?: T[K];
@@ -30,6 +43,7 @@ declare global {
       fetch: typeof fetch;
     };
   };
+  export type Bindings = Record<string, unknown>;
   interface WorkerEnv {
     // APP
     NODE_ENV: 'development' | 'production';
@@ -52,15 +66,33 @@ declare global {
     // DB
     CFW_VUE_AI_DB: D1Database;
 
+    // AUTH
+    __SECRET__: string;
+    NEXTAUTH_URL: string;
+    NEXTAUTH_SECRET: string;
+    GITHUB_CLIENT_ID: string;
+    GITHUB_CLIENT_SECRET: string;
+    JMAP_TOKEN: string;
+    EMAIL_SERVER_HOST: string;
+    EMAIL_SERVER_PORT: string;
+    EMAIL_SERVER_USER: string;
+    EMAIL_SERVER_PASSWORD: string;
+    EMAIL_FROM: string;
+
     isWorkerEnv(): void;
     ASSETS: {
       fetch: typeof fetch;
     };
   }
 
-  export type Env = WorkerEnv | NodeEnv | NodeJS.ProcessEnv;
+  type Env = WorkerEnv | NodeEnv | NodeJS.ProcessEnv;
+  interface CredsAuth {
+    sanitizedUser: string;
+    user: User;
+    token: string;
+  }
 
-  export interface Request extends CFRequest {
+  interface Request extends CFRequest {
     readonly method: string;
     readonly url: string;
     readonly headers: Headers;
@@ -69,16 +101,19 @@ declare global {
     isAuthenticated?: boolean;
     cf: CFRequest['cf'];
     cf_summary?: Partial<CFRequest['cf']>;
-    // user?: User | null;
-    // session?: Omit<Database['Session'], 'id'>;
-    // auth?: Auth | null;
+    listOptions?: ListOptions;
+    user?: User | null;
+    session?: Omit<Database['Session'], 'id'>;
+    credsAuth?: CredsAuth | null;
   }
 
-  export interface Response extends CFResponse {
+  interface Response extends Response {}
+
+  interface Response extends CFResponse {
     cf?: ResponseCfProperties;
     webSocket?: WebSocket;
     encodeBody?: 'automatic' | 'manual' | undefined;
-    // session?: Session | null;
+    session?: Session | null;
   }
   namespace NodeJS {
     interface ProcessEnv {
@@ -92,6 +127,17 @@ declare global {
       VITE_APP_URL: string;
       VITE_API_URL: string;
       SSR_BASE_PATHS: string;
+      __SECRET__: string;
+      NEXTAUTH_URL: string;
+      NEXTAUTH_SECRET: string;
+      GITHUB_CLIENT_ID: string;
+      GITHUB_CLIENT_SECRET: string;
+      JMAP_TOKEN: string;
+      EMAIL_SERVER_HOST: string;
+      EMAIL_SERVER_PORT: string;
+      EMAIL_SERVER_USER: string;
+      EMAIL_SERVER_PASSWORD: string;
+      EMAIL_FROM: string;
     }
 
     interface ImportMeta {
@@ -106,6 +152,17 @@ declare global {
         VITE_APP_URL: string;
         VITE_API_URL: string;
         SSR_BASE_PATHS: string;
+        __SECRET__: string;
+        NEXTAUTH_URL: string;
+        NEXTAUTH_SECRET: string;
+        GITHUB_CLIENT_ID: string;
+        GITHUB_CLIENT_SECRET: string;
+        JMAP_TOKEN: string;
+        EMAIL_SERVER_HOST: string;
+        EMAIL_SERVER_PORT: string;
+        EMAIL_SERVER_USER: string;
+        EMAIL_SERVER_PASSWORD: string;
+        EMAIL_FROM: string;
       };
     }
   }
@@ -140,4 +197,38 @@ declare global {
 declare module '__STATIC_CONTENT_MANIFEST' {
   const content: string;
   export default content;
+}
+
+declare module '@auth/core/adapters' {
+  interface User {
+    emailVerified?: boolean;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    roles: UserRole[];
+    userType: UserType;
+  }
+}
+
+declare module '@auth/core/types' {
+  interface Session {
+    user?: User & DefaultSession['user'] & Omit<Database['User'], 'id'>;
+  }
+  interface User {
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    roles: UserRole[];
+    userType: UserType;
+  }
+}
+declare module '@auth/core/jwt' {
+  interface JWT {
+    name?: string | null;
+    email?: string | null;
+    picture?: string | null;
+    sub?: string;
+    sessionToken?: string;
+  }
 }

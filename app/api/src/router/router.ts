@@ -1,33 +1,23 @@
-import {
-  // Router,
-  createCors,
-  RequestLike,
-  IRequest,
-  error,
-} from 'itty-router';
+import { createCors, RequestLike, IRequest, error } from 'itty-router';
+import { ExecutionContext } from '@cloudflare/workers-types';
+import { ServerResponse } from 'http';
 import { OpenAPIRouter } from '@cloudflare/itty-router-openapi';
 
+import sampleData from '@cfw-vue-ai/db/src/data.json';
 import { jsonData, withCfHeaders, withCfSummary } from '../middleware';
 
-import data from './data.json';
-// import handleProxy from '../middleware/proxy';
-// import handleRedirect from '../middleware/redirect';
-
-// case path === '/redirect':
-//   return handleRedirect.fetch(request, env, ctx);
-// case path === '/proxy':
-//   return handleProxy.fetch(request, env, ctx);
+const FILE_LOG_LEVEL = 'error';
 
 const { preflight, corsify } = createCors();
 
-// export { preflight, corsify };
+export { corsify };
 
 type CF = [env: Env, context: ExecutionContext];
 
 const router = OpenAPIRouter<IRequest, CF>({
   schema: {
     info: {
-      title: 'Ai Maps API',
+      title: 'CFW Vue AI API',
       version: '1.0',
     },
   },
@@ -45,7 +35,7 @@ router
   .all('/*', withCfHeaders())
   // .all('/api/*', () => {})
   .get('/json-data', (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
-    jsonData(req, res, env, data)
+    jsonData(req, res, env, sampleData)
   )
   .get('/hello', withCfSummary(), (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
     jsonData(req, res, env, { hello: 'world' })
@@ -53,4 +43,11 @@ router
   // .all("*", error_handler)
   .all('*', () => error(404, 'Oops... Are you sure about that? FAaFO'));
 
-export default router;
+const Api = {
+  handle: (req: Request, resp: Response | ServerResponse, env: Env, ctx: ExecutionContext) => {
+    const out = router.handle(req, resp, env, ctx);
+    return out;
+  },
+};
+
+export default Api;
