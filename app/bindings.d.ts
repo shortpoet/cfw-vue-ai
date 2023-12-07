@@ -19,6 +19,7 @@ import type {
   // Session,
   UserRole,
   UserType,
+  SessionUnion,
 } from './types';
 import { Database } from './db/src';
 
@@ -181,9 +182,12 @@ declare global {
       };
       // httpResponse: HttpResponse;
       _allPageIds: string[];
+      session: SessionUnion | null;
       isAdmin: boolean;
       csrfToken: string;
       callbackUrl: string;
+      sessionToken: string;
+      pkceCodeVerifier: string;
       cf: ResponseCfProperties;
       abortReason?: {
         message: string;

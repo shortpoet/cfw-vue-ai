@@ -47,7 +47,6 @@
     "markdown-it-shikiji": "^0.7.6",
     "unplugin-vue-markdown": "^0.25.2",
     "vike": "^0.4.147",
-    "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^0.34.6",
     "vue": "^3.3.9"
   }

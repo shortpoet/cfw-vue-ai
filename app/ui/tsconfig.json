@@ -4,9 +4,17 @@
     "strict": true,
     "module": "ESNext",
     "target": "ESNext",
-    "outDir": "build",
-    // Doesn't apply to server/, see ts-node config down below and server/tsconfig.json
+    // "outDir": "build",
+    "useDefineForClassFields": true,
+    "allowJs": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
     "moduleResolution": "Bundler",
+    "skipLibCheck": true,
     "lib": [
       "DOM",
       "DOM.Iterable",
@@ -23,9 +31,7 @@
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules"
-    ],
-    "skipLibCheck": true,
-    "esModuleInterop": true
+    ]
   },
   "ts-node": {
     "esm": true,
@@ -43,6 +49,7 @@
     "node_modules",
   ],
   "include": [
+    "src",
     "src/**/*",
     "src/**/*.vue",
     "vite.config.ts",
