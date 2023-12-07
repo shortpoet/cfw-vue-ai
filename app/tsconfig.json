@@ -17,11 +17,32 @@
     "allowJs": false,
     "forceConsistentCasingInFileNames": true,
   },
-  "paths": {
-    "@/*": [
-      "app/*"
-    ]
-  },
+  // "paths": {
+  //   "##": [
+  //     "./app"
+  //   ],
+  //   "##/*": [
+  //     "./app/*"
+  //   ],
+  //   "#": [
+  //     "./app"
+  //   ],
+  //   "#/*": [
+  //     "./app/*"
+  //   ],
+  //   "assets": [
+  //     "assets"
+  //   ],
+  //   "assets/*": [
+  //     "assets/*"
+  //   ],
+  //   "public": [
+  //     "public"
+  //   ],
+  //   "public/*": [
+  //     "public/*"
+  //   ],
+  // },
   "include": [
     "api/**/*",
     "types/**/*",

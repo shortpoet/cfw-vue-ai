@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@cloudflare/workers-types';
+import { ServerResponse } from 'http';
 
 import router from './router';
-import { ServerResponse } from 'http';
 
 const FILE_LOG_LEVEL = 'error';
 

@@ -1,9 +1,36 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "types": [
       "@cloudflare/workers-types",
-    ]
+    ],
+    "paths": {
+      "##": [
+        "./"
+      ],
+      "##/*": [
+        "./*"
+      ],
+      "#": [
+        "./"
+      ],
+      "#/*": [
+        "./*"
+      ],
+      "assets": [
+        "assets"
+      ],
+      "assets/*": [
+        "assets/*"
+      ],
+      "public": [
+        "public"
+      ],
+      "public/*": [
+        "public/*"
+      ],
+    },
   },
   "include": [
     "**/*.ts",

@@ -9,14 +9,11 @@ import {
   isGithubUser,
   UserUnion,
   SessionUnion,
-} from "types/index";
-import { InjectionKey, ref, provide, inject } from "vue";
-// import { CookieSetOptions } from "universal-cookie";
-import { useFetch } from "./fetch";
-import { useAuthStore } from "../stores";
-import { storeToRefs } from "pinia";
-// import { escapeNestedKeys } from "ai-maps-util/index";
-// import { navigate } from "vite-plugin-ssr/client/router";
+} from '@cfw-vue-ai/types';
+import { InjectionKey, ref, provide, inject } from 'vue';
+import { useFetch } from './fetch';
+import { useAuthStore } from '../stores';
+import { storeToRefs } from 'pinia';
 
 export {
   COOKIES_SESSION_TOKEN,
@@ -28,9 +25,6 @@ export {
 
 const AuthSymbol: InjectionKey<NextAuthInstance> = Symbol();
 
-// const authClient = ref<Auth0Client | null>(null);
-// let redirectCallback: (appState: any) => void;
-// const redirectCallback = ref(DEFAULT_REDIRECT_CALLBACK);
 const user = ref<UserUnion>();
 const session = ref<SessionUnion | undefined>();
 const token = ref<string>();
@@ -38,8 +32,8 @@ const authLoading = ref(true);
 const error = ref<any>();
 const isLoggedIn = ref(false);
 const audience = `https://ssr.shortpoet.com`;
-const scope = "openid profile email offline_access";
-const response_type = "code";
+const scope = 'openid profile email offline_access';
+const response_type = 'code';
 
 const COOKIES_USER_TOKEN = `${process.env.VITE_APP_NAME}-next-user-token`;
 const COOKIES_SESSION_TOKEN = `${process.env.VITE_APP_NAME}-next-session-token`;
@@ -47,11 +41,11 @@ const SESSION_TOKEN_EXPIRY = 60 * 60; // 1 hour
 
 const cookieOptions: any = {
   // const cookieOptions: CookieSetOptions = {
-  path: "/",
+  path: '/',
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
   maxAge: 60 * 60 * 24,
-  domain: "localhost",
-  sameSite: "strict",
+  domain: 'localhost',
+  sameSite: 'strict',
   // below only works in https
   // secure: true,
   // httpOnly: true,
@@ -77,24 +71,18 @@ export const provideAuth = () => {
   provide(AuthSymbol, auth);
 };
 
-export const isClient = typeof window !== "undefined";
-const defaultWindow: (Window & typeof globalThis) | undefined =
-  /* #__PURE__ */ isClient ? window : undefined;
+export const isClient = typeof window !== 'undefined';
+const defaultWindow: (Window & typeof globalThis) | undefined = /* #__PURE__ */ isClient
+  ? window
+  : undefined;
 
 const useNextAuth = () => {
   const auth = inject(AuthSymbol);
-  if (!auth) throw new Error("provideAuth() not called in parent");
+  if (!auth) throw new Error('provideAuth() not called in parent');
 
   const authStore = useAuthStore();
-  const {
-    authState,
-    isLoggedIn,
-    nonce,
-    idToken,
-    accessToken,
-    currentUser,
-    loginRedirectPath,
-  } = storeToRefs(authStore);
+  const { authState, isLoggedIn, nonce, idToken, accessToken, currentUser, loginRedirectPath } =
+    storeToRefs(authStore);
   const {
     initRandomAuthState,
     initRandomNonce,
@@ -107,10 +95,8 @@ const useNextAuth = () => {
     setLoginRedirectPath,
     setSession: setSessionStore,
   } = authStore;
-  setNonce(nonce.value !== "" ? nonce.value : initRandomNonce());
-  setAuthState(
-    authState.value !== "" ? authState.value : initRandomAuthState()
-  );
+  setNonce(nonce.value !== '' ? nonce.value : initRandomNonce());
+  setAuthState(authState.value !== '' ? authState.value : initRandomAuthState());
   auth.authState = ref(authStore.authState);
   auth.nonce = ref(authStore.nonce);
   auth.isLoggedIn = isLoggedIn;
@@ -134,21 +120,19 @@ const setSession = async (): Promise<SetSessionResult> => {
   // TODO set session type
   const url = new URL(`${process.env.NEXTAUTH_URL}/session`);
   const { data, error, dataLoading } = await useFetch<any>(url.href);
-  let res: SetSessionResult = { session: undefined, status: "Loading" };
+  let res: SetSessionResult = { session: undefined, status: 'Loading' };
   if (error.value) {
     // if (process.env.VITE_LOG_LEVEL === 'debug')
     console.error(`[ui] useAuth.setSession error: ${error.value}`);
-    res = { session: undefined, status: "Error" };
+    res = { session: undefined, status: 'Error' };
   }
   if (dataLoading.value) {
     // if (process.env.VITE_LOG_LEVEL === 'debug')
     console.log(`[ui] useAuth.setSession dataLoading: ${dataLoading.value}`);
   }
   if (data.value) {
-    console.log(
-      `[ui] useAuth.setSession data: ${JSON.stringify(data.value, null, 2)}`
-    );
-    res = { session: data.value, status: "Success" };
+    console.log(`[ui] useAuth.setSession data: ${JSON.stringify(data.value, null, 2)}`);
+    res = { session: data.value, status: 'Success' };
   }
   return res;
 };
@@ -162,7 +146,6 @@ const onLoad = async () => {
   // }
   authLoading.value = false;
   return null;
-  [];
 };
 
 const login = async (options?: any) => {
@@ -170,20 +153,17 @@ const login = async (options?: any) => {
   const url = new URL(`${process.env.NEXTAUTH_URL}/signin`);
   const { data, error, dataLoading } = await useFetch(url.href);
   window.location.replace(url.href);
-  // navigate(url.pathname);
   if (error.value) {
-    // if (process.env.VITE_LOG_LEVEL === 'debug')
     console.error(`error: ${error.value}`);
   }
 
   if (dataLoading.value) {
-    // if (process.env.VITE_LOG_LEVEL === 'debug')
-    console.log(`dataLoading: ${dataLoading.value}`);
-    res = { result: "Loading", status: "Loading" };
+    console.log(`[ui] [useAuth] dataLoading: ${dataLoading.value}`);
+    res = { result: 'Loading', status: 'Loading' };
   }
   if (data.value) {
     console.log(`data: ${JSON.stringify(data.value, null, 2)}`);
-    res = { result: "Success", status: "Success" };
+    res = { result: 'Success', status: 'Success' };
     // const { session, user } = data.value;
 
     // if (process.env.VITE_LOG_LEVEL === 'debug') {
@@ -211,7 +191,7 @@ const logout = async () => {
 
   if (dataLoading.value) {
     console.log(`dataLoading: ${dataLoading.value}`);
-    res = { result: "Loading", status: "Loading" };
+    res = { result: 'Loading', status: 'Loading' };
   }
   if (data.value) {
     console.log(`data: ${JSON.stringify(data.value, null, 2)}`);
