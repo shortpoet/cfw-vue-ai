@@ -8,6 +8,7 @@ import LinkAttributes from 'markdown-it-link-attributes';
 import path from 'node:path';
 import { defineConfig, loadEnv, UserConfig } from 'vite';
 import { InlineConfig } from 'vitest';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import { fileURLToPath } from 'node:url';
 // import { nodePolyfills } from "vite-plugin-node-polyfills";
 import dotenv from 'dotenv';
@@ -50,6 +51,7 @@ export default ({ mode }: { mode: string }) => {
       vue({
         include: [/\.vue$/, /\.md$/],
       }),
+      tsconfigPaths(),
       vike(),
       Unocss(),
       Markdown({
@@ -96,12 +98,12 @@ export default ({ mode }: { mode: string }) => {
       target: 'esnext',
     },
 
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('../', import.meta.url)),
-        stream: 'readable-stream',
-      },
-    },
+    // resolve: {
+    //   alias: {
+    //     '@': fileURLToPath(new URL('../', import.meta.url)),
+    //     stream: 'readable-stream',
+    //   },
+    // },
 
     test: vitestConfig,
   });

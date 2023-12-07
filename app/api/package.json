@@ -3,9 +3,15 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy",
+    "start": "wrangler dev",
     "dev": "wrangler dev --live-reload",
-    "start": "wrangler dev"
+    "build": "pnpm scripts w:build",
+    "prev": "wrangler dev --env preview --live-reload --config ../../wrangler.preview.toml",
+    "w:dev": "wrangler dev --env dev --live-reload",
+    "========= Deploy": "",
+    "deploy": "wrangler deploy",
+    "deploy:uat": "wrangler deploy --env uat --config ../../wrangler.uat.toml",
+    "deploy:prd": "wrangler deploy --env prod --config ../wrangler.prod.toml"
   },
   "devDependencies": {
     "@cfw-vue-ai/types": "workspace:*",
