@@ -5,14 +5,13 @@ import {
   Session,
   SessionUnion,
   User,
-  UserUnion
-} from 'types/index';
+  UserUnion,
+  isGithubUser,
+  UserType,
+} from '@cfw-vue-ai/types';
 import { useStorage } from '@vueuse/core';
-
-import { isGithubUser } from 'types/index';
-import { UserType } from 'types/index';
 import { usePageContext } from '../composables';
-import { uuidv4 } from '@/ai-maps-util';
+import { uuidv4 } from '@cfw-vue-ai/utils';
 
 const initBaseUser = (user: SessionUnion['user']): BaseUser => {
   const id = uuidv4();
@@ -48,7 +47,7 @@ const initBaseUser = (user: SessionUnion['user']): BaseUser => {
     image,
     username,
     password,
-    sub
+    sub,
   };
   return baseUser;
 };
@@ -64,7 +63,7 @@ export const useAuthStore = defineStore('auth', {
     currentUser: {} as UserUnion,
     gitHubUser: {} as GithubUser,
     loginRedirectPath: '',
-    session: {} as SessionUnion
+    session: {} as SessionUnion,
   }),
   actions: {
     initRandomAuthState() {
@@ -114,8 +113,8 @@ export const useAuthStore = defineStore('auth', {
         this.setCurrentUser(initUser);
         this.setGithubUser(githubUser);
       }
-    }
-  }
+    },
+  },
   // persist: [
   //   { key: "authState", storage: sessionStorage },
   //   { key: "nonce", storage: sessionStorage },
@@ -160,5 +159,4 @@ export const useAuthStore = defineStore('auth', {
 // https://github.com/vuejs/pinia/issues/690
 // https://www.reddit.com/r/vuejs/comments/snh25a/cryptic_error_with_pinia_vue_3_typescript/
 // https://stackoverflow.com/questions/70681667/cant-use-vue-router-and-pinia-inside-a-single-store
-if (import.meta.hot)
-  import.meta.hot.accept(acceptHMRUpdate(useAuthStore, import.meta.hot));
+if (import.meta.hot) import.meta.hot.accept(acceptHMRUpdate(useAuthStore, import.meta.hot));
