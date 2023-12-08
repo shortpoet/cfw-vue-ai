@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.ts",
+  "main": "dist/server.js",
+  "module": "dist/server.module.js",
+  "scripts": {
+    "serve": "cross-env PORT=3333 NODE_ENV=development tsx watch ./src/simple.ts"
+  },
+  "keywords": [],
+  "author": "CarlosSoriano",
+  "license": "ISC",
+  "devDependencies": {
+    "chalk": "^5.3.0",
+    "dotenv": "^16.3.1"
+  },
+  "dependencies": {
+    "http": "0.0.1-security",
+    "itty-router": "^4.0.23"
+  }
+}
