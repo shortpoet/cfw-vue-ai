@@ -74,8 +74,10 @@ type CredentialsUser = {
 
 type CredentialsSessionUser = {
   email: string;
+  emialVerified: Date | string | null;
   roles: UserRole[];
   created_at: Date;
+  updated_at: Date;
   name: string | null;
   image?: string | null;
 };
@@ -103,8 +105,10 @@ type EmailUser = {
 
 type EmailSessionUser = {
   email: string;
+  emialVerified: Date | string | null;
   roles: UserRole[];
   created_at: Date;
+  updated_at: Date;
   name: string | null;
   image?: string | null;
 };
@@ -116,8 +120,10 @@ type EmailSession = {
 
 type GithubSessionUser = {
   email: string;
+  emialVerified: Date | string | null;
   roles: UserRole[];
   created_at: Date;
+  updated_at: Date;
   name: string | null;
   image?: string | null;
 };

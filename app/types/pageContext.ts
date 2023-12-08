@@ -1,5 +1,6 @@
 import type { ComponentPublicInstance } from 'vue';
 import { ResponseCfProperties } from './cf';
+import { Session } from './auth';
 
 export type {
   PageContextServer,
@@ -23,6 +24,9 @@ type Page = Component;
 type PageProps = {
   isAdmin: boolean;
   loading?: boolean;
+  session?: Session | null;
+  csrfToken?: string;
+  callbackUrl?: string;
   cf?: ResponseCfProperties;
   apiData?: any;
   apiDataLoading?: boolean;
