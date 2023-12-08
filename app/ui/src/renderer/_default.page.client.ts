@@ -1,4 +1,4 @@
-import { PageContext } from 'types/index';
+import { PageContext } from '@cfw-vue-ai/types';
 import { createApp } from './app';
 import { usePageTitle } from '../composables';
 import { navigate } from 'vike/client/router';

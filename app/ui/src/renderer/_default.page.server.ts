@@ -1,7 +1,7 @@
 import { renderToString as renderToString_ } from '@vue/server-renderer';
 import { createHead, renderHeadToString } from '@vueuse/head';
 import { escapeInject, dangerouslySkipEscape } from 'vike/server';
-import { PageContext, PageContextServer } from 'types/index';
+import { PageContext, PageContextServer } from '@cfw-vue-ai/types';
 import { createApp } from './app';
 import type { App } from 'vue';
 
@@ -28,9 +28,7 @@ async function onBeforeRender(pageContext: PageContext) {
 
   const path = pageContext.urlPathname;
 
-  console.log(
-    `[ui] [server] [onBeforeRender] is logged in ${isLoggedIn} isAdmin ${isAdmin}`
-  );
+  console.log(`[ui] [server] [onBeforeRender] is logged in ${isLoggedIn} isAdmin ${isAdmin}`);
 
   // client-side routing is enabled
   switch (true as boolean) {
@@ -60,9 +58,9 @@ async function onBeforeRender(pageContext: PageContext) {
         cf,
         loading: false,
         csrfToken,
-        callbackUrl
-      }
-    }
+        callbackUrl,
+      },
+    },
   };
 }
 
@@ -78,12 +76,11 @@ const passToClient = [
   'isAdmin',
   'cf',
   'sessionToken',
-  'pkceCodeVerifier'
+  'pkceCodeVerifier',
 ];
 
 async function render(pageContext: PageContextServer) {
-  const { session, cf, callbackUrl, csrfToken, isAdmin, Page, pageProps, redirectTo } =
-    pageContext;
+  const { session, cf, callbackUrl, csrfToken, isAdmin, Page, pageProps, redirectTo } = pageContext;
   // This render() hook only supports SSR, see https://vike.dev/render-modes for how to modify render() to support SPA
   if (!Page)
     throw new Error(
@@ -102,9 +99,7 @@ async function render(pageContext: PageContextServer) {
     (documentProps && documentProps.description) ||
     'AI powered Mapping App using Vite + vite-plugin-ssr';
 
-  const { headTags, htmlAttrs, bodyAttrs, bodyTags } = await renderHeadToString(
-    createHead()
-  );
+  const { headTags, htmlAttrs, bodyAttrs, bodyTags } = await renderHeadToString(createHead());
 
   const documentHtml = escapeInject`<!DOCTYPE html>
     <html lang="en" ${htmlAttrs}>
@@ -119,7 +114,7 @@ async function render(pageContext: PageContextServer) {
 
   if (redirectTo) {
     return {
-      pageContext: { redirectTo }
+      pageContext: { redirectTo },
     };
   }
 
@@ -130,8 +125,8 @@ async function render(pageContext: PageContextServer) {
       enableEagerStreaming: true,
       session,
       redirectTo,
-      cf
-    }
+      cf,
+    },
   };
 }
 async function renderToString(app: App) {

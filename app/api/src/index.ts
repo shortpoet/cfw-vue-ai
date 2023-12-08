@@ -18,7 +18,7 @@ import {
   logWorkerStart,
   logger,
 } from '@cfw-vue-ai/utils';
-import { Api } from './router';
+import { Api, corsify } from './router';
 import { handleStaticAssets } from './static-assets';
 import { handleSsr } from './ssr';
 

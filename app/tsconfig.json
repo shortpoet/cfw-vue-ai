@@ -16,11 +16,37 @@
     "strictNullChecks": true,
     "allowJs": false,
     "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "api/*": [
+        "api/*"
+      ],
+      "db/*": [
+        "db/*"
+      ],
+      "server/*": [
+        "server/*"
+      ],
+      "types/*": [
+        "types/*"
+      ],
+      "ui/*": [
+        "ui/*"
+      ],
+      "utils/*": [
+        "utils/*"
+      ],
+    },
   },
   "include": [
     "api/**/*",
+    "db/**/*",
+    "server/**/*",
     "types/**/*",
+    "ui/**/*",
+    "utils/**/*",
     "bindings.d.ts",
-    "utils/request.ts"
-  ]
+  ],
 }

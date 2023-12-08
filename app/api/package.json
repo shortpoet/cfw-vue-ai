@@ -2,6 +2,8 @@
   "name": "@cfw-vue-ai/api",
   "version": "0.0.2",
   "private": true,
+  "source": "src/index.ts",
+  "type": "module",
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev --live-reload",

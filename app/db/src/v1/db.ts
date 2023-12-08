@@ -1,5 +1,5 @@
 import type { GeneratedAlways } from 'kysely';
-import { UserRole, UserType } from 'types/index';
+import { UserRole, UserType } from '@cfw-vue-ai/types';
 
 type AccountId = string;
 type UserId = string;

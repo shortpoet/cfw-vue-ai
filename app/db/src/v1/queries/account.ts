@@ -1,6 +1,6 @@
 import { Kysely } from 'kysely';
 
-import { UserRole, UserType } from 'types/index';
+import { UserRole, UserType } from '@cfw-vue-ai/types';
 import { Database, getDatabaseFromEnv } from '..';
 import { format } from '../cast';
 const { to, from } = format;

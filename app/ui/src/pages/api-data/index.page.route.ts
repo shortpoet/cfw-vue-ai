@@ -1,4 +1,4 @@
-import { PageContext } from 'types/index';
+import { PageContext } from '@cfw-vue-ai/types';
 import type { GuardAsync } from 'vike/types';
 const route = 'api-data';
 const debugRoute = `/${route}/debug`;

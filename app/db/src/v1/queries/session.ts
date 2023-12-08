@@ -1,7 +1,7 @@
 import { Kysely } from 'kysely';
 import { Database } from '../db';
 import { format, propertiesToFormat } from '../cast';
-import { User, UserRole, UserType } from 'types/index';
+import { User, UserRole, UserType } from '@cfw-vue-ai/types';
 const to = format.to;
 const isSqlite = true;
 

@@ -4,6 +4,7 @@
   "version": "0.0.2",
   "description": "",
   "source": "src/index.ts",
+  "main": "src/index.ts",
   "scripts": {},
   "keywords": [],
   "author": "CarlosSoriano",

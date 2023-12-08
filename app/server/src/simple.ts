@@ -2,7 +2,7 @@ import http from 'http';
 import dotenv from 'dotenv';
 import { error, json } from 'itty-router';
 import path from 'node:path';
-import { corsify, Api as api } from '@/api/src/api/v1';
+import { corsify, Api } from '@cfw-vue-ai/api/src/router';
 import { mapHttpHeaders, serverLogStart, ctx, serverLogEnd } from './util';
 import { root } from '.';
 
@@ -13,21 +13,21 @@ const vars = dotenv.config({ path: `${root}/.dev.vars` });
 const parsedDev = vars.parsed;
 if (!parsed || !parsedDev) {
   const which = [!parsed, !parsedDev];
-  throw new Error(`[server] missing env vars -> \n\t\t[.env, .dev.vars] -> ${which}]`);
+  // throw new Error(`[server] missing env vars -> \n\t\t[.env, .dev.vars] -> ${which}]`);
 }
 const HOST: string = process.env.HOST || 'localhost';
 const PORT: number = parseInt(process.env.PORT || '3333');
-const SECRET: string = process.env.NEXTAUTH_SECRET;
-const GITHUB_CLIENT_ID: string = process.env.GITHUB_CLIENT_ID;
-const GITHUB_CLIENT_SECRET: string = process.env.GITHUB_CLIENT_SECRET;
+const SECRET: string = process.env.NEXTAUTH_SECRET || '';
+const GITHUB_CLIENT_ID: string = process.env.GITHUB_CLIENT_ID || '';
+const GITHUB_CLIENT_SECRET: string = process.env.GITHUB_CLIENT_SECRET || '';
 if (!SECRET || !GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
   const which = [!SECRET, !GITHUB_CLIENT_ID, !GITHUB_CLIENT_SECRET]
     .map((b) => b.toString())
     .filter(Boolean)
     .join(', ');
-  throw new Error(
-    `[server] auth.config -> missing secret or env vars -> \n\t\t[NEXTAUTH_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET] -> ${which}]`
-  );
+  // throw new Error(
+  //   `[server] auth.config -> missing secret or env vars -> \n\t\t[NEXTAUTH_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET] -> ${which}]`
+  // );
 }
 
 const server = http.createServer(async (req, res) => {
@@ -43,13 +43,12 @@ const server = http.createServer(async (req, res) => {
     // console.log(req);
     const apiReq = new Request(new URL(req.url, 'http://' + req.headers.host), {
       method: req.method,
-      headers: mappedHeaders
+      headers: mappedHeaders,
       // body: req.read(),
     });
     const response = new Response();
     // const response = new Response("", { cf: req.cf });
-    const resp = await api
-      .handle(apiReq, response, process.env, ctx)
+    const resp = await Api.handle(apiReq, response, process.env, ctx)
       .then(json)
       .catch(error)
       .then(corsify);

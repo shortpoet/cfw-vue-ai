@@ -2,7 +2,7 @@ import type { AdapterUser } from '@auth/core/adapters';
 import { ExpressionBuilder, InsertQueryBuilder, InsertResult, Kysely } from 'kysely';
 import { jsonArrayFrom, jsonObjectFrom } from 'kysely/helpers/sqlite';
 
-import { User, UserRole, UserType } from 'types/index';
+import { User, UserRole, UserType } from '@cfw-vue-ai/types';
 import { Database, getDatabaseFromEnv } from '..';
 import { format, propertiesToFormat } from '../cast';
 const { to, from } = format;

@@ -11,23 +11,9 @@
 }
 </style>
   
-<script lang="ts">
+<script setup lang="ts">
 import { usePageContext } from '../../composables';
-
-export default {
-  components: {
-    ApiViewerFetch
-  },
-  setup() {
-    const pageContext = usePageContext();
-    const pageProps = pageContext?.pageProps || { apiData: undefined, apiDataLoading: true, apiDataError: undefined };
-    const { apiData, apiDataLoading, apiDataError } = pageProps;
-
-    return {
-      apiData,
-      apiDataLoading,
-      apiDataError
-    }
-  }
-}
+const { pageProps } = usePageContext() ||
+  { pageProps: { apiData: undefined, apiDataLoading: true, apiDataError: undefined } };
+const { apiData, apiDataLoading, apiDataError } = pageProps;
 </script>

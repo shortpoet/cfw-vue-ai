@@ -11,11 +11,6 @@
 }
 </style>
   
-<script lang="ts">
+<script setup lang="ts">
 
-export default {
-  components: {
-    ApiViewer
-  },
-}
 </script>

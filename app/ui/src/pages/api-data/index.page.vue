@@ -10,23 +10,22 @@
     </nav>
   </div>
 </template>
-<script lang="ts">
-export default {
-  components: {
-    Link,
-  },
-  async setup(_, ctx) {
-    const attrsObj = {
-      bg: 'blue-400 hover:blue-500 dark:blue-500 dark:hover:blue-600',
-      // text: 'sm white', // this causes a bug that changes inner html
-      font: 'mono light',
-      p: 'y-2 x-4',
-      border: '2 rounded blue-200',
-    };
+<script setup lang="ts">
 
-    console.log(`[ui] [api-data] [index.page.vue] [setup] ::`)
-    ctx.emit('loaded', true);
-    return { attrsObj };
-  }
-}
+const attrsObj = {
+  bg: 'blue-400 hover:blue-500 dark:blue-500 dark:hover:blue-600',
+  // text: 'sm white', // this causes a bug that changes inner html
+  font: 'mono light',
+  p: 'y-2 x-4',
+  border: '2 rounded blue-200',
+};
+
+console.log(`[ui] [api-data] [index.page.vue] [setup] ::`);
+
+const emit = defineEmits(['loaded']);
+
+emit('loaded', true);
+
+useAttrs();
+
 </script>

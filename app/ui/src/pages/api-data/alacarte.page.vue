@@ -21,74 +21,43 @@
 }
 </style>
   
-<script lang="ts">
-import {
-  computed, ref,
-  watch
-} from 'vue';
-import { useUiStore } from '../../stores'
+<script setup lang="ts">
+import { useUiStore } from '../../stores';
 
-export default {
-  components: {
-    ApiViewer,
-    TextInput
-  },
-  setup() {
-    const ui = useUiStore()
-    // const ui: StoreState<UiState> = useUiStore()
-    const urlPath = ref(ui.alaCartePath)
-    // const urlPath = ref('')
-    // const pageContext: PageContext = usePageContext()
-    const showViewer = ref(false)
-    const fetchNow = ref(false)
-    // const router = useRouter()
-    const go = () => {
-      // goTime.value = false
-      if (urlPath.value) {
-        ui.setNewPath(urlPath.value)
-        if (import.meta.env.VITE_LOG_LEVEL === 'debug') {
-          // console.log('orig/index.page.vue: go()')
-          // console.log('urlPath.value: ' + urlPath.value)
-          // console.log('pageContext.urlPathname: ' + pageContext.urlPathname)
-          // console.log('resolveRoute: ' + resolveRoute(`/orig/${encodeURIComponent(urlPath.value)}`, pageContext.urlPathname))
-        }
-        showViewer.value = true
-        fetchNow.value = true
-        // navigate(`/orig/hi/${encodeURIComponent(urlPath.value)}`)
-      }
-    }
-    // console.log('orig/index.page.vue: setup()')
-    // console.log('urlPath.value: ' + urlPath.value)
-    const validUrl = computed(() => {
-      return (
-        urlPath.value &&
-        urlPath.value.length > 0 &&
-        urlPath.value !== '/' &&
-        urlPath.value.startsWith('api/') &&
-        showViewer.value
-      )
-    })
-    const onUpdateModel = (value: string) => {
-      fetchNow.value = false
-      console.log('orig/index.page.vue: onUpdateModel()')
-      // goTime.value = false
-      urlPath.value = value
-      ui.setNewPath(urlPath.value)
-      // console.log('urlPath.value: ' + urlPath.value)
-    }
-    watch(urlPath, (newVal, oldVal) => {
-      // console.log('orig/index.page.vue: watch(urlPath)')
-      // console.log('newVal: ' + newVal)
-      // console.log('oldVal: ' + oldVal)
-    })
+const ui = useUiStore();
+const urlPath = ref(ui.alaCartePath);
+const showViewer = ref(false);
+const fetchNow = ref(false);
 
-    return {
-      go,
-      urlPath,
-      validUrl,
-      onUpdateModel,
-      fetchNow
+const go = () => {
+  if (urlPath.value) {
+    ui.setNewPath(urlPath.value);
+    if (import.meta.env.VITE_LOG_LEVEL === 'debug') {
+      // Your debug logs here
     }
+    showViewer.value = true;
+    fetchNow.value = true;
   }
-}
+};
+
+const validUrl = computed(() => {
+  return (
+    urlPath.value &&
+    urlPath.value.length > 0 &&
+    urlPath.value !== '/' &&
+    urlPath.value.startsWith('api/') &&
+    showViewer.value
+  );
+});
+
+const onUpdateModel = (value: string) => {
+  fetchNow.value = false;
+  urlPath.value = value;
+  ui.setNewPath(urlPath.value);
+};
+
+watch(urlPath, (newVal, oldVal) => {
+  // Watch logic here if needed
+});
+
 </script>

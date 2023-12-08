@@ -1,0 +1,88 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "baseUrl": "..",
+    // "baseUrl": "./src",
+    "module": "ESNext",
+    "target": "esnext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext",
+      "WebWorker"
+    ],
+    "strict": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "node",
+      "@cloudflare/workers-types",
+      "itty-router",
+      "vite/client",
+      "vike",
+      "@vueuse/core",
+      "pinia"
+    ],
+    "paths": {
+      "@/*": [
+        "app/*"
+        // "app/src/*"
+      ],
+      // "components/*": [
+      //   "client/components/*"
+      // ],
+      // "hooks/*": [
+      //   "client/hooks/*"
+      // ],
+      // "pages/*": [
+      //   "client/pages/*"
+      // ],
+      // "styles/*": [
+      //   "client/styles/*"
+      // ]
+    },
+  },
+  "ts-node": {
+    "esm": true,
+    // "transpileOnly": true,
+    "compilerOptions": {
+      // "target": "ESNext",
+      // "module": "ESNext",
+      "types": [
+        "vite/client",
+        "node",
+      ],
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.test.tsx",
+    "**/node_modules/*",
+    //   "ui/src/components/gpt-clone/**/*",
+    //   "ui/src/components/openai/**/*",
+    //   "ui/src/pages/gpt-clone/**/*",
+    //   "ui/src/pages/openai/**/*",
+    //   "ui/src/stores/gpt-clone/**/*",
+    //   "ui/src/layouts/GPTLayout.vue",
+  ],
+  "include": [
+    "bindings.d.ts",
+    "api/**/*",
+    "server/**/*",
+    "types/**/*",
+    "ui/**/*",
+    "ui/**/*.vue",
+    "ai-maps-util/**/*",
+  ]
+}

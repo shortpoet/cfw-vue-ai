@@ -20,7 +20,7 @@ import type {
   UserRole,
   UserType,
   SessionUnion,
-} from './types';
+} from './types/src';
 import { Database } from './db/src';
 
 type Mutable<T> = {
