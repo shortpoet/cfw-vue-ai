@@ -5,12 +5,13 @@
     </a>
     <Link href="/">Home</Link>
     <Link href="/about">About</Link>
+    <Link href="/api-data">Api Data</Link>
+    <Link href="/login">Login</Link>
   </div>
 </template>
 
 <script setup lang="ts">
-import Link from '@/ui/src/components/base/Link.vue';
-import logoUrl from '@/public/Old_map_icon.svg';
+import logoUrl from '../../../../public/Old_map_icon.svg';
 </script>
 <style scoped>
 .logo {

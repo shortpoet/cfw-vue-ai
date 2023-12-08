@@ -1,6 +1,6 @@
 import { badResponse, okResponse } from '../../response';
 import { withCfSummary } from '../../request';
-import { getCookieAuthToken } from 'app/utils';
+import { getCookieAuthToken } from '@cfw-vue-ai/utils';
 export interface CredsUser {
   key: string;
   username: string;

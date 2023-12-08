@@ -31,21 +31,17 @@
   </div>
 </template>
 <style scoped>
-@import url('@/ui/src/styles/page-shell.css');
+@import url('../styles/page-shell.css');
 </style>
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
-import UserLayout from '@/ui/src/layouts/UserLayout.vue';
-import AdminLayout from '@/ui/src/layouts/AdminLayout.vue';
-import { usePageContext } from '@/ui/src/composables/pageContext';
-import MainNav from '@/ui/src/components/base/MainNav.vue';
-import { useNextAuth } from '@/ui/src/composables/auth';
+import { UserLayout } from '../layouts';
+import { AdminLayout } from '../layouts';
 import { useAuthStore } from '../stores';
-import Footer from '@/ui/src/components/base/Footer.vue';
-import { UserRole } from '@/types';
 import { useHead } from '@vueuse/head';
-import { meta, title, link } from '@/ui/src/renderer/meta';
+import { meta, title, link } from '../renderer';
+import { UserRole } from '@cfw-vue-ai/types';
 
 useHead({
   title,

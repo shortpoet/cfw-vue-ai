@@ -28,15 +28,11 @@
   </main>
 </template>
 <style scoped>
-@import url('@/ui/src/styles/page-shell.css');
+@import url('../styles/page-shell.css');
 </style>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
-import MainNav from '@/ui/src/components/base/MainNav.vue';
 import BlueLayout from './BlueLayout.vue';
-import Footer from '@/ui/src/components/base/Footer.vue';
-import { useHead } from '@vueuse/head';
 import { meta, title, link } from '../renderer/meta';
 
 useHead({

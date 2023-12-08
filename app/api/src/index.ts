@@ -18,7 +18,7 @@ import {
   logWorkerStart,
   logger,
 } from '@cfw-vue-ai/utils';
-import { Api as api } from './router';
+import { Api } from './router';
 import { handleStaticAssets } from './static-assets';
 import { handleSsr } from './ssr';
 
@@ -59,7 +59,7 @@ async function handleFetchEvent(
       return await handleStaticAssets(request, env, ctx);
     case isAPiURL(url):
       log(`[worker] index.handleFetchEvent -> ${env.VITE_API_VERSION} -> ${url.pathname}`);
-      res = await api.handle(request, resp, env, ctx);
+      res = await Api.handle(request, resp, env, ctx);
       log(`[worker] index.handleFetchEvent -> api response`);
     // logObjs([res, res.headers]);
     default:

@@ -26,11 +26,6 @@
   
 <script lang="ts">
 import { computed, PropType, ref, watch } from 'vue';
-import Counter from '@/ui/src/components/base/Counter.vue'
-import Link from '@/ui/src/components/base/Link.vue'
-import JsonTree from '@/ui/src/components/base/JsonTree.vue'
-import { useNextAuth } from '@/ui/src/composables/auth';
-import { RequestConfig, USE_FETCH_REQ_INIT, useFetch } from '@/ui/src/composables/fetch';
 
 export default {
   components: {

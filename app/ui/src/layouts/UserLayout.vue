@@ -6,7 +6,7 @@
 </template>
 
 <style scoped>
-@import url('@/ui/src/styles/user-layout.css');
+@import url('../styles/user-layout.css');
 </style>
 
 <script lang="ts" setup>

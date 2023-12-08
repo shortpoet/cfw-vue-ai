@@ -26,9 +26,6 @@
   
 <script lang="ts">
 import { computed, ref } from 'vue';
-import Counter from '@/ui/src/components/base/Counter.vue'
-import Link from '@/ui/src/components/base/Link.vue'
-import JsonTree from '@/ui/src/components/base/JsonTree.vue'
 
 export default {
   components: {

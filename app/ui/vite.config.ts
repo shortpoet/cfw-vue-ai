@@ -4,6 +4,8 @@ import Unocss from 'unocss/vite';
 import Markdown from 'unplugin-vue-markdown/vite';
 import Shiki from 'markdown-it-shikiji';
 import LinkAttributes from 'markdown-it-link-attributes';
+import Components from 'unplugin-vue-components/vite';
+import AutoImport from 'unplugin-auto-import/vite';
 
 import path from 'node:path';
 import { defineConfig, loadEnv, UserConfig } from 'vite';
@@ -51,7 +53,24 @@ export default ({ mode }: { mode: string }) => {
         include: [/\.vue$/, /\.md$/],
       }),
       vike(),
+      AutoImport({
+        imports: [
+          'vue',
+          'vue/macros',
+          // '@vueuse/core',
+          '@vueuse/head',
+          // 'vue-demi'
+        ],
+        dts: 'src/auto-imports.d.ts',
+        dirs: ['src/composables', 'src/composables/base'],
+        vueTemplate: true,
+      }),
       Unocss(),
+      Components({
+        extensions: ['vue'],
+        include: [/\.vue$/, /\.vue\?vue/],
+        dts: 'src/components.d.ts',
+      }),
       Markdown({
         wrapperClasses: 'prose prose-sm m-auto text-left',
         headEnabled: true,
@@ -81,28 +100,12 @@ export default ({ mode }: { mode: string }) => {
       hmr: {
         overlay: false,
       },
-      // to avoid CORS issues
-      // proxy: {
-      //   "/api": {
-      //     target: "http://localhost:3333",
-      //     changeOrigin: true,
-      //     rewrite: (path) => path.replace(/^\/api/, "api"),
-      //   },
-      // },
     },
 
     build: {
       outDir: 'build',
       target: 'esnext',
     },
-
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('../', import.meta.url)),
-        stream: 'readable-stream',
-      },
-    },
-
     test: vitestConfig,
   });
 };

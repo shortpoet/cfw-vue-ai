@@ -1,1 +1,1 @@
-export { default as Layout } from '@/ui/src/layouts/SuspenseLayout.vue';
+export { SuspenseLayout as Layout } from '../../layouts';

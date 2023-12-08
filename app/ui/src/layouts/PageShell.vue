@@ -16,10 +16,6 @@
 </template>
 
 <script lang="ts" setup>
-// import { ref } from 'vue';
-import { useHead } from '@vueuse/head';
-import MainNav from '@/ui/src/components/base/MainNav.vue';
-import Footer from '@/ui/src/components/base/Footer.vue';
 import { meta, title, link } from '../renderer/meta';
 
 useHead({
@@ -54,5 +50,5 @@ useHead({
 <style></style>
 
 <style scoped>
-@import url('@/ui/src/styles/page-shell.css');
+@import url('../styles/page-shell.css');
 </style>

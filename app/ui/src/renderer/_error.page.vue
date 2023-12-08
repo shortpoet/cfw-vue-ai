@@ -18,7 +18,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { usePageContext } from '../composables';
-import Counter from '@/ui/src/components/base/Counter.vue'
 
 defineProps(['is404', 'errorInfo'])
 const pageContext = usePageContext()

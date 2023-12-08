@@ -1,5 +1,5 @@
 import { render, redirect } from 'vike/abort';
-import { PageContext, UserRole } from 'types/index';
+import { PageContext, UserRole } from '@cfw-vue-ai/types';
 import type { GuardAsync } from 'vike/types';
 
 interface GuardProtectedRoutes {
@@ -23,9 +23,7 @@ export const useGuard = async (
   const redirectTo = user ? undefined : '/auth/login';
 
   if (Object.keys(protectedRoutes).includes(urlPathname)) {
-    console.log(
-      `\n[ui] [guard]\n[ui] [guard] [${route}] START redirectTo: ${redirectTo}`
-    );
+    console.log(`\n[ui] [guard]\n[ui] [guard] [${route}] START redirectTo: ${redirectTo}`);
     console.log(`[ui] [guard] [${route}] roles: ${roles}`);
     console.log(`[ui] [guard] [${route}] protectedRoutes[urlPathname]: ->`);
     console.log(protectedRoutes[urlPathname]);
@@ -44,13 +42,11 @@ export const useGuard = async (
       throw render(403, {
         noSession: false,
         notAdmin: !roles?.includes(UserRole.Admin),
-        message: 'Only admins are allowed to access this page.'
+        message: 'Only admins are allowed to access this page.',
       });
     }
 
-    console.log(
-      `[ui] [guard] [${route}] protectedRoutes.includes(${urlPathname}) && !user`
-    );
+    console.log(`[ui] [guard] [${route}] protectedRoutes.includes(${urlPathname}) && !user`);
 
     // Render the login page while preserving the URL. (This is novel technique
     // which we explain down below.)

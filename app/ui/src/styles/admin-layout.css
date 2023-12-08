@@ -1,0 +1,8 @@
+.admin-layout.content {
+  background-color: cornflowerblue;
+  padding: 20px;
+  border-left: 2px solid #ccc;
+  padding-bottom: 50px;
+  min-height: 100vh;
+  max-width: 900px;
+}

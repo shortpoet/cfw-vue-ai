@@ -11,7 +11,6 @@
   </div>
 </template>
 <script lang="ts">
-import Link from '@/ui/src/components/base/Link.vue'
 export default {
   components: {
     Link,

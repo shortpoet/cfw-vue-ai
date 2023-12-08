@@ -6,7 +6,7 @@
 </template>
 
 <style scoped>
-/* @import url('@/ui/src/styles/admin-layout.css'); */
+/* @import url('../styles/admin-layout.css'); */
 </style>
 
 <script lang="ts" setup>

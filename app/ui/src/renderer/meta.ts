@@ -28,7 +28,7 @@ const meta = [
   { property: 'og:updated_time', content: new Date().toISOString() },
   {
     property: 'og:see_also',
-    content: 'https://www.linkedin.com/in/carlos-soriano/'
+    content: 'https://www.linkedin.com/in/carlos-soriano/',
   },
   { name: 'twitter:card', content: 'summary_large_image' },
   { name: 'twitter:title', content: title },
@@ -50,8 +50,8 @@ const meta = [
 
   {
     name: 'theme-color',
-    content: '#00aba9'
-  }
+    content: '#00aba9',
+  },
 ];
 const link = [
   {
@@ -60,10 +60,10 @@ const link = [
     // href: '/favicon.svg?'
     // href: `https://${import.meta.env.VITE_APP_URL}/favicon.svg`
     // href: (await import('@/public/favicon.svg')).default
-    href: (await import('@/public/Old_map_icon.svg')).default
+    href: (await import('../../../public/Old_map_icon.svg')).default,
   },
   {
     rel: 'canonical',
-    href: computed(() => import.meta.env.BASE_URL)
-  }
+    href: computed(() => import.meta.env.BASE_URL),
+  },
 ];

@@ -1,6 +1,6 @@
 import { PageContext } from 'types/index';
 import { createApp } from './app';
-import { usePageTitle } from '@/ui/src/composables';
+import { usePageTitle } from '../composables';
 import { navigate } from 'vike/client/router';
 import { render as renderAbort, redirect } from 'vike/abort';
 
@@ -17,8 +17,7 @@ let app: ReturnType<typeof createApp>;
 async function render(pageContext: PageContext) {
   // console.log('client.render');
   const { Page, pageProps } = pageContext;
-  if (!Page)
-    throw new Error('Client-side render() hook expects pageContext.Page to be defined');
+  if (!Page) throw new Error('Client-side render() hook expects pageContext.Page to be defined');
 
   const { session, redirectTo, cf, urlPathname } = pageContext;
 
@@ -58,9 +57,7 @@ export const clientRouting = true
 // !! WARNING !! Before doing so, read https://vike.dev/clientRouting */
 
 function onHydrationEnd() {
-  console.log(
-    '[ui] [client] [onHydrationEnd] Hydration finished; page is now interactive.'
-  );
+  console.log('[ui] [client] [onHydrationEnd] Hydration finished; page is now interactive.');
 }
 function onPageTransitionStart() {
   console.log('[ui] [client] [onPageTransitionStart] Page transition start');

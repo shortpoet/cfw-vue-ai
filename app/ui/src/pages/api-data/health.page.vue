@@ -12,7 +12,6 @@
 </style>
   
 <script lang="ts">
-import ApiViewerFetch from '@/ui/src/components/base/ApiViewerFetch.vue';
 import { usePageContext } from '../../composables';
 
 export default {

@@ -74,7 +74,7 @@ type CredentialsUser = {
 
 type CredentialsSessionUser = {
   email: string;
-  emialVerified: Date | string | null;
+  emailVerified: Date | string | null;
   roles: UserRole[];
   created_at: Date;
   updated_at: Date;
@@ -105,7 +105,7 @@ type EmailUser = {
 
 type EmailSessionUser = {
   email: string;
-  emialVerified: Date | string | null;
+  emailVerified: Date | string | null;
   roles: UserRole[];
   created_at: Date;
   updated_at: Date;
@@ -120,7 +120,7 @@ type EmailSession = {
 
 type GithubSessionUser = {
   email: string;
-  emialVerified: Date | string | null;
+  emailVerified: Date | string | null;
   roles: UserRole[];
   created_at: Date;
   updated_at: Date;

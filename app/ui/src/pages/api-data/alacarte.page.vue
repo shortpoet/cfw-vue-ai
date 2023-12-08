@@ -26,15 +26,7 @@ import {
   computed, ref,
   watch
 } from 'vue';
-// import { PageContext } from '@/types';
-import ApiViewer from '@/ui/src/components/base/ApiViewer.vue';
-import TextInput from '@/ui/src/components/base/TextInput.vue';
-import { useUiStore } from '@/ui/src/stores'
-// import { usePageContext } from '@/ui/src/composables';
-// import { resolveRoute } from 'vike/routing'
-// import { navigate } from 'vike/client/router';
-// import { StoreState } from 'pinia';
-
+import { useUiStore } from '../../stores'
 
 export default {
   components: {

@@ -8,5 +8,4 @@
 </template>
 
 <script lang="ts" setup>
-import TheCounter from '@/ui/src/components/base/TheCounter.vue';
 </script>

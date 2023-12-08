@@ -1,13 +1,13 @@
 import '@unocss/reset/tailwind.css';
 import 'uno.css';
-import '@/ui/src/styles/main.css';
+import '../styles/main.css';
 import { ComponentPublicInstance, createSSRApp, defineComponent, h, markRaw, reactive } from 'vue';
 import { createHead } from '@vueuse/head';
 import { install as installPinia } from '../modules/pinia';
 import { StoreState } from 'pinia';
 import { UiState } from '../stores';
 import { setPageContext } from '../composables';
-import PageShell from '@/ui/src/layouts/PageShell.vue';
+import { PageShell } from '../layouts';
 import { Component, PageContext, PageProps, Page } from '@cfw-vue-ai/types';
 
 export const isClient = typeof window !== 'undefined';
