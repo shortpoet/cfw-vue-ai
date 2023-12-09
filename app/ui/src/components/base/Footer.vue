@@ -55,6 +55,8 @@ const toggleLangsTitle = ref('Toggle Langs');
     <div i-carbon-logo-github />
     </Link>
 
+    <DropMenu :icon-class="'i-carbon-user-filled'" />
+
   </nav>
 </template>
 

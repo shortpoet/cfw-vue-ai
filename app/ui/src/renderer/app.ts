@@ -6,7 +6,7 @@ import { createHead } from '@vueuse/head';
 import { install as installPinia } from '../modules/pinia';
 import { StoreState } from 'pinia';
 import { UiState } from '../stores';
-import { setPageContext } from '../composables';
+import { setPageContext, provideAuth } from '../composables';
 import { PageShell } from '../layouts';
 import { Component, PageContext, PageProps, Page } from '@cfw-vue-ai/types';
 
@@ -25,7 +25,7 @@ export { createApp };
 function createApp(Page: Page, pageProps: PageProps | undefined, pageContext: PageContext) {
   // console.log("createApp");
   // const { Page, pageProps, session, csrfToken, callbackUrl, isAdmin } = pageContext;
-  const { csrfToken, callbackUrl, isAdmin, cf } = pageContext;
+  const { session, csrfToken, callbackUrl, isAdmin, cf } = pageContext;
   let rootComponent: any;
   // let rootComponent: Component;
   // let rootComponent: ComponentPublicInstance;
@@ -36,6 +36,7 @@ function createApp(Page: Page, pageProps: PageProps | undefined, pageContext: Pa
       Page: markRaw(Page),
       pageProps: markRaw(pageProps || {}),
       Layout: markRaw(pageContext.exports.Layout || PageShell),
+      session,
       csrfToken,
       callbackUrl,
       isAdmin,
@@ -43,6 +44,7 @@ function createApp(Page: Page, pageProps: PageProps | undefined, pageContext: Pa
     }),
     created() {
       rootComponent = this;
+      provideAuth();
     },
     mounted() {},
     render() {
@@ -71,6 +73,7 @@ function createApp(Page: Page, pageProps: PageProps | undefined, pageContext: Pa
       rootComponent.pageProps = markRaw(pageContext.pageProps || {});
       // without the below line the layout only changes on reload, and then persists weirdly to other navigated pages
       rootComponent.Layout = markRaw(pageContext.exports.Layout || PageShell);
+      rootComponent.session = pageContext.session;
       rootComponent.csrfToken = pageContext.csrfToken;
       rootComponent.callbackUrl = pageContext.callbackUrl;
       rootComponent.isAdmin = pageContext.isAdmin;

@@ -6,7 +6,7 @@
     <Link href="/">Home</Link>
     <Link href="/about">About</Link>
     <Link href="/api-data">Api Data</Link>
-    <Link href="/login">Login</Link>
+    <Link href="/auth">Auth</Link>
   </div>
 </template>
 
