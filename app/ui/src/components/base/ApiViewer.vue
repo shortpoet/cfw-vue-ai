@@ -25,22 +25,6 @@
 </style>
   
 <script setup lang="ts">
-import {
-  computed, ref, watch
-} from 'vue';
-
-<template>
-  <!--Your template content here-- >
-    </template>
-
-    < script setup lang = "ts" >
-import {
-  computed, ref, watch, defineProps, PropType
-} from 'vue';
-
-// Import necessary functions like useNextAuth, useFetch, and Request
-// Import your components: Counter, Link, JsonTree
-
 const props = defineProps({
   title: {
     type: String,
@@ -58,9 +42,9 @@ const props = defineProps({
     default: true
   },
   options: {
-    type: Object as PropType<RequestConfig>,
+    type: Object as PropType<typeof RequestConfig>,
     default: () => new Request('', USE_FETCH_REQ_INIT),
-    validator: (options: RequestConfig) => {
+    validator: (options: typeof RequestConfig) => {
       return options.method === 'GET' ||
         options.method === 'POST' ||
         options.method === 'PUT' ||
@@ -76,19 +60,10 @@ const props = defineProps({
 const urlPath = ref(props.urlPath);
 const fetchNow = ref(props.fetchNow);
 
-const NOOP = {
-  data: undefined,
-  dataLoading: ref(false),
-  error: undefined,
-  loaded: ref(false),
-};
-
-if (typeof window === 'undefined' || !fetchNow.value) {
-  return NOOP;
-}
-
 const auth = useNextAuth();
 const { user, authLoading, onLoad } = auth;
+console.log('[ui] [Api Viewer] [auth] user');
+console.log(user);
 await onLoad();
 authLoading.value = auth.authLoading.value;
 
@@ -99,8 +74,6 @@ const options = {
 let dataLoading = ref(false);
 let error = ref();
 let data = ref();
-
-const loaded = computed(() => dataLoading.value === false && authLoading.value === false);
 
 watch(urlPath, async (newUrl, oldUrl) => {
   if (fetchNow.value === false) {
@@ -130,5 +103,19 @@ watch(fetchNow, async (newVal, oldVal) => {
     console.log(data.value);
   }
 }, { immediate: true });
+
+if (typeof window === 'undefined' || !fetchNow.value) {
+  const NOOP = {
+    data: ref(undefined),
+    dataLoading: ref(false),
+    error: ref(undefined),
+    loaded: ref(false),
+  };
+  data = NOOP.data;
+  dataLoading = NOOP.dataLoading;
+  error = NOOP.error;
+  dataLoading = NOOP.loaded;
+}
+const loaded = computed(() => dataLoading.value === false && authLoading.value === false);
 
 </script>
