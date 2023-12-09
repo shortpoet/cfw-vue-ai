@@ -4,7 +4,17 @@ import { ServerResponse } from 'http';
 import { OpenAPIRouter } from '@cloudflare/itty-router-openapi';
 
 import sampleData from '@cfw-vue-ai/db/src/data.json';
-import { jsonData, withCfHeaders, withCfSummary } from '../middleware';
+import {
+  authMiddlewareItty as authMiddleware,
+  withSession,
+  withCfHeaders,
+  withCfSummary,
+  jsonData,
+  withUser,
+} from '../middleware';
+
+import { auth_dbv1_router } from 'api/router';
+import { health_router } from 'api/router';
 
 const FILE_LOG_LEVEL = 'error';
 
@@ -32,13 +42,20 @@ const protectedRoutes = {
 
 router
   .options('*', preflight)
-  .all('/*', withCfHeaders())
-  // .all('/api/*', () => {})
+  .all('*', withCfHeaders())
+  .all('*', authMiddleware)
+  .all('*', withSession())
+  .all('/db-v1/*', auth_dbv1_router)
+  .all('/health/*', health_router)
   .get('/json-data', (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
     jsonData(req, res, env, sampleData)
   )
-  .get('/hello', withCfSummary(), (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
-    jsonData(req, res, env, { hello: 'world' })
+  .get(
+    '/hello',
+    withCfSummary(),
+    withUser(),
+    (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
+      jsonData(req, res, env, { hello: 'world' })
   )
   // .all("*", error_handler)
   .all('*', () => error(404, 'Oops... Are you sure about that? FAaFO'));

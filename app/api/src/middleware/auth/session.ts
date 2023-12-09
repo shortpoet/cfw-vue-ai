@@ -1,9 +1,9 @@
 import { UserRole } from '@cfw-vue-ai/types';
-const FILE_LOG_LEVEL = 'debug';
-import { getCookieAuthToken, logger, logObjs } from '@cfw-vue-ai/utils';
+import { getDatabaseFromEnv, q } from '@cfw-vue-ai/db/src';
 import { unauthorizedResponse } from '../response';
 import { getSessionItty } from './middleware-itty';
-import { getDatabaseFromEnv, q } from '@cfw-vue-ai/db/src';
+import { getCookieAuthToken, logger, logObjs } from '@cfw-vue-ai/utils';
+const FILE_LOG_LEVEL = 'debug';
 
 export const withSession =
   ({ required = true } = {}) =>

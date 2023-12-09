@@ -3,7 +3,7 @@ import { OpenAPIRouter } from '@cloudflare/itty-router-openapi';
 
 import { UserRole } from '@cfw-vue-ai/types';
 import { logObjs, logger } from '@cfw-vue-ai/utils';
-import { corsify } from '../router';
+import { corsify } from '..';
 import { jsonData, unauthorizedResponse, withAuth } from '../../middleware';
 import { debugRes, healthCheck, healthCheckJson } from '../../controllers';
 

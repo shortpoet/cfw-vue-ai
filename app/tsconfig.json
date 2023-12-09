@@ -21,22 +21,22 @@
         "./*"
       ],
       "api/*": [
-        "api/*"
+        "api/src/*"
       ],
       "db/*": [
-        "db/*"
+        "db/src/*"
       ],
       "server/*": [
         "server/*"
       ],
       "types/*": [
-        "types/*"
+        "types/src/*"
       ],
       "ui/*": [
-        "ui/*"
+        "ui/src/*"
       ],
       "utils/*": [
-        "utils/*"
+        "utils/src/*"
       ],
     },
   },

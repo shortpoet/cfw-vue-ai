@@ -101,6 +101,14 @@ export default ({ mode }: { mode: string }) => {
       hmr: {
         overlay: false,
       },
+      // to avoid CORS issues
+      // proxy: {
+      //   '/api': {
+      //     target: 'http://localhost:3333',
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/api/, 'api'),
+      //   },
+      // },
     },
 
     build: {

@@ -92,6 +92,11 @@ declare global {
     user: User;
     token: string;
   }
+  interface ReqAuth {
+    sanitizedUser: string;
+    user: User | any;
+    token: string;
+  }
 
   interface Request extends CFRequest {
     readonly method: string;
@@ -105,6 +110,7 @@ declare global {
     listOptions?: ListOptions;
     user?: User | null;
     session?: Omit<Database['Session'], 'id'>;
+    auth?: ReqAuth | null;
     credsAuth?: CredsAuth | null;
   }
 
