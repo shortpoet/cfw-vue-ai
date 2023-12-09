@@ -55,14 +55,16 @@ export default ({ mode }: { mode: string }) => {
       vike(),
       AutoImport({
         imports: [
-          'vue',
+          // messes up Component : any for now...
+          // 'vue',
           'vue/macros',
           // '@vueuse/core',
           '@vueuse/head',
           // 'vue-demi'
         ],
+        exclude: [],
         dts: 'src/auto-imports.d.ts',
-        dirs: ['src/composables', 'src/composables/base'],
+        dirs: ['src/composables/**'],
         vueTemplate: true,
       }),
       Unocss(),

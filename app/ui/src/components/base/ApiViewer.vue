@@ -71,9 +71,9 @@ const options = {
   ...props.options,
 };
 
-let dataLoading = ref(false);
-let error = ref();
-let data = ref();
+const dataLoading = ref(false);
+const error = ref();
+const data = ref();
 
 watch(urlPath, async (newUrl, oldUrl) => {
   if (fetchNow.value === false) {
@@ -111,10 +111,10 @@ if (typeof window === 'undefined' || !fetchNow.value) {
     error: ref(undefined),
     loaded: ref(false),
   };
-  data = NOOP.data;
-  dataLoading = NOOP.dataLoading;
-  error = NOOP.error;
-  dataLoading = NOOP.loaded;
+  data.value = NOOP.data.value;
+  dataLoading.value = NOOP.dataLoading.value;
+  error.value = NOOP.error.value;
+  dataLoading.value = NOOP.loaded.value;
 }
 const loaded = computed(() => dataLoading.value === false && authLoading.value === false);
 

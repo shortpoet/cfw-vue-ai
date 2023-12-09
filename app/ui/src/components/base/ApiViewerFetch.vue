@@ -24,50 +24,43 @@
 }
 </style>
   
-<script lang="ts">
-import { computed, ref } from 'vue';
+<script setup lang="ts">
 
-export default {
-  components: {
-    Counter,
-    Link,
-    JsonTree,
+const props = defineProps({
+  title: {
+    type: String,
+    required: false,
   },
-  props: {
-    title: {
-      type: String,
-      required: false,
-    },
-    data: {
-      type: Object,
-      required: false,
-    },
-    loading: {
-      type: Boolean,
-      required: false,
-    },
-    error: {
-      type: Object,
-      required: false,
-    },
+  data: {
+    type: Object,
+    required: false,
   },
-
-  async setup(props) {
-    const NOOP = {
-      data: undefined,
-      error: undefined,
-      loaded: ref(false),
-    }
-    if (typeof window === "undefined") {
-      return NOOP
-    }
-
-    let loading = ref(props.loading);
-    let error = ref(props.error);
-    let data = ref(props.data);
-
-    const loaded = computed(() => loading.value === false);
-    return { data, loaded, error };
+  loading: {
+    type: Boolean,
+    required: false,
   },
+  error: {
+    type: Object,
+    required: false,
+  },
+});
+
+
+const loading = ref(props.loading);
+const error = ref(props.error);
+const data = ref(props.data);
+
+if (typeof window === 'undefined') {
+  const NOOP = {
+    data: ref(undefined),
+    loading: ref(false),
+    error: ref(undefined),
+  };
+  data.value = NOOP.data.value;
+  error.value = NOOP.error.value
+  loading.value = NOOP.loading.value;
 }
+
+const loaded = computed(() => loading.value === false);
+
 </script>

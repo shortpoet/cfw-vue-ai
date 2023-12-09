@@ -93,12 +93,6 @@ declare global {
   const watchPostEffect: typeof import('vue')['watchPostEffect']
   const watchSyncEffect: typeof import('vue')['watchSyncEffect']
 }
-// for type re-export
-declare global {
-  // @ts-ignore
-  export type { Component, ComponentPublicInstance, ComputedRef, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, VNode, WritableComputedRef } from 'vue'
-  import('vue')
-}
 // for vue template auto import
 import { UnwrapRef } from 'vue'
 declare module 'vue' {
@@ -112,71 +106,24 @@ declare module 'vue' {
     readonly $toRef: UnwrapRef<typeof import('vue/macros')['$toRef']>
     readonly COOKIES_SESSION_TOKEN: UnwrapRef<typeof import('./composables/auth')['COOKIES_SESSION_TOKEN']>
     readonly COOKIES_USER_TOKEN: UnwrapRef<typeof import('./composables/auth')['COOKIES_USER_TOKEN']>
-    readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly FetchError: UnwrapRef<typeof import('./composables/fetch')['FetchError']>
     readonly Locale: UnwrapRef<typeof import('./composables/locales')['Locale']>
     readonly RequestConfig: UnwrapRef<typeof import('./composables/fetch')['RequestConfig']>
     readonly SESSION_TOKEN_EXPIRY: UnwrapRef<typeof import('./composables/auth')['SESSION_TOKEN_EXPIRY']>
     readonly USE_FETCH_REQ_INIT: UnwrapRef<typeof import('./composables/fetch')['USE_FETCH_REQ_INIT']>
     readonly UseFetchResult: UnwrapRef<typeof import('./composables/fetch')['UseFetchResult']>
-    readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly cookieOptions: UnwrapRef<typeof import('./composables/auth')['cookieOptions']>
-    readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
-    readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
-    readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
-    readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
-    readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
-    readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
-    readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getI18n: UnwrapRef<typeof import('./composables/i18n')['getI18n']>
     readonly getLocale: UnwrapRef<typeof import('./composables/locales')['getLocale']>
-    readonly h: UnwrapRef<typeof import('vue')['h']>
-    readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly isClient: UnwrapRef<typeof import('./composables/auth')['isClient']>
     readonly isDark: UnwrapRef<typeof import('./composables/dark')['isDark']>
-    readonly isProxy: UnwrapRef<typeof import('vue')['isProxy']>
-    readonly isReactive: UnwrapRef<typeof import('vue')['isReactive']>
-    readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
-    readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
-    readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
-    readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
-    readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
-    readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
-    readonly onBeforeUnmount: UnwrapRef<typeof import('vue')['onBeforeUnmount']>
-    readonly onBeforeUpdate: UnwrapRef<typeof import('vue')['onBeforeUpdate']>
-    readonly onDeactivated: UnwrapRef<typeof import('vue')['onDeactivated']>
-    readonly onErrorCaptured: UnwrapRef<typeof import('vue')['onErrorCaptured']>
-    readonly onMounted: UnwrapRef<typeof import('vue')['onMounted']>
-    readonly onRenderTracked: UnwrapRef<typeof import('vue')['onRenderTracked']>
-    readonly onRenderTriggered: UnwrapRef<typeof import('vue')['onRenderTriggered']>
-    readonly onScopeDispose: UnwrapRef<typeof import('vue')['onScopeDispose']>
-    readonly onServerPrefetch: UnwrapRef<typeof import('vue')['onServerPrefetch']>
-    readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
-    readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly pageContext: UnwrapRef<typeof import('./composables/index')['pageContext']>
     readonly preferredDark: UnwrapRef<typeof import('./composables/dark')['preferredDark']>
-    readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideAuth: UnwrapRef<typeof import('./composables/auth')['provideAuth']>
-    readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
-    readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
-    readonly ref: UnwrapRef<typeof import('vue')['ref']>
-    readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly setPageContext: UnwrapRef<typeof import('./composables/pageContext')['setPageContext']>
-    readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
-    readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
-    readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly t: UnwrapRef<typeof import('./composables/i18n')['t']>
-    readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
-    readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
-    readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
-    readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
     readonly toggleDark: UnwrapRef<typeof import('./composables/dark')['toggleDark']>
     readonly toggleLocales: UnwrapRef<typeof import('./composables/locales')['toggleLocales']>
-    readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
-    readonly unref: UnwrapRef<typeof import('vue')['unref']>
-    readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
-    readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
-    readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useFetch: UnwrapRef<typeof import('./composables/fetch')['useFetch']>
     readonly useGuard: UnwrapRef<typeof import('./composables/guard')['useGuard']>
     readonly useHead: UnwrapRef<typeof import('@vueuse/head')['useHead']>
@@ -185,11 +132,6 @@ declare module 'vue' {
     readonly usePageContext: UnwrapRef<typeof import('./composables/pageContext')['usePageContext']>
     readonly usePageTitle: UnwrapRef<typeof import('./composables/pageTitle')['usePageTitle']>
     readonly useSeoMeta: UnwrapRef<typeof import('@vueuse/head')['useSeoMeta']>
-    readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
-    readonly watch: UnwrapRef<typeof import('vue')['watch']>
-    readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
-    readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
-    readonly watchSyncEffect: UnwrapRef<typeof import('vue')['watchSyncEffect']>
   }
 }
 declare module '@vue/runtime-core' {
@@ -203,71 +145,24 @@ declare module '@vue/runtime-core' {
     readonly $toRef: UnwrapRef<typeof import('vue/macros')['$toRef']>
     readonly COOKIES_SESSION_TOKEN: UnwrapRef<typeof import('./composables/auth')['COOKIES_SESSION_TOKEN']>
     readonly COOKIES_USER_TOKEN: UnwrapRef<typeof import('./composables/auth')['COOKIES_USER_TOKEN']>
-    readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly FetchError: UnwrapRef<typeof import('./composables/fetch')['FetchError']>
     readonly Locale: UnwrapRef<typeof import('./composables/locales')['Locale']>
     readonly RequestConfig: UnwrapRef<typeof import('./composables/fetch')['RequestConfig']>
     readonly SESSION_TOKEN_EXPIRY: UnwrapRef<typeof import('./composables/auth')['SESSION_TOKEN_EXPIRY']>
     readonly USE_FETCH_REQ_INIT: UnwrapRef<typeof import('./composables/fetch')['USE_FETCH_REQ_INIT']>
     readonly UseFetchResult: UnwrapRef<typeof import('./composables/fetch')['UseFetchResult']>
-    readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly cookieOptions: UnwrapRef<typeof import('./composables/auth')['cookieOptions']>
-    readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
-    readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
-    readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
-    readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
-    readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
-    readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
-    readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getI18n: UnwrapRef<typeof import('./composables/i18n')['getI18n']>
     readonly getLocale: UnwrapRef<typeof import('./composables/locales')['getLocale']>
-    readonly h: UnwrapRef<typeof import('vue')['h']>
-    readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly isClient: UnwrapRef<typeof import('./composables/auth')['isClient']>
     readonly isDark: UnwrapRef<typeof import('./composables/dark')['isDark']>
-    readonly isProxy: UnwrapRef<typeof import('vue')['isProxy']>
-    readonly isReactive: UnwrapRef<typeof import('vue')['isReactive']>
-    readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
-    readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
-    readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
-    readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
-    readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
-    readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
-    readonly onBeforeUnmount: UnwrapRef<typeof import('vue')['onBeforeUnmount']>
-    readonly onBeforeUpdate: UnwrapRef<typeof import('vue')['onBeforeUpdate']>
-    readonly onDeactivated: UnwrapRef<typeof import('vue')['onDeactivated']>
-    readonly onErrorCaptured: UnwrapRef<typeof import('vue')['onErrorCaptured']>
-    readonly onMounted: UnwrapRef<typeof import('vue')['onMounted']>
-    readonly onRenderTracked: UnwrapRef<typeof import('vue')['onRenderTracked']>
-    readonly onRenderTriggered: UnwrapRef<typeof import('vue')['onRenderTriggered']>
-    readonly onScopeDispose: UnwrapRef<typeof import('vue')['onScopeDispose']>
-    readonly onServerPrefetch: UnwrapRef<typeof import('vue')['onServerPrefetch']>
-    readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
-    readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly pageContext: UnwrapRef<typeof import('./composables/index')['pageContext']>
     readonly preferredDark: UnwrapRef<typeof import('./composables/dark')['preferredDark']>
-    readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideAuth: UnwrapRef<typeof import('./composables/auth')['provideAuth']>
-    readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
-    readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
-    readonly ref: UnwrapRef<typeof import('vue')['ref']>
-    readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly setPageContext: UnwrapRef<typeof import('./composables/pageContext')['setPageContext']>
-    readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
-    readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
-    readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly t: UnwrapRef<typeof import('./composables/i18n')['t']>
-    readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
-    readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
-    readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
-    readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
     readonly toggleDark: UnwrapRef<typeof import('./composables/dark')['toggleDark']>
     readonly toggleLocales: UnwrapRef<typeof import('./composables/locales')['toggleLocales']>
-    readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
-    readonly unref: UnwrapRef<typeof import('vue')['unref']>
-    readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
-    readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
-    readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useFetch: UnwrapRef<typeof import('./composables/fetch')['useFetch']>
     readonly useGuard: UnwrapRef<typeof import('./composables/guard')['useGuard']>
     readonly useHead: UnwrapRef<typeof import('@vueuse/head')['useHead']>
@@ -276,10 +171,5 @@ declare module '@vue/runtime-core' {
     readonly usePageContext: UnwrapRef<typeof import('./composables/pageContext')['usePageContext']>
     readonly usePageTitle: UnwrapRef<typeof import('./composables/pageTitle')['usePageTitle']>
     readonly useSeoMeta: UnwrapRef<typeof import('@vueuse/head')['useSeoMeta']>
-    readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
-    readonly watch: UnwrapRef<typeof import('vue')['watch']>
-    readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
-    readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
-    readonly watchSyncEffect: UnwrapRef<typeof import('vue')['watchSyncEffect']>
   }
 }
