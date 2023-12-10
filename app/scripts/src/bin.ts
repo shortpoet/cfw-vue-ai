@@ -2,6 +2,7 @@ import sade from 'sade';
 import * as kv from './commands/kv';
 import * as vars from './commands/vars';
 import * as git from './commands/git';
+import * as db from './commands/db';
 
 const cli = sade('cfw')
   .version('0.0.1')
@@ -21,7 +22,20 @@ const cli = sade('cfw')
 
   .command('git set')
   .describe('Set git config')
-  .action(git.set);
+  .action(git.set)
+
+  .command('db list')
+  .alias('db ls')
+  .describe('List all D1 databases')
+  .action(db.list)
+
+  .command('db apply')
+  .describe('Apply D1 database migrations')
+  .action(db.apply)
+
+  .command('db delete')
+  .describe('Delete D1 databases')
+  .action(db.deleteDb);
 
 cli.parse(process.argv, {
   boolean: ['debug', 'single', 'quiet'],

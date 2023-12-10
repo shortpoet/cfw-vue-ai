@@ -24,6 +24,7 @@ interface Options {
   debug?: boolean;
   only?: Arrayable<string>;
   ignore?: Arrayable<string>;
+  migration?: string;
 }
 
 type Config = {
@@ -37,6 +38,7 @@ type Config = {
   appName: string;
   bindingNameUI: string;
   bindingNameDb: string;
+  databaseName: string;
   secrets: Record<string, string>;
   only?: Arrayable<string>;
   ignore?: Arrayable<string>;
@@ -63,6 +65,11 @@ interface WranglerTomlCommon {
     include?: Array<string>;
     exclude?: Array<string>;
   };
+  d1_databases?: Array<{
+    binding: string;
+    database_name: string;
+    database_id: string;
+  }>;
   vars?: Record<string, string>;
 }
 interface WranglerToml extends Partial<WranglerTomlCommon> {

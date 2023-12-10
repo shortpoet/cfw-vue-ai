@@ -86,12 +86,13 @@ export async function getConfig(opts: Options): Promise<Config> {
     JMAP_TOKEN: `Mail/fastmail/ai-maps-email-send-token`,
   };
 
-  await setSecrets(secrets, secretsFilePath, { env, debug, wranglerFile });
-  assert(
-    secretsFilePath,
-    `[wrangle] [config] Secret file does not exist: "${secretsFilePath}"`,
-    true
-  );
+  // TODO add to build
+  // await setSecrets(secrets, secretsFilePath, { env, debug, wranglerFile });
+  // assert(
+  //   secretsFilePath,
+  //   `[wrangle] [config] Secret file does not exist: "${secretsFilePath}"`,
+  //   true
+  // );
 
   await assertTomlEnv({ env, wranglerFile, appName, debug });
 
@@ -103,6 +104,7 @@ export async function getConfig(opts: Options): Promise<Config> {
   const bindingNameDb = `${bindingNameBase}_DB_V1`;
   const bindingNameUI = `${bindingNameBase}_UI`;
   const bindingIdDb = formatBindingId(opts, { isUi: false }.isUi);
+  const databaseName = bindingIdDb;
 
   return {
     cwd,
@@ -118,5 +120,6 @@ export async function getConfig(opts: Options): Promise<Config> {
     appName,
     bindingNameUI,
     bindingNameDb,
+    databaseName,
   };
 }

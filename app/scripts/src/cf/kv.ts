@@ -84,5 +84,5 @@ async function writeNamespaceToToml(bindingName: string, opts: Config) {
     preview_id: previewId,
   });
   config['env'][`${opts.env}`]['kv_namespaces'] = kv_namespaces;
-  writeToml(config, opts.wranglerFile);
+  writeToml(config, opts);
 }

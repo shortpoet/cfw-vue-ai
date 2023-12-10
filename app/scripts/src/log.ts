@@ -83,3 +83,109 @@ export async function messages(arr: Message[], isError?: boolean) {
 
   (isError ? error : warn)(output);
 }
+
+function toTitleCase(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+export function printList<T extends Record<string, any>>(list: T[], columnNames: (keyof T)[]) {
+  const columnHeadings: { [K in keyof T]: string } = {} as { [K in keyof T]: string };
+
+  columnNames.forEach((columnName) => {
+    columnHeadings[columnName] = String(columnName);
+  });
+
+  const GAP = '    ',
+    TH = colors.dim().bold().italic;
+
+  const columnLengths: { [K in keyof T]: number } = {} as { [K in keyof T]: number };
+  const HEADING_GAP = GAP.repeat(columnNames.length);
+  // const HEADING_GAP = GAP.repeat(columnNames.length * 3 - (columnNames.length + 1));
+
+  columnNames.forEach((columnName) => {
+    const maxColumnLength = Math.max(
+      ...list.map((item) => String(item[columnName]).length),
+      String(columnHeadings[columnName]).length
+    );
+    columnLengths[columnName] = maxColumnLength;
+  });
+
+  const heading = columnNames
+    .map((columnName) =>
+      TH(toTitleCase(columnHeadings[columnName])).padEnd(
+        columnLengths[columnName] + HEADING_GAP.length
+      )
+    )
+    .join(HEADING_GAP);
+
+  success(heading);
+
+  let i = 0,
+    arr = list,
+    tmp = '';
+
+  for (; i < arr.length; i++) {
+    if (tmp) tmp += '\n';
+    tmp += colors.cyan(ARROW);
+    tmp += columnNames
+      .map((columnName) =>
+        String(arr[i][columnName]).padEnd(columnLengths[columnName] + GAP.length)
+      )
+      .join(GAP);
+  }
+
+  console.log(tmp);
+}
+
+export function printList2<T extends Record<string, any>>(list: T[], columnNames: (keyof T)[]) {
+  const columnHeadings: { [K in keyof T]: string } = {} as { [K in keyof T]: string };
+
+  columnNames.forEach((columnName) => {
+    columnHeadings[columnName] = String(columnName);
+  });
+
+  const GAP = '    ',
+    TH = colors.dim().bold().italic;
+
+  const columnLengths: { [K in keyof T]: number } = {} as { [K in keyof T]: number };
+
+  // Calculate the maximum length for each column
+  columnNames.forEach((columnName) => {
+    const maxColumnLength = Math.max(
+      ...list.map((item) => String(item[columnName]).length),
+      String(columnHeadings[columnName]).length
+    );
+    columnLengths[columnName] = maxColumnLength;
+  });
+
+  const HEADING_GAP = GAP.repeat(columnNames.length * 3 - (columnNames.length + 1));
+  // const HEADING_GAP = GAP.repeat(columnNames.length * 3 - (columnNames.length - 1));
+  // Generate the header with padding based on max item length in each column
+  const heading = columnNames
+    .map((columnName) => {
+      const maxItemLength = Math.max(
+        ...list.map((item) => String(item[columnName]).length),
+        String(columnHeadings[columnName]).length
+      );
+      return TH(toTitleCase(columnHeadings[columnName])).padEnd(maxItemLength + GAP.length);
+    })
+    .join(HEADING_GAP);
+
+  success(heading);
+
+  // Output rows with appropriate padding based on the calculated lengths
+  let i = 0,
+    arr = list,
+    tmp = '';
+
+  for (; i < arr.length; i++) {
+    if (tmp) tmp += '\n';
+    tmp += colors.cyan(ARROW);
+    tmp += columnNames
+      .map((columnName) =>
+        String(arr[i][columnName]).padEnd(columnLengths[columnName] + GAP.length)
+      )
+      .join(GAP);
+  }
+
+  console.log(tmp);
+}

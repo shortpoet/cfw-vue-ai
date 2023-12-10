@@ -12,18 +12,5 @@ export async function list(opts: Options) {
   const conf = await getConfig(opts);
   log.info('Retrieving KV namespaces:');
   const items = await getNamespaces(conf);
-  const GAP = '    ',
-    TH = colors.dim().bold().italic;
-  log.success(TH('ID') + ' '.repeat(30) + GAP + TH('Title'));
-
-  let i = 0,
-    arr = items,
-    tmp = ''; // ID => 32 chars
-  for (; i < arr.length; i++) {
-    if (tmp) tmp += '\n';
-    tmp += (arr[i].supports_url_encoding ? colors.cyan : colors.red)(log.ARROW);
-    tmp += arr[i].id + GAP + arr[i].title;
-  }
-
-  console.log(tmp);
+  log.printList(items, ['id', 'title', 'supports_url_encoding']);
 }

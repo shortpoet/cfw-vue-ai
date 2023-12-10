@@ -59,7 +59,7 @@ const formatBindingId = (opts: Partial<Config>, isUi: boolean) =>
     ? `${opts.appName}-ui-${opts.env}-${opts.bindingNameUI}`
     : `${opts.appName}-preview-${opts.env}-${opts.bindingNameDb}`;
 
-function executeWranglerCommand(command: string, opts: Config) {
+function executeWranglerCommand(command: string, opts: Pick<Config, 'env' | 'wranglerFile'>) {
   command = `--env ${opts.env} ${command} --config ${opts.wranglerFile}`;
   console.log(
     chalk.magenta(
@@ -91,17 +91,17 @@ async function getToml(tomlPath: string): Promise<WranglerToml> {
 
 const writeToml = async (data: any, conf: Pick<Config, 'wranglerFile' | 'debug'>) => {
   const { wranglerFile, debug } = conf;
-  log.print('blue', `[util] writing toml file: "${wranglerFile}"`);
+  if (debug) log.print('blue', `[util] writing toml file: "${wranglerFile}"`);
   if (debug) console.log(data);
   const backupPath = wranglerFile.replace('wrangler.toml', 'wrangler.bak.toml');
-  log.print('blue', `[util] backing up toml file: "${backupPath}"`);
+  if (debug) log.print('blue', `[util] backing up toml file: "${backupPath}"`);
   await writeFile(backupPath, await readFile(wranglerFile));
   await writeFile(wranglerFile, json2toml(data));
 };
 
 const writeFile = async (file: string, data: string) => {
   try {
-    console.log(chalk.magenta(`[wrangle] [util] writing ${file}`));
+    // console.log(chalk.magenta(`[wrangle] [util] writing ${file}`));
     await write(file, data);
   } catch (error) {
     console.error(error);
