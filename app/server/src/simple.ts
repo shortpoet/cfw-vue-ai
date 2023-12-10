@@ -13,7 +13,7 @@ const vars = dotenv.config({ path: `${root}/.dev.vars` });
 const parsedDev = vars.parsed;
 if (!parsed || !parsedDev) {
   const which = [!parsed, !parsedDev];
-  // throw new Error(`[server] missing env vars -> \n\t\t[.env, .dev.vars] -> ${which}]`);
+  throw new Error(`[server] missing env vars -> \n\t\t[.env, .dev.vars] -> ${which}]`);
 }
 const HOST: string = process.env.HOST || 'localhost';
 const PORT: number = parseInt(process.env.PORT || '3333');
@@ -25,9 +25,9 @@ if (!SECRET || !GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
     .map((b) => b.toString())
     .filter(Boolean)
     .join(', ');
-  // throw new Error(
-  //   `[server] auth.config -> missing secret or env vars -> \n\t\t[NEXTAUTH_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET] -> ${which}]`
-  // );
+  throw new Error(
+    `[server] auth.config -> missing secret or env vars -> \n\t\t[NEXTAUTH_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET] -> ${which}]`
+  );
 }
 
 const server = http.createServer(async (req, res) => {

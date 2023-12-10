@@ -11,16 +11,9 @@ import {
   writeKV,
   deleteNamespace,
   getPreview,
-  setBindings
+  setBindings,
 } from './kv';
-import {
-  command,
-  getToml,
-  readFile,
-  writeFile,
-  writeToml,
-  formatBindingId
-} from './util';
+import { command, getToml, readFile, writeFile, writeToml, formatBindingId } from './util';
 import { assertPassUnlocked, setSecretFile, setSecrets } from './secret';
 import { assertDatabase } from './db';
 
@@ -101,13 +94,7 @@ async function setGitconfig(bindingNameUI, appName, env, gitDataPath, tomlPath, 
   writeFile(gitDataPath, commitStr);
 }
 
-async function setVars(
-  _env: Env,
-  envVars: Record<string, string>,
-  ssrDir,
-  tomlPath,
-  secrets
-) {
+async function setVars(_env: Env, envVars: Record<string, string>, ssrDir, tomlPath, secrets) {
   const ssrDirs = fs
     .readdirSync(ssrDir)
     .map((dir) => path.join(ssrDir, dir).split('/').pop())
@@ -126,7 +113,7 @@ async function setVars(
   const newVars = {
     ...config['env'][`${env}`]['vars'],
     ...envVars,
-    SSR_BASE_PATHS: ssrDirs
+    SSR_BASE_PATHS: ssrDirs,
   };
   Object.keys(secrets).forEach((key) => {
     delete newVars[key];
@@ -139,9 +126,9 @@ async function setVars(
         ...config['env'],
         [`${env}`]: {
           ...config['env'][`${env}`],
-          vars: newVars
-        }
-      }
+          vars: newVars,
+        },
+      },
     },
     tomlPath
   );
@@ -188,7 +175,7 @@ async function assertTomlEnv(tomlPath, env) {
     'workers_dev',
     'main',
     'site',
-    'dev'
+    'dev',
   ];
 
   baseKeys.forEach((key) => {
@@ -210,7 +197,7 @@ async function setupAsserts(env, debug) {
   const secretFilePath = `${__rootDir}/.dev.vars`;
 
   const envVars = dotenv.config({
-    path: envFile
+    path: envFile,
   }).parsed;
   // const parsed = Object.entries(envVars).reduce((acc, [key, value]) => {
   //   acc[key] = value;
@@ -223,9 +210,7 @@ async function setupAsserts(env, debug) {
   if (!appName) {
     throw new Error('[wrangle] No app name found');
   }
-  console.log(
-    chalk.green(`[wrangle] START Setting up ${env.env} environment for ${appName}`)
-  );
+  console.log(chalk.green(`[wrangle] START Setting up ${env.env} environment for ${appName}`));
   console.log(chalk.magenta(`[wrangle] envFile: ${envFile} -> vars->`));
 
   // const secretFilePath = `${__rootDir}/.${env.env}.vars`;
@@ -237,7 +222,7 @@ async function setupAsserts(env, debug) {
     [__dataDir, false],
     [ssrDir, false],
     [tomlPath, true],
-    [secretFilePath, true]
+    [secretFilePath, true],
   ]);
 
   await assertTomlEnv(tomlPath, env);
@@ -247,12 +232,12 @@ async function setupAsserts(env, debug) {
     GITHUB_CLIENT_ID: `Github/oauth/${process.env.VITE_APP_NAME}/${env.env}/GITHUB_CLIENT_ID`,
     GITHUB_CLIENT_SECRET: `Github/oauth/${process.env.VITE_APP_NAME}/${env.env}/GITHUB_CLIENT_SECRET`,
     EMAIL_SERVER_PASSWORD: `Mail/fastmail/ai-maps-nodemailer`,
-    JMAP_TOKEN: `Mail/fastmail/ai-maps-email-send-token`
+    JMAP_TOKEN: `Mail/fastmail/ai-maps-email-send-token`,
   };
 
   const bindingNameBase = `${process.env.VITE_APP_NAME.toUpperCase().replace(/-/g, '_')}`;
   const bindingNameSuffixes = [
-    'UI'
+    'UI',
     // "SESSIONS", "USERS", "MAPS"
   ];
   const bindingNameDb = `${bindingNameBase}_DB_V1`;
@@ -276,7 +261,7 @@ async function setupAsserts(env, debug) {
     bindingNameUI,
     bindingNameSuffixes,
     bindingNameDb,
-    envVars
+    envVars,
   };
 }
 
@@ -292,7 +277,7 @@ async function main(env, debug, cmds = ['all']) {
     bindingNameUI,
     bindingNameSuffixes,
     bindingNameDb,
-    envVars
+    envVars,
   } = await setupAsserts(env, debug);
   while (cmds.length) {
     const cmd = cmds.shift();
@@ -305,14 +290,7 @@ async function main(env, debug, cmds = ['all']) {
         await setSecrets(secrets, secretFilePath, env, tomlPath, 32);
         break;
       case cmd === 'kv':
-        await setBindings(
-          bindingNameBase,
-          bindingNameSuffixes,
-          appName,
-          env,
-          tomlPath,
-          debug
-        );
+        await setBindings(bindingNameBase, bindingNameSuffixes, appName, env, tomlPath, debug);
         break;
       case cmd === 'vars':
         await setVars(env, envVars, ssrDir, tomlPath, secrets);
@@ -321,38 +299,15 @@ async function main(env, debug, cmds = ['all']) {
         const dbCommand = cmd?.split(':')[1];
         const subCommand = cmd?.split(':')[2];
         if (dbCommand) {
-          await assertDatabase(
-            bindingNameDb,
-            appName,
-            env,
-            tomlPath,
-            subCommand,
-            dbCommand,
-            debug
-          );
+          await assertDatabase(bindingNameDb, appName, env, tomlPath, subCommand, dbCommand, debug);
           break;
         }
-        await assertDatabase(
-          bindingNameDb,
-          appName,
-          env,
-          tomlPath,
-          undefined,
-          undefined,
-          debug
-        );
+        await assertDatabase(bindingNameDb, appName, env, tomlPath, undefined, undefined, debug);
         break;
       case cmd === 'all':
         await setGitconfig(bindingNameUI, appName, env, gitDataPath, tomlPath, debug);
         await setSecrets(secrets, secretFilePath, env, tomlPath, 32);
-        await setBindings(
-          bindingNameBase,
-          bindingNameSuffixes,
-          appName,
-          env,
-          tomlPath,
-          debug
-        );
+        await setBindings(bindingNameBase, bindingNameSuffixes, appName, env, tomlPath, debug);
         await assertDatabase(bindingNameDb, appName, env, tomlPath, debug);
         await setVars(env, envVars, ssrDir, tomlPath, secrets);
         break;
@@ -372,15 +327,15 @@ async function main(env, debug, cmds = ['all']) {
     env === 'prod'
       ? '.env.prod'
       : // : env === "preview"
-      // ? ".env.preview"
-      env === 'uat'
-      ? '.env.uat'
-      : '.env.preview';
+        // ? ".env.preview"
+        env === 'uat'
+        ? '.env.uat'
+        : '.env.preview';
 
   const _env = {
     debug,
     env,
-    envFile
+    envFile,
   };
 
   await main(_env, debug, cmds);

@@ -1,9 +1,9 @@
-import { KVNamespace } from "@cloudflare/workers-types";
-import { execSync } from "node:child_process";
-import getGitInfo from "./get-git-info";
-import { deepClone } from "./util";
+import { KVNamespace } from '@cloudflare/workers-types';
+import { execSync } from 'node:child_process';
+import getGitInfo from './get-git-info';
+import { deepClone } from './util';
 
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 let KV_DEBUG = false;
 
 export {
@@ -14,30 +14,22 @@ export {
   getPreview,
   assertBinding,
   setBindings,
+  getNamespaces,
 };
-import { Env, KV_DEBUG as debug } from "./wrangle";
-import {
-  getToml,
-  writeToml,
-  executeWranglerCommand,
-  formatBindingId,
-} from "./util";
-import chalk from "chalk";
+import { Env, KV_DEBUG as debug } from './wrangle';
+import { getToml, writeToml, executeWranglerCommand, formatBindingId } from './util';
+import chalk from 'chalk';
 
 const getBinding = (env, tomlPath) => {
   const config = getToml(tomlPath);
   if (!config) {
-    throw new Error("no config");
+    throw new Error('no config');
   }
-  return config["env"][`${env}`]["kv_namespaces"][0]["binding"];
+  return config['env'][`${env}`]['kv_namespaces'][0]['binding'];
 };
 
 async function assertBinding(bindingName, env, appName, tomlPath) {
-  console.log(
-    chalk.green(
-      `[wrangle] [kv] Asserting kv bindings for ${bindingName} in env ${env}`
-    )
-  );
+  console.log(chalk.green(`[wrangle] [kv] Asserting kv bindings for ${bindingName} in env ${env}`));
   const bindingId = formatBindingId(bindingName, env, appName);
   if (!getNamespace(bindingId, env)) {
     createNamespace(bindingName, env, appName, tomlPath);
@@ -45,18 +37,11 @@ async function assertBinding(bindingName, env, appName, tomlPath) {
   writeNamespaceToToml(bindingName, tomlPath, env);
 }
 
-async function setBindings(
-  bindingNameBase,
-  bindingNameSuffixes,
-  appName,
-  env,
-  tomlPath,
-  debug
-) {
+async function setBindings(bindingNameBase, bindingNameSuffixes, appName, env, tomlPath, debug) {
   for (const suffix of bindingNameSuffixes) {
     const bindingName = `${bindingNameBase}_${suffix}`;
-    if (debug || process.env.VITE_LOG_LEVEL === "debug") {
-      console.log(chalk.cyan("[wrangle] [kv]  bindingName", bindingName));
+    if (debug || process.env.VITE_LOG_LEVEL === 'debug') {
+      console.log(chalk.cyan('[wrangle] [kv]  bindingName', bindingName));
       KV_DEBUG = true;
     }
     assertBinding(bindingName, env, appName, tomlPath);
@@ -64,7 +49,7 @@ async function setBindings(
 }
 
 function getNamespaces(env: Env) {
-  return JSON.parse(executeWranglerCommand("kv:namespace list", env.env));
+  return JSON.parse(executeWranglerCommand('kv:namespace list', env.env));
 }
 
 function getNamespace(id: string, env: Env) {
@@ -109,7 +94,7 @@ function writeNamespaceToToml(
   // updateToml(`env.${env}.kv_namespaces.0.title`, id);
   const config = getToml(tomlPath);
   if (!config) {
-    throw new Error("no config");
+    throw new Error('no config');
   }
   console.log(chalk.magenta(`[wrangle] [kv] config before:`));
   // const clone = deepClone(config);
@@ -117,20 +102,14 @@ function writeNamespaceToToml(
   // if (debug || process.env.VITE_LOG_LEVEL === "debug") {
   //   console.log(config);
   // }
-  let kv_namespaces: any[] = config["env"][`${env_name}`]["kv_namespaces"];
+  let kv_namespaces: any[] = config['env'][`${env_name}`]['kv_namespaces'];
   if (!kv_namespaces) {
     kv_namespaces = [];
   }
   const kv_namespace = kv_namespaces.find((i) => i.binding === bindingName);
-  if (
-    kv_namespace &&
-    kv_namespace.id === namespaceId &&
-    kv_namespace.preview_id === previewId
-  ) {
+  if (kv_namespace && kv_namespace.id === namespaceId && kv_namespace.preview_id === previewId) {
     console.log(
-      chalk.yellow(
-        `[wrangle] [kv] binding ${bindingName} already exists in toml ${tomlPath}`
-      )
+      chalk.yellow(`[wrangle] [kv] binding ${bindingName} already exists in toml ${tomlPath}`)
     );
     return;
   }
@@ -139,7 +118,7 @@ function writeNamespaceToToml(
     id: namespaceId,
     preview_id: previewId,
   });
-  config["env"][`${env_name}`]["kv_namespaces"] = kv_namespaces;
+  config['env'][`${env_name}`]['kv_namespaces'] = kv_namespaces;
   writeToml(config, tomlPath);
 }
 
@@ -162,9 +141,9 @@ function createNamespace(
 function updateToml(nestedKey: string, value: string, tomlPath: string) {
   const config = getToml(tomlPath);
   if (!config) {
-    throw new Error("no config");
+    throw new Error('no config');
   }
-  const keys = nestedKey.split(".");
+  const keys = nestedKey.split('.');
   let current = config;
   for (let i = 0; i < keys.length - 1; i++) {
     current = current[keys[i]];

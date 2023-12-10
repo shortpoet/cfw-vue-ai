@@ -11,7 +11,7 @@
   "type": "module",
   "scripts": {
     "========= Util": "",
-    "wrangle": "tsx scripts/wrangle.ts",
+    "wrangle": "pnpm scripts wrangle",
     "wrangle:kv": "tsx scripts/wrangle.ts --cmds kv",
     "start": "cross-env NODE_ENV=development && concurrently \"pnpm serve\" \"pnpm v:dev\"",
     "dev": "pnpm run v:build && pnpm run w:build && pnpm run w:dev",
@@ -29,7 +29,7 @@
     "========= Server": "",
     "serve": "pnpm serv serve",
     "========= Api": "",
-    "w:build": "pnpm api build",
+    "w:build": "pnpm scripts build",
     "w:dev": "pnpm api dev",
     "w:deploy": "pnpm api deploy",
     "========= Ui": "",
