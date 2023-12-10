@@ -16,23 +16,56 @@ function getPreview(id: string, opts: Config) {
   return getNamespaces(opts).find((i: any) => i.title === `${id}_preview`);
 }
 
-function createNamespace(bindingName: string, opts: Config) {
+export function createNamespace(bindingName: string, opts: Config) {
   const cmd = `kv:namespace create ${bindingName}`;
   const cmdPrev = `kv:namespace create ${bindingName} --preview`;
   // if (debug) process.exit(0);
+  console.log(colors.cyan(`[wrangle] [kv] creating namespace ${bindingName}`));
+  if (!opts.goLive) return;
   const res = executeWranglerCommand(cmd, opts);
   console.log(colors.cyan(res));
   const resPrev = executeWranglerCommand(cmdPrev, opts);
   console.log(colors.cyan(resPrev));
 }
 
+export function deleteNamespace(bindingName: string, opts: Config) {
+  console.log(colors.cyan(`[wrangle] [kv] deleting namespace ${bindingName}`));
+
+  const bindingId = formatBindingId(opts, { isUi: true }.isUi);
+  console.log(colors.cyan(`[wrangle] [kv] bindingId ${bindingId}`));
+  const namespaceId = getNamespace(bindingId, opts).id;
+  console.log(colors.cyan(`[wrangle] [kv] deleting namespace ${namespaceId}`));
+  // const cmd = `kv:namespace delete --namespace-id=${namespaceId}`;
+  // const res = executeWranglerCommand(cmd, opts);
+  // console.log(colors.cyan(res));
+}
+
+export async function setBindings(
+  bindingNameBase: string,
+  bindingNameSuffixes: string[],
+  opts: Config
+) {
+  const { env, appName, wranglerFile, debug } = opts;
+  for (const suffix of bindingNameSuffixes) {
+    const bindingName = `${bindingNameBase}_${suffix}`;
+    if (debug || process.env.VITE_LOG_LEVEL === 'debug') {
+      console.log(colors.cyan(`[wrangle] [kv]  bindingName ${bindingName}`));
+      // KV_DEBUG = true;
+    }
+    assertBinding(bindingName, opts);
+  }
+}
+
 async function assertBinding(bindingName: string, opts: Config) {
   log.print('green', `[wrangle] [kv] Asserting kv bindings for ${bindingName} in env ${opts.env}`);
   const bindingId = formatBindingId(opts, { isUi: true }.isUi);
-  if (!getNamespace(bindingId, opts)) {
+  const namespace = getNamespace(bindingId, opts);
+  if (!namespace) {
     createNamespace(bindingName, opts);
   }
-  writeNamespaceToToml(bindingName, opts);
+  if (opts.goLive) {
+    await writeNamespaceToToml(bindingName, opts);
+  }
 }
 
 export function writeKV(bindingName: string, key: string, value: string, opts: Config) {
@@ -53,7 +86,11 @@ export function writeKV(bindingName: string, key: string, value: string, opts: C
 
 async function writeNamespaceToToml(bindingName: string, opts: Config) {
   const bindingId = formatBindingId(opts, { isUi: true }.isUi);
-  const namespaceId = getNamespace(bindingId, opts).id;
+  const namespace = getNamespace(bindingId, opts);
+  if (!namespace) {
+    throw new Error(`[wrangle] [kv] no namespace for binding ${bindingName}`);
+  }
+  const namespaceId = namespace.id;
   const previewId = getPreview(bindingId, opts).id;
   console.log(
     colors.green(

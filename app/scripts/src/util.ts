@@ -54,10 +54,19 @@ export async function load<T = unknown>(str: string, dir = '.'): Promise<T | fal
   }
 }
 
-const formatBindingId = (opts: Partial<Config>, isUi: boolean) =>
-  isUi
+const formatBindingId = (
+  opts: Pick<Config, 'appName' | 'env' | 'bindingNameUI' | 'bindingNameDb'>,
+  isUI: boolean
+) => {
+  console.log(chalk.yellow(`[wrangle] [util] formatting binding id`));
+  // console.log(opts.appName);
+  // console.log(opts.env);
+  // console.log(opts.bindingNameUI);
+  // console.log(opts.bindingNameDb);
+  return isUI
     ? `${opts.appName}-ui-${opts.env}-${opts.bindingNameUI}`
     : `${opts.appName}-preview-${opts.env}-${opts.bindingNameDb}`;
+};
 
 function executeWranglerCommand(command: string, opts: Pick<Config, 'env' | 'wranglerFile'>) {
   command = `--env ${opts.env} ${command} --config ${opts.wranglerFile}`;

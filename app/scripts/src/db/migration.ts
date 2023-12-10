@@ -40,7 +40,7 @@ export function applyMigration(
 ) {
   console.log(colors.green(`[wrangle] [db] applying to database [name] ${databaseName}`));
   let localSwitch = '';
-  if (opts.env === 'preview' || opts.env === 'dev') {
+  if (opts.env === 'qa' || opts.env === 'dev') {
     localSwitch = `--local`;
   }
 

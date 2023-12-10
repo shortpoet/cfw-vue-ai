@@ -20,6 +20,7 @@ export async function setVars(
   if (!config && !config['env'] && !config['env'][`${conf.env}`]) {
     throw new Error(`no config found at ${wranglerFile}`);
   }
+  console.log(config);
   log.print('green', `[setVars] Setting vars for ${conf.env} -> ${wranglerFile}`);
 
   const env = conf.env;
@@ -27,7 +28,7 @@ export async function setVars(
     delete config[key];
   });
   const newVars: Record<string, string> = {
-    ...config['env']![`${env}`]['vars'],
+    ...config['env'][`${env}`]['vars'],
     ...envVars,
     SSR_BASE_PATHS: ssrDirs,
   };
@@ -35,18 +36,16 @@ export async function setVars(
     delete newVars[key];
   });
   log.print('blue', '[wrangle] newVars');
-  // console.log(newVars);
-  writeToml(
-    {
-      ...config,
-      env: {
-        ...config['env'],
-        [`${env}`]: {
-          ...config['env']![`${env}`],
-          vars: newVars,
-        },
+  const newConf = {
+    ...config,
+    env: {
+      ...config['env'],
+      [`${env}`]: {
+        ...config['env'][`${env}`],
+        vars: newVars,
       },
     },
-    { wranglerFile, debug }
-  );
+  };
+  console.log(newConf);
+  writeToml(newConf, { wranglerFile, debug });
 }

@@ -1,10 +1,13 @@
 import { resolve } from 'node:path';
 import * as dotenv from 'dotenv';
 
+import * as log from '../log';
+
 import { Config, Options, WranglerToml, WrangleConfig } from '../types';
 import { __appDir, __rootDir, __wranglerDir } from '@cfw-vue-ai/types/src/root';
 import { assert, formatBindingId, getToml, writeToml } from '../util';
 import { setSecrets } from '../secret/secret';
+import { setBindings } from '../cf/kv';
 // import * as log from '../log';
 
 const __dataDir = `${__appDir}/data`;
@@ -19,7 +22,7 @@ async function assertTomlEnv(conf: Pick<Config, 'env' | 'wranglerFile' | 'appNam
     throw new Error('no config');
   }
   if (!config['env']) {
-    // log.print('cyan', `[toml] [config] Creating env:`);
+    log.print('green', `[toml] [config] Creating env:`);
     config['env'] = {};
   }
   const defaultConfig = {
@@ -42,10 +45,16 @@ async function assertTomlEnv(conf: Pick<Config, 'env' | 'wranglerFile' | 'appNam
     },
   };
   config = { ...defaultConfig, ...config };
-  if (!config['env'][`${env}`]) {
-    config['env'][`${env}`] = { name: appName };
-  }
+  const defaultEnvConfig = {
+    name: appName,
+    // route: `https://${appName}.workers.dev/*`,
+  };
+  // if (!config['env'][`${env}`]['name']) {
+  //   config['env'][`${env}`]['name'] = appName;
+  // }
+  config['env'][`${env}`] = { ...defaultEnvConfig, ...config['env'][`${env}`] };
   if (config['vars']) config['env'][`${env}`]['vars'] = config['vars'];
+  // console.log(config);
   await writeToml(config, { wranglerFile, debug });
 }
 
@@ -56,6 +65,7 @@ export async function getConfig(opts: Options): Promise<Config> {
   assert(dir, `[wrangle] [config] Workers directory does not exist: "${dir}"`, true);
 
   const cwd = opts.cwd || process.cwd();
+  const goLive = opts.goLive || false;
   const env = opts.env || 'dev';
   const debug = opts.debug || false;
   const only = opts.only;
@@ -76,7 +86,7 @@ export async function getConfig(opts: Options): Promise<Config> {
 
   const appName = process.env.VITE_APP_NAME;
   assert(appName, `[wrangle] [config] No app name found`, false);
-
+  log.print('cyan', `[wrangle] [config] App name: ${appName}`);
   const secrets = {
     __SECRET__: `Cloud/auth0/${appName}/${env}/__SECRET__`,
     NEXTAUTH_SECRET: `Cloud/nextauth/${appName}/${env}/NEXTAUTH_SECRET`,
@@ -95,6 +105,7 @@ export async function getConfig(opts: Options): Promise<Config> {
   // );
 
   await assertTomlEnv({ env, wranglerFile, appName, debug });
+  // assert(appName, `[wrangle] [config] No app name found`, false);
 
   const bindingNameBase = `${appName.toUpperCase().replace(/-/g, '_')}`;
   const bindingNameSuffixes = [
@@ -103,11 +114,23 @@ export async function getConfig(opts: Options): Promise<Config> {
   ];
   const bindingNameDb = `${bindingNameBase}_DB_V1`;
   const bindingNameUI = `${bindingNameBase}_UI`;
-  const bindingIdDb = formatBindingId(opts, { isUi: false }.isUi);
+  const bindingIdDb = formatBindingId(
+    { appName, env, bindingNameUI, bindingNameDb },
+    { isUI: false }.isUI
+  );
+  const bindingIdUi = formatBindingId(
+    { appName, env, bindingNameUI, bindingNameDb },
+    { isUI: true }.isUI
+  );
   const databaseName = bindingIdDb;
+
+  assert(bindingNameDb, `[wrangle] [config] No binding name found`, false);
+  assert(bindingIdDb, `[wrangle] [config] No binding id found`, false);
+  assert(databaseName, `[wrangle] [config] No database name found`, false);
 
   return {
     cwd,
+    goLive,
     dir,
     env,
     debug,
@@ -121,5 +144,6 @@ export async function getConfig(opts: Options): Promise<Config> {
     bindingNameUI,
     bindingNameDb,
     databaseName,
+    bindingIdUi,
   };
 }

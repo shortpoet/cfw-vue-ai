@@ -12,6 +12,14 @@ name = "cfw-vue-ai"
 binding = "CFW_VUE_AI_DB_V1"
 database_name = "undefined-preview-dev-undefined"
 database_id = "3dadfe8d-f025-4b54-b175-8cf344efe3f7"
+[[env.dev.d1_databases]]
+binding = "CFW_VUE_AI_DB_V1"
+database_name = "undefined-preview-dev-undefined"
+database_id = "946630c7-048c-425c-b9e7-6bee2b53294c"
+[[env.dev.d1_databases]]
+binding = "CFW_VUE_AI_DB_V1"
+database_name = "cfw-vue-ai-preview-dev-CFW_VUE_AI_DB_V1"
+database_id = "25bd0658-0b31-47a3-8b60-3f69feb2cced"
 [env.dev.vars]
 NODE_ENV = "development"
 WORKER_ENVIRONMENT = "dev"

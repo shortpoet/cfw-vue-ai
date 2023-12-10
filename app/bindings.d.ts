@@ -50,7 +50,7 @@ declare global {
   interface WorkerEnv {
     // APP
     NODE_ENV: 'development' | 'production';
-    WORKER_ENVIRONMENT: 'dev' | 'preview' | 'uat' | 'prod';
+    WORKER_ENVIRONMENT: 'dev' | 'qa' | 'uat' | 'prod';
     VITE_PORT: string;
     VITE_APP_NAME: string;
     VITE_API_VERSION: string;
@@ -128,7 +128,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       NODE_ENV: 'development' | 'production';
-      WORKER_ENVIRONMENT: 'dev' | 'preview' | 'uat' | 'prod';
+      WORKER_ENVIRONMENT: 'dev' | 'qa' | 'uat' | 'prod';
       VITE_PORT: string;
       VITE_LOG_LEVEL: LogLevel;
       VITE_APP_NAME: string;
@@ -153,7 +153,7 @@ declare global {
     interface ImportMeta {
       env: {
         NODE_ENV: 'development' | 'production';
-        WORKER_ENVIRONMENT: 'dev' | 'preview' | 'uat' | 'prod';
+        WORKER_ENVIRONMENT: 'dev' | 'qa' | 'uat' | 'prod';
         VITE_PORT: string;
         VITE_APP_NAME: string;
         VITE_API_VERSION: string;
