@@ -4,11 +4,13 @@ import * as dotenv from 'dotenv';
 import { Config, Options, WranglerToml, WrangleConfig } from '../types';
 import { __appDir, __rootDir, __wranglerDir } from '@cfw-vue-ai/types/src/root';
 import { assert, formatBindingId, getToml, writeToml } from '../util';
+import { setSecrets } from '../secret/secret';
 // import * as log from '../log';
 
 const __dataDir = `${__appDir}/data`;
 export const gitDataPath = `${__dataDir}/git.json`;
 export const ssrDir = `${__appDir}/ui/src/pages`;
+export const secretsFilePath = `${__rootDir}/.dev.vars`;
 
 async function assertTomlEnv(conf: Pick<Config, 'env' | 'wranglerFile' | 'appName' | 'debug'>) {
   const { env, wranglerFile, appName, debug } = conf;
@@ -61,11 +63,9 @@ export async function getConfig(opts: Options): Promise<Config> {
 
   const wranglerFile = env === 'dev' ? `${dir}/wrangler.toml` : `${dir}/wrangler.${env}.toml`;
   const envFile = env === 'dev' ? `${__appDir}/.env` : `${__appDir}/.env.${env}`;
-  const secretFilePath = `${__rootDir}/.dev.vars`;
 
   assert(envFile, `[wrangle] [config] Env file does not exist: "${envFile}"`, true);
   assert(wranglerFile, `[wrangle] [config] Wrangler file does not exist: "${wranglerFile}"`, true);
-  // assert(secretFilePath, `[wrangle] [config] Secret file does not exist: "${secretFilePath}"`, true);
 
   const envVars = dotenv.config({
     path: envFile,
@@ -77,6 +77,22 @@ export async function getConfig(opts: Options): Promise<Config> {
   const appName = process.env.VITE_APP_NAME;
   assert(appName, `[wrangle] [config] No app name found`, false);
 
+  const secrets = {
+    __SECRET__: `Cloud/auth0/${appName}/${env}/__SECRET__`,
+    NEXTAUTH_SECRET: `Cloud/nextauth/${appName}/${env}/NEXTAUTH_SECRET`,
+    GITHUB_CLIENT_ID: `Github/oauth/${appName}/${env}/GITHUB_CLIENT_ID`,
+    GITHUB_CLIENT_SECRET: `Github/oauth/${appName}/${env}/GITHUB_CLIENT_SECRET`,
+    EMAIL_SERVER_PASSWORD: `Mail/fastmail/ai-maps-nodemailer`,
+    JMAP_TOKEN: `Mail/fastmail/ai-maps-email-send-token`,
+  };
+
+  await setSecrets(secrets, secretsFilePath, { env, debug, wranglerFile });
+  assert(
+    secretsFilePath,
+    `[wrangle] [config] Secret file does not exist: "${secretsFilePath}"`,
+    true
+  );
+
   await assertTomlEnv({ env, wranglerFile, appName, debug });
 
   const bindingNameBase = `${appName.toUpperCase().replace(/-/g, '_')}`;
@@ -87,15 +103,6 @@ export async function getConfig(opts: Options): Promise<Config> {
   const bindingNameDb = `${bindingNameBase}_DB_V1`;
   const bindingNameUI = `${bindingNameBase}_UI`;
   const bindingIdDb = formatBindingId(opts, { isUi: false }.isUi);
-
-  const secrets = {
-    __SECRET__: `Cloud/auth0/${appName}/${env}/__SECRET__`,
-    NEXTAUTH_SECRET: `Cloud/nextauth/${appName}/${env}/NEXTAUTH_SECRET`,
-    GITHUB_CLIENT_ID: `Github/oauth/${appName}/${env}/GITHUB_CLIENT_ID`,
-    GITHUB_CLIENT_SECRET: `Github/oauth/${appName}/${env}/GITHUB_CLIENT_SECRET`,
-    EMAIL_SERVER_PASSWORD: `Mail/fastmail/ai-maps-nodemailer`,
-    JMAP_TOKEN: `Mail/fastmail/ai-maps-email-send-token`,
-  };
 
   return {
     cwd,

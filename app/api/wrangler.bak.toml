@@ -1,7 +1,7 @@
 name = "cfw-vue-ai"
 compatibility_date = "2023-11-21"
-node_compat = false
-workers_dev = false
+node_compat = true
+workers_dev = true
 main = "./build/worker.mjs"
 [site]
 bucket = "../ui/build/client"

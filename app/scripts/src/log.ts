@@ -21,8 +21,9 @@ export const info = (msg: string) => {
 export const success = (msg: string) => print('green', msg);
 export const warn = (msg: string) => print('yellow', msg);
 
-export function error(msg: string, code = 1): never {
+export function error(msg: string, code = 1): never | false {
   print('red', msg);
+  if (code === 0) return false;
   process.exit(code);
 }
 

@@ -3,7 +3,7 @@ import * as log from '../log';
 import { setVars } from '../cf/vars';
 import { getConfig } from './config';
 import { Options } from '../types';
-import { __appDir, __rootDir, __wranglerDir } from '@cfw-vue-ai/types';
+import { __appDir, __rootDir, __wranglerDir } from '@cfw-vue-ai/types/src/root';
 import { assert } from '../util';
 
 export async function set(opts: Options) {

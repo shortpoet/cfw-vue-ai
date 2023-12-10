@@ -30,11 +30,11 @@ export {
 
 export { exists };
 
-export function assert(input: unknown, msg: string, isFile?: boolean): asserts input {
+export function assert(input: unknown, msg: string, isFile?: boolean, exitCode = 2): void | false {
   // console.log(chalk.magenta(`[wrangle] [util] asserting ${input}`));
   // console.log(exists(input as string));
-  (isFile && exists(input as string)) || !!input || error(msg, 0);
-  // (isFile && exists(input as string) && !!input) || (!isFile && !!input) || error(msg, 0);
+  // (isFile && exists(input as string)) || !!input || error(msg, 0);
+  (isFile && exists(input as string) && !!input) || (!isFile && !!input) || error(msg, exitCode);
 }
 
 export function group(str: Arrayable<string>): Set<string> {
