@@ -2,7 +2,7 @@ import type { AuthConfig as BaseAuthConfig } from '@auth/core/types';
 import Cookies from 'universal-cookie';
 import { Provider } from '@auth/core/providers';
 
-import { UserRole } from '@cfw-vue-ai/types';
+import { UserRole } from '@cfw-vue-ai/types/src';
 import {
   getCookieAuthToken,
   logSignin,

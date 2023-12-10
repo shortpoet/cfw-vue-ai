@@ -1,6 +1,6 @@
 import { CredentialsConfig, OAuthConfig, Provider } from '@auth/core/providers';
 
-import { UserRole } from '@cfw-vue-ai/types';
+import { UserRole } from '@cfw-vue-ai/types/src';
 import chalk from 'chalk';
 import { sendMail } from '../jmap';
 import Credentials from '@auth/core/providers/credentials';

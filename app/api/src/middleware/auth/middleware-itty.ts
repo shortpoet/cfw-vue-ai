@@ -2,7 +2,7 @@ import type { AuthAction } from '@auth/core/types';
 import { Auth } from '@auth/core';
 import { ExecutionContext } from '@cloudflare/workers-types';
 // import { Session } from '@auth/core/types';
-import { Session } from '@cfw-vue-ai/types';
+import { Session } from '@cfw-vue-ai/types/src';
 import { IRequest } from 'itty-router';
 import { ACTIONS, AuthConfig, SESSION_STRATEGY, deriveAuthConfig } from '.';
 
@@ -37,7 +37,11 @@ export const createAuthRequest = async (
   const log = logger(FILE_LOG_LEVEL, env);
 
   const { authConfig, isAuthAvailable } = await deriveAuthConfig(req, res, env, optionsInit);
+  if (!isAuthAvailable()) {
+    throw new Error('[api] [middleware] [auth] [itty] Auth is not available');
+  }
   log(`[api] [middleware] [auth] [itty] createAuthRequest -> NEW \n`);
+  // console.log(req.headers);
   const parsedUrl = new URL(req.url);
   const referrer = req.headers.get('referer');
   const origin = `${parsedUrl.origin}/`;
@@ -61,6 +65,7 @@ export const createAuthRequest = async (
   };
   const request = new Request(parsedUrl, init);
   // logObjs([authConfig, init]);
+  console.log(request.headers.get('cookie'));
   const response = await Auth(request, authConfig);
   return response;
 };
@@ -142,16 +147,24 @@ export async function getSessionItty(
   const optionsInit: Partial<AuthConfig> = { prefix };
   const { authConfig, isAuthAvailable } = await deriveAuthConfig(req, res, env, optionsInit);
   const url = new URL(`${prefix}/session`, req.url);
+  let response;
   try {
     const request = new Request(url, { headers: req.headers });
+    // console.log(req.headers);
     if (!isAuthAvailable()) {
       throw new Error('Auth is not available');
     }
     log(
       `[api] [middleware] [auth] [itty] getSessionItty.authRequest -> ${req.method}://.${url.pathname}`
     );
-    const response = await Auth(request, authConfig);
+    response = await Auth(request, authConfig);
     const { status = 200 } = response;
+    // console.log(response);
+    // console.log(response.body);
+    // read body
+    // const red = await response.body?.getReader().read();
+    // console.log(red);
+    // console.log(red.value);
     const session: Session | any = await response.body.json();
     log(`[api] [middleware] [auth] [itty] getSessionItty.response -> session`);
     console.log(session);
@@ -170,6 +183,14 @@ export async function getSessionItty(
     }
     throw new Error(session.message);
   } catch (error) {
+    // if error is TypeError .json() is not a function
+    if (error instanceof TypeError && error.message.includes('json')) {
+      log(`[api] [middleware] [auth] [itty] getSessionItty.error -> TypeError`);
+      // const text = await response?.body.text();
+      // console.log(response?.body);
+      // console.error(error.message);
+      return null;
+    }
     console.error(`[api] [middleware] [auth] [itty] getSessionItty.error`);
     console.error(error);
     return null;

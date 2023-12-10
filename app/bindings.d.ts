@@ -68,6 +68,7 @@ declare global {
 
     // DB
     CFW_VUE_AI_DB: D1Database;
+    CFW_VUE_AI_DB_BINDING_NAME: string;
 
     // AUTH
     __SECRET__: string;

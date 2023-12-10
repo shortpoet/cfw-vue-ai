@@ -90,6 +90,9 @@ importers:
       '@types/node':
         specifier: ^20.10.1
         version: 20.10.3
+      cf-bindings-proxy:
+        specifier: ^0.7.1
+        version: 0.7.1(@cloudflare/workers-types@4.20231121.0)(wrangler@3.19.0)
       itty-router:
         specifier: ^4.0.23
         version: 4.0.23
