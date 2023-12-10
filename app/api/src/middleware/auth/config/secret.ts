@@ -6,7 +6,7 @@ export const deriveSecretsFromEnv = async (env: Env) => {
   const log = logger(FILE_LOG_LEVEL, env);
 
   if (!NEXTAUTH_SECRET || !GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
-    log(`[worker] auth.config -> missing secret or env vars in env -> trying to get from KV`);
+    log(`[api] auth.config -> missing secret or env vars in env -> trying to get from KV`);
     const secret = await env.CFW_VUE_AI_KV_UI.get('NEXTAUTH_SECRET');
     const GITHUB_CLIENT_ID = await env.CFW_VUE_AI_KV_UI.get('GITHUB_CLIENT_ID');
     const GITHUB_CLIENT_SECRET = await env.CFW_VUE_AI_KV_UI.get('GITHUB_CLIENT_SECRET');
@@ -16,11 +16,11 @@ export const deriveSecretsFromEnv = async (env: Env) => {
         .filter(Boolean)
         .join(', ');
       throw new Error(
-        `[worker] auth.config -> missing secret or env vars -> \n\t\t[NEXTAUTH_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET] -> ${which}]`
+        `[api] auth.config -> missing secret or env vars -> \n\t\t[NEXTAUTH_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET] -> ${which}]`
       );
     } else {
       log(
-        `[worker] auth.config -> got secret and env vars from KV -> ${secret}, ${GITHUB_CLIENT_ID}, ${GITHUB_CLIENT_SECRET}`
+        `[api] auth.config -> got secret and env vars from KV -> ${secret}, ${GITHUB_CLIENT_ID}, ${GITHUB_CLIENT_SECRET}`
       );
     }
   }

@@ -14,6 +14,7 @@ import {
   isAPiURL,
   isAssetURL,
   isSSR,
+  logObjs,
   logWorkerEnd,
   logWorkerStart,
   logger,
@@ -53,23 +54,30 @@ async function handleFetchEvent(
   const log = logger(FILE_LOG_LEVEL, env);
   const path = url.pathname;
   let res;
+  // log(`[api] index.handleFetchEvent -> ${request.method} -> ${path}`);
   switch (true) {
     case isAssetURL(url):
       // must early return or assets missing
-      return await handleStaticAssets(request, env, ctx);
+      res = await handleStaticAssets(request, env, ctx);
+      break;
     case isAPiURL(url):
-      log(`[worker] index.handleFetchEvent -> ${env.VITE_API_VERSION} -> ${url.pathname}`);
+      // console.log(
+      //   `[api] [isAPiURL] index.handleFetchEvent -> ${env.VITE_API_VERSION} -> ${url.pathname}`
+      // );
       res = await Api.handle(request, resp, env, ctx);
-      log(`[worker] index.handleFetchEvent -> api response`);
-    // logObjs([res, res.headers]);
+      // console.log(`[api] [isAPiURL] index.handleFetchEvent -> api response`);
+      // logObjs([res.headers, res.body]);
+      // console.log(await res.clone().json());
+      break;
     default:
+      console.log(`[api] [default] index.handleFetchEvent -> ${url.pathname}`);
       // this is only logged on page reload due to client routing
-      log(
-        `[worker] handleFetchEvent ${url.pathname} is SSR ${isSSR(
-          url,
-          env.SSR_BASE_PATHS.split(',')
-        )}`
-      );
+      // log(
+      //   `[api] handleFetchEvent ${url.pathname} is SSR ${isSSR(
+      //     url,
+      //     env.SSR_BASE_PATHS.split(',')
+      //   )}`
+      // );
       res =
         (await handleSsr(request, resp, env, ctx)) ?? new Response('Not Found', { status: 404 });
   }

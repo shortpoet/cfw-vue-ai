@@ -38,7 +38,7 @@ export const withListOptions = (request: Request) => {
 export const withCfSummary =
   ({ level = 'basic' } = {}) =>
   async (request: Request, env: Env) => {
-    console.log(`[worker] middlware.withCfSummary -> ${request.method} -> ${request.url}`);
+    console.log(`[api] middlware.withCfSummary -> ${request.method} -> ${request.url}`);
     request.cf_summary = request.cf
       ? {
           longitude: request.cf.longitude,
@@ -60,7 +60,7 @@ export const withCfSummary =
 export const withCfHeaders =
   ({ level = 'basic' } = {}) =>
   async (request: Request, res: Response, env: Env) => {
-    console.log(`[worker] middlware.withCfHeaders -> ${request.method} -> ${request.url}`);
+    console.log(`[api] middlware.withCfHeaders -> ${request.method} -> ${request.url}`);
     const { cf } = request;
     if (cf) {
       const { colo, clientTcpRtt } = cf;

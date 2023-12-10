@@ -17,7 +17,7 @@ const initJWT = async (env: Env, token?: JWT) => {
   const d = await decode({ ...jwt, token: token?.sessionToken, salt });
 
   const decoded = await decode({ ...jwt, token: token?.sessionToken });
-  console.log(`[worker] auth.middleware.itty.handleNextAuth.decoded`);
+  console.log(`[api] auth.middleware.itty.handleNextAuth.decoded`);
   console.log(decoded);
   return { jwt, decoded };
 };

@@ -20,7 +20,7 @@ export const deriveAuthProviders = (env: Env) => {
         clientId: env.GITHUB_CLIENT_ID,
         clientSecret: env.GITHUB_CLIENT_SECRET,
         profile(profile) {
-          log(`[worker] auth.config -> GitHub -> profile -> \n`);
+          log(`[api] auth.config -> GitHub -> profile -> \n`);
           // console.log(profile);
           return {
             id: profile.id.toString(),
@@ -55,7 +55,7 @@ export const deriveAuthProviders = (env: Env) => {
     <p>Your AI Maps Team</p>
   `;
       const subject = 'Verify your email address';
-      log(`[worker] auth.config -> sendVerificationRequest -> \n`);
+      log(`[api] auth.config -> sendVerificationRequest -> \n`);
       const response = await sendMail({
         env,
         messageBody,

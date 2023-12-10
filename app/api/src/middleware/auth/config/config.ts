@@ -58,7 +58,7 @@ const deriveAuthConfig = async (
   isGlobalReadOnly: () => boolean;
 }> => {
   const log = logger(FILE_LOG_LEVEL, env);
-  log(`[worker] auth.config -> \n`);
+  log(`[api] auth.config -> \n`);
 
   const providers = deriveAuthProviders(env);
   const adapter = deriveDatabaseAdapter(env) as ReturnType<typeof KyselyAdapter>;
@@ -83,7 +83,7 @@ const deriveAuthConfig = async (
       adapter,
       callbacks: {
         signIn: async ({ user, account, profile, email, credentials }) => {
-          log(`[worker] auth.config -> callbacks.signIn -> \n`);
+          log(`[api] auth.config -> callbacks.signIn -> \n`);
           logSignin(user, account, profile, email, credentials);
           try {
             const parsedUrl = new URL(req.url);
@@ -99,12 +99,12 @@ const deriveAuthConfig = async (
             const sessionToken = getCookieAuthToken(req, 'cookie', cookieName) || '';
             const sessionExpiry = fromDate(SESSION_MAX_AGE);
             const userAndSession = await q.getSessionAndUser(sessionToken, db);
-            log(`[worker] auth.config -> callbacks.signIn -> userAndSession -> \n`);
+            log(`[api] auth.config -> callbacks.signIn -> userAndSession -> \n`);
             console.log(userAndSession);
             if (isApi && action === 'callback' && req.method === 'POST') {
               if (userAndSession && user) return true;
               if (user) {
-                log(`[worker] auth.config -> callbacks.signIn -> user -> \n`);
+                log(`[api] auth.config -> callbacks.signIn -> user -> \n`);
                 const sessionToken = uuidv4();
                 await q.createSession(
                   {
@@ -121,10 +121,10 @@ const deriveAuthConfig = async (
             }
 
             const cookies = new Cookies(req, { path: '/' });
-            log(`[worker] auth.config -> callbacks.signIn -> cookies -> \n`);
+            log(`[api] auth.config -> callbacks.signIn -> cookies -> \n`);
             // console.log(cookies);
             log(
-              `[worker] auth.config -> callbacks.signIn setting -> "next-auth.session-token" to -> \n`
+              `[api] auth.config -> callbacks.signIn setting -> "next-auth.session-token" to -> \n`
             );
             console.log(sessionToken);
             cookies.set(SESSION_COOKIE_NAME, sessionToken, {
@@ -134,37 +134,37 @@ const deriveAuthConfig = async (
             // req.user = user;
             if (user) {
               const roleUser = await q.getRoleUser(user.id, db);
-              log(`[worker] auth.config -> callbacks.signIn -> SET user and session on REQ\n`);
+              log(`[api] auth.config -> callbacks.signIn -> SET user and session on REQ\n`);
               req.user = roleUser;
             }
             return true;
           } catch (error) {
-            console.log(`[worker] auth.config -> callbacks.signIn -> error -> \n`);
+            console.log(`[api] auth.config -> callbacks.signIn -> error -> \n`);
             console.error(error);
             return true;
           }
         },
         jwt: async ({ token, user, account, session }) => {
-          log(`[worker] auth.config -> callbacks.jwt -> \n`);
+          log(`[api] auth.config -> callbacks.jwt -> \n`);
           logObjs([token, user, account, session]);
           const db = getDatabaseFromEnv(env);
           if (!db) return token;
           const sessionToken = req.session?.sessionToken || '';
           // return null;
           const sessionAndUser = await q.getSessionAndUser(sessionToken, db);
-          log(`[worker] auth.config -> callbacks.jwt -> sessionAndUser -> \n`);
+          log(`[api] auth.config -> callbacks.jwt -> sessionAndUser -> \n`);
           console.log(sessionAndUser);
           return { sessionToken, ...session };
         },
         // user ? { ...token, id: user.id, token: { role: user.role } } : token,
         session: async ({ session, token }) => {
-          log(`[worker] auth.config -> callbacks.session -> \n`);
+          log(`[api] auth.config -> callbacks.session -> \n`);
           // console.log(session);
           let user;
           if (session?.user && session?.user?.email && adapter.getUserByEmail) {
             user = await adapter.getUserByEmail(session?.user?.email);
           }
-          log(`[worker] auth.config -> callbacks.session -> user -> \n`);
+          log(`[api] auth.config -> callbacks.session -> user -> \n`);
           console.log(user);
           console.log('isAdmin');
           console.log(user?.roles?.includes(UserRole.Admin));
@@ -181,17 +181,17 @@ const deriveAuthConfig = async (
       events: {
         createUser: async ({ user }) => {
           let isAdmin = false;
-          log(`[worker] auth.config -> events.createUser -> \n`);
+          log(`[api] auth.config -> events.createUser -> \n`);
           // console.log(user);
           const idAsNumber = Number(user.id);
           if (idAsNumber === 1) {
             isAdmin = true;
-            log(`[worker] auth.config -> events.createUser -> user -> ${user.id} -> IS ADMIN`);
+            log(`[api] auth.config -> events.createUser -> user -> ${user.id} -> IS ADMIN`);
             await q.setUserIsAdmin(user.id, isAdmin, env);
           }
         },
         signIn: async ({ user, account, profile, isNewUser }) => {
-          log(`[worker] auth.config -> events.signIn -> isNewUser -> ${isNewUser} \n`);
+          log(`[api] auth.config -> events.signIn -> isNewUser -> ${isNewUser} \n`);
           console.log(user);
           const _account = await q.getAccountByUserId(user.id, env);
           // console.log(_account);
@@ -199,7 +199,7 @@ const deriveAuthConfig = async (
             const db = getDatabaseFromEnv(env);
             if (!db) return;
             const roleUser = await q.getRoleUser(user.id, db);
-            log(`[worker] auth.config -> callbacks.signIn -> SET user and session on REQ\n`);
+            log(`[api] auth.config -> callbacks.signIn -> SET user and session on REQ\n`);
             req.user = roleUser;
           }
           if (
@@ -207,7 +207,7 @@ const deriveAuthConfig = async (
             (_account?.access_token === null || _account?.access_token === '')
           ) {
             log(
-              `[worker] auth.config -> events.signIn -> update account access token -> ${account?.access_token}\n`
+              `[api] auth.config -> events.signIn -> update account access token -> ${account?.access_token}\n`
             );
             q.updateAccount(_account?.id || '', { access_token: account?.access_token }, env);
           }

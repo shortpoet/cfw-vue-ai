@@ -46,7 +46,7 @@ const logWorkerStart = (request: Request) => {
     console.log(
       chalk.green(`
         \nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        \n[worker] START main.fetch ->
+        \n[api] START main.fetch ->
         \n[${new Date().toLocaleTimeString()}] -> ${
           request.method
         } -> ${url} -> content-type: ${headers.get('Content-Type')}\n
@@ -55,11 +55,11 @@ const logWorkerStart = (request: Request) => {
     if (cf) {
       const { city, region, country, colo, clientTcpRtt } = cf;
       const location = [city, region, country].filter(Boolean).join(', ');
-      console.log(`[worker] main.fetch -> detected location: ${location}`);
+      console.log(`[api] main.fetch -> detected location: ${location}`);
       if (clientTcpRtt) {
         console.log(
-          `[worker] main.fetch -> round trip time from client to edge colo ${colo} is ${clientTcpRtt} ms
-           [worker] main.fetch -> headers:
+          `[api] main.fetch -> round trip time from client to edge colo ${colo} is ${clientTcpRtt} ms
+           [api] main.fetch -> headers:
           `
           // headers
         );
@@ -73,7 +73,7 @@ const logWorkerEnd = (request: Request, response: Response) => {
   if (!isAssetURL(url)) {
     console.log(
       chalk.green(`
-        \n[worker] END main.fetch ->
+        \n[api] END main.fetch ->
         \n[${new Date().toLocaleTimeString()}] -> ${request.method} -> ${url.pathname} -> ${
           response.status
         } -> ${response.statusText}\n
@@ -84,17 +84,17 @@ const logWorkerEnd = (request: Request, response: Response) => {
 };
 
 const logSignin = (user: any, account: any, profile: any, email: any, credentials: any) => {
-  console.log(chalk.green(`[worker] auth.config -> callbacks.signIn -> START \n`));
+  console.log(chalk.green(`[api] auth.config -> callbacks.signIn -> START \n`));
   // user.role = profile?.role;
-  console.log(chalk.green(`[worker] auth.config -> callbacks.signIn -> user -> \n`));
+  console.log(chalk.green(`[api] auth.config -> callbacks.signIn -> user -> \n`));
   console.log(user);
-  console.log(chalk.green(`[worker] auth.config -> callbacks.signIn -> account ->\n`));
+  console.log(chalk.green(`[api] auth.config -> callbacks.signIn -> account ->\n`));
   console.log(account);
-  console.log(chalk.green(`[worker] auth.config -> callbacks.signIn -> profile -> \n`));
+  console.log(chalk.green(`[api] auth.config -> callbacks.signIn -> profile -> \n`));
   console.log(profile);
-  console.log(chalk.green(`[worker] auth.config -> callbacks.signIn -> email ->\n`));
+  console.log(chalk.green(`[api] auth.config -> callbacks.signIn -> email ->\n`));
   console.log(email);
-  console.log(chalk.green(`[worker] auth.config -> callbacks.signIn -> credentials -> \n`));
+  console.log(chalk.green(`[api] auth.config -> callbacks.signIn -> credentials -> \n`));
   console.log(credentials);
 };
 
@@ -105,10 +105,10 @@ const tryLogHeader = (key: string, req: Request, from: string) => {
   const value = req.headers.get(key);
   if (value) {
     if (key === 'Authorization') {
-      console.log(`[worker] log header ${from} -> ${key} :: ${value.slice(0, 15)}...`);
+      console.log(`[api] log header ${from} -> ${key} :: ${value.slice(0, 15)}...`);
       return;
     }
-    console.log(`[worker] log header ${from} -> ${key} :: ${value}`);
+    console.log(`[api] log header ${from} -> ${key} :: ${value}`);
   }
 };
 
@@ -117,9 +117,9 @@ const tryLogHeaders = (req: Request, from: string) => {
   if (!req.headers) return;
   for (const [key, value] of req.headers.entries()) {
     if (key === 'Authorization') {
-      console.log(`[worker] log header ${from} -> ${key} :: ${value.slice(0, 15)}...`);
+      console.log(`[api] log header ${from} -> ${key} :: ${value.slice(0, 15)}...`);
       return;
     }
-    console.log(`[worker] log header ${from} -> ${key} :: ${value}`);
+    console.log(`[api] log header ${from} -> ${key} :: ${value}`);
   }
 };

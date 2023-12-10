@@ -7,8 +7,8 @@ import { createCors } from 'itty-router';
 const { preflight, corsify } = createCors();
 
 export function jsonData(req: Request, res: Response, env: Env, data: JsonData) {
-  console.log(`[worker] middlware.jsonData -> ${req.method} -> ${req.url} -> req`);
-
+  console.log(`[api] middlware.jsonData -> ${req.method} -> ${req.url} -> req`);
+  console.log(data);
   return jsonOkResponse(data, res);
 }
 

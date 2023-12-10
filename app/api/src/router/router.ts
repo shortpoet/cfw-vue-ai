@@ -47,9 +47,11 @@ router
   .all('*', withSession())
   .all('/db-v1/*', auth_dbv1_router)
   .all('/health/*', health_router)
-  .get('/json-data', (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) =>
-    jsonData(req, res, env, sampleData)
-  )
+  .get('/json-data', (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) => {
+    console.log(`[api] /json-data -> ${req.method} -> ${req.url} -> req`);
+    console.log(sampleData);
+    return jsonData(req, res, env, sampleData);
+  })
   .get(
     '/hello',
     withCfSummary(),

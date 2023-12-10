@@ -14,7 +14,7 @@
     "wrangle": "pnpm scripts wrangle",
     "wrangle:kv": "tsx scripts/wrangle.ts --cmds kv",
     "start": "cross-env NODE_ENV=development && concurrently \"pnpm serve\" \"pnpm v:dev\"",
-    "dev": "pnpm run v:build && pnpm run w:build && pnpm run w:dev",
+    "dev": "pnpm ui build:w && pnpm w:build && pnpm w:dev",
     "prev": "pnpm run wrangle:kv && pnpm run w:dev",
     "lint": "eslint --ext .ts,.tsx .",
     "prepare": "cd .. && husky install app/.husky",

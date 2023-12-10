@@ -8,7 +8,7 @@ export { handleSsr };
 
 async function handleSsr(request: Request, res: Response, env: Env, ctx: ExecutionContext) {
   const log = logger(FILE_LOG_LEVEL, env);
-  log(`[worker] [ssr] handleSsr -> url -> ${request.url}`);
+  log(`[api] [ssr] handleSsr -> url -> ${request.url}`);
   const userAgent = request.headers.get('User-Agent') || '';
   const pageContextInit = {
     urlOriginal: request.url,

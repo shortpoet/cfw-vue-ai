@@ -9,24 +9,24 @@ export const withSession =
   ({ required = true } = {}) =>
   async (req: Request, res: Response, env: Env, ctx: ExecutionContext) => {
     const log = logger(FILE_LOG_LEVEL, env);
-    // log(`[worker] [middleware] [auth] [withSession] -> ${req.method} -> ${req.url}`);
-    if (required) log(`[worker] [middleware] [auth] [withSession]  -> required -> ${required} `);
+    // log(`[api] [middleware] [auth] [withSession] -> ${req.method} -> ${req.url}`);
+    if (required) log(`[api] [middleware] [auth] [withSession]  -> required -> ${required} `);
     const session = await getSessionItty(req, res, env);
-    // log(`[worker] [middleware] [auth] [withSession] -> session ->`);
+    // log(`[api] [middleware] [auth] [withSession] -> session ->`);
     // logObjs([session]);
     // if (!session) {
-    //   log(`[worker] [middleware] [auth] [withSession] -> !session ->`);
+    //   log(`[api] [middleware] [auth] [withSession] -> !session ->`);
     //   return unauthorizedResponse('Unauthorized - no session', res);
     // }
     log(
-      `[worker] [middleware] [auth] [withSession] -> setting res.session to session from itty res ->`
+      `[api] [middleware] [auth] [withSession] -> setting res.session to session from itty res ->`
     );
     res.session = session;
     const db = getDatabaseFromEnv(env);
     if (!db || !session?.sessionToken) return;
     const dbSession = await q.getSession(session.sessionToken, db);
     if (dbSession) {
-      log(`[worker] [middleware] [auth] [withSession] -> setting req.session to dbSession ->`);
+      log(`[api] [middleware] [auth] [withSession] -> setting req.session to dbSession ->`);
       req.session = dbSession;
     }
     // return res;
@@ -37,10 +37,10 @@ export const withAuth =
   async (req: Request, res: Response, env: Env, ctx: ExecutionContext) => {
     roles = [...roles, UserRole.Admin];
     const log = logger(FILE_LOG_LEVEL, env);
-    log(`[worker] [middleware] [auth] [withAuth] -> ${req.method} -> ${req.url}`);
-    // log(`[worker] [middleware] [auth] [withAuth] -> REQ.session ->`);
+    log(`[api] [middleware] [auth] [withAuth] -> ${req.method} -> ${req.url}`);
+    // log(`[api] [middleware] [auth] [withAuth] -> REQ.session ->`);
     // console.log(req.session);
-    // log(`[worker] [middleware] [auth] [withAuth] -> RES.session ->`);
+    // log(`[api] [middleware] [auth] [withAuth] -> RES.session ->`);
     // console.log(res.session);
     let sanitizedToken: string | null = null;
     const session = res.session;
@@ -48,14 +48,14 @@ export const withAuth =
 
     const user = session?.user;
     const userRoles = user?.roles;
-    // log(`[worker] [middleware] [auth] [withAuth]-> session -> ${session}`);
-    // log(`[worker] [middleware] [auth] [withAuth]-> user -> ${user}`);
-    // log(`[worker] [middleware] [auth] [withAuth]-> role -> ${role}`);
+    // log(`[api] [middleware] [auth] [withAuth]-> session -> ${session}`);
+    // log(`[api] [middleware] [auth] [withAuth]-> user -> ${user}`);
+    // log(`[api] [middleware] [auth] [withAuth]-> role -> ${role}`);
     if (!session || !user) {
-      // log(`[worker] [middleware] [auth] [withAuth] -> !session || !user ->`);
+      // log(`[api] [middleware] [auth] [withAuth] -> !session || !user ->`);
       return unauthorizedResponse(
         JSON.stringify(
-          { msg: `[worker] [middleware] [auth] [withAuth] Unauthorized - no session` },
+          { msg: `[api] [middleware] [auth] [withAuth] Unauthorized - no session` },
           null,
           2
         ),
@@ -64,12 +64,12 @@ export const withAuth =
     }
     if (roles.length && userRoles && !userRoles.some((role) => roles.includes(role))) {
       // log(
-      //   `[worker] [middleware] [auth] [withAuth] -> roles.length && !roles.includes(role) ->`
+      //   `[api] [middleware] [auth] [withAuth] -> roles.length && !roles.includes(role) ->`
       // );
       // logObjs([roles, role]);
       return unauthorizedResponse(
         JSON.stringify(
-          { msg: `[worker] [middleware] [auth] [withAuth] Unauthorized - invalid role` },
+          { msg: `[api] [middleware] [auth] [withAuth] Unauthorized - invalid role` },
           null,
           2
         ),

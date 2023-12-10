@@ -7,7 +7,7 @@ export { handleStaticAssets };
 import rawManifest from '__STATIC_CONTENT_MANIFEST';
 
 async function handleStaticAssets(request: Request, env: Env, ctx: ExecutionContext) {
-  // console.log(`[worker] [static-assets] handleStaticAssets -> url -> ${request.url}`);
+  // console.log(`[api] [static-assets] handleStaticAssets -> url -> ${request.url}`);
   const DEBUG = env.VITE_LOG_LEVEL === 'debug';
   let options = setCacheOptions(request, DEBUG);
 
@@ -35,7 +35,7 @@ async function handleStaticAssets(request: Request, env: Env, ctx: ExecutionCont
       response.headers.set('X-Frame-Options', 'DENY');
       response.headers.set('Referrer-Policy', 'unsafe-url');
       response.headers.set('Feature-Policy', 'none');
-      // console.log(`[worker] [static-assets] handleStaticAssets -> response -> ${request.url}`);
+      // console.log(`[api] [static-assets] handleStaticAssets -> response -> ${request.url}`);
       return response;
     } catch (error: any) {
       console.log('error getAssetFromKV', error);

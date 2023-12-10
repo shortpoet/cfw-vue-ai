@@ -37,14 +37,14 @@ export const createAuthRequest = async (
   const log = logger(FILE_LOG_LEVEL, env);
 
   const { authConfig, isAuthAvailable } = await deriveAuthConfig(req, res, env, optionsInit);
-  log(`[worker] [middleware] [auth] [itty] createAuthRequest -> NEW \n`);
+  log(`[api] [middleware] [auth] [itty] createAuthRequest -> NEW \n`);
   const parsedUrl = new URL(req.url);
   const referrer = req.headers.get('referer');
   const origin = `${parsedUrl.origin}/`;
   let callbackUrl;
   if (referrer && !referrer.includes('/api/auth') && referrer !== origin) {
     log(
-      `[worker] [middleware] [auth] [itty] createAuthRequest -> setting callbackUrl to referrer -> ${referrer} -> but not ${origin} \n}`
+      `[api] [middleware] [auth] [itty] createAuthRequest -> setting callbackUrl to referrer -> ${referrer} -> but not ${origin} \n}`
     );
     callbackUrl = referrer;
     const replacementParams = new URLSearchParams({ callbackUrl: referrer });
@@ -72,7 +72,7 @@ export const authMiddlewareItty = async (
 ) => {
   const log = logger(FILE_LOG_LEVEL, env);
   try {
-    log(`[worker] auth.middleware.itty -> START\n`);
+    log(`[api] auth.middleware.itty -> START\n`);
     // console.log(req.headers);
     const prefix = '/api/auth';
     const optionsInit: Partial<AuthConfig> = { prefix };
@@ -94,19 +94,19 @@ export const authMiddlewareItty = async (
     if (ACTIONS.includes(action as AuthAction) && isApi) {
       const session = await getSessionItty(req, res, env);
       res.session = session;
-      log(`[worker] auth.middleware.itty -> auth action -> ${action}`);
+      log(`[api] auth.middleware.itty -> auth action -> ${action}`);
       const response = await createAuthRequest(req, res, env, optionsInit);
       const logNoBody = Object.entries(response).reduce((acc, [key, value]) => {
         if (key === 'body') return acc;
         return { ...acc, [key]: value };
       }, {} as any);
-      // log(`[worker] [middleware] [auth] [itty] handleNextAuth.response | user | session`);
+      // log(`[api] [middleware] [auth] [itty] handleNextAuth.response | user | session`);
       // logObjs([logNoBody]);
       // logObjs([req.user, req.session]);
       if (action === 'callback' && req.method === 'POST') {
         // handle credentials Callback
         log(
-          `[worker] [middleware] [auth] [itty] handleNextAuth -> callback -> POST -> credentials callback SET ON RESPONSE\n`
+          `[api] [middleware] [auth] [itty] handleNextAuth -> callback -> POST -> credentials callback SET ON RESPONSE\n`
         );
         if (req && req.session && req.session.sessionToken && SESSION_STRATEGY === 'database') {
           const protocol = parsedUrl.protocol;
@@ -115,7 +115,7 @@ export const authMiddlewareItty = async (
           const isCookieSecure = protocol === 'https:' ? 'Secure;' : '';
           const newCookie = `${cookieName}=${req.session.sessionToken}; Path=/; HttpOnly; ${isCookieSecure} SameSite=Lax`;
           log(
-            `[worker] [middleware] [auth] [itty] handleNextAuth -> callback -> POST -> credentials callback SET ON RESPONSE -> ${newCookie}\n`
+            `[api] [middleware] [auth] [itty] handleNextAuth -> callback -> POST -> credentials callback SET ON RESPONSE -> ${newCookie}\n`
           );
           res.headers.append('Set-Cookie', newCookie);
         }
@@ -125,7 +125,7 @@ export const authMiddlewareItty = async (
     }
     return;
   } catch (error) {
-    log(`[worker] [middleware] [auth] [itty] error`);
+    log(`[api] [middleware] [auth] [itty] error`);
     console.error(error);
     return;
   }
@@ -137,7 +137,7 @@ export async function getSessionItty(
   env: Env
 ): Promise<Session | null> {
   const log = logger(FILE_LOG_LEVEL, env);
-  log(`[worker] [middleware] [auth] [itty] getSessionItty -> START\n`);
+  log(`[api] [middleware] [auth] [itty] getSessionItty -> START\n`);
   const prefix = '/api/auth';
   const optionsInit: Partial<AuthConfig> = { prefix };
   const { authConfig, isAuthAvailable } = await deriveAuthConfig(req, res, env, optionsInit);
@@ -148,12 +148,12 @@ export async function getSessionItty(
       throw new Error('Auth is not available');
     }
     log(
-      `[worker] [middleware] [auth] [itty] getSessionItty.authRequest -> ${req.method}://.${url.pathname}`
+      `[api] [middleware] [auth] [itty] getSessionItty.authRequest -> ${req.method}://.${url.pathname}`
     );
     const response = await Auth(request, authConfig);
     const { status = 200 } = response;
     const session: Session | any = await response.body.json();
-    log(`[worker] [middleware] [auth] [itty] getSessionItty.response -> session`);
+    log(`[api] [middleware] [auth] [itty] getSessionItty.response -> session`);
     console.log(session);
     if (!session || !Object.keys(session).length) return null;
     if (status === 200) {
@@ -170,7 +170,7 @@ export async function getSessionItty(
     }
     throw new Error(session.message);
   } catch (error) {
-    console.error(`[worker] [middleware] [auth] [itty] getSessionItty.error`);
+    console.error(`[api] [middleware] [auth] [itty] getSessionItty.error`);
     console.error(error);
     return null;
   }

@@ -20,7 +20,7 @@ router.get(
   async (req: Request, res: Response, env: Env, ctx: ExecutionContext) => {
     const log = logger(FILE_LOG_LEVEL, env);
     const debugResponse = await debugRes(req, res, env, ctx, false);
-    log(`[worker] [routes] [health] [debug] GET -> debugResponse ->`);
+    log(`[api] [routes] [health] [debug] GET -> debugResponse ->`);
     // logObjs([debugResponse]);
     return jsonData(req, res, env, debugResponse);
   }
@@ -31,7 +31,7 @@ router.post(
   async (req: Request, res: Response, env: Env, ctx: ExecutionContext) => {
     const log = logger(FILE_LOG_LEVEL, env);
     const debugResponse = await debugRes(req, res, env, ctx, false);
-    log(`[worker] [routes] [health] [debug] POST -> debugResponse ->`);
+    log(`[api] [routes] [health] [debug] POST -> debugResponse ->`);
     // logObjs([debugResponse]);
     return jsonData(req, res, env, debugResponse);
   }

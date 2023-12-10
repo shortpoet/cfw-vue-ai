@@ -32,7 +32,7 @@ const vitestConfig: InlineConfig = {
 };
 
 export default ({ mode }: { mode: string }) => {
-  console.log(`vite loading... (${mode})`);
+  console.log(`[ui] [vite] loading... (${mode})`);
   const loaded = loadEnv(mode, envDir, '');
   const env = { ...process.env, ...loaded, ...parsedSecret };
   const processEnvValues = {

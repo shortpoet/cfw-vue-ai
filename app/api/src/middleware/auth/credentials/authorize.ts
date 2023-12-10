@@ -82,13 +82,13 @@ export const authorize = async (
     if (sessionToken) {
       if (useJwtSession) {
         // console.log(
-        //   `[worker] [credentials] [authorize] [sessionToken] use JWT ${sessionToken}`
+        //   `[api] [credentials] [authorize] [sessionToken] use JWT ${sessionToken}`
         // );
         try {
           const { jwt, decoded } = await initJWT(env, { sessionToken });
           session = decoded;
           // console.log(
-          //   "[worker] [credentials] [authorize] [sessionToken] decoded JWT",
+          //   "[api] [credentials] [authorize] [sessionToken] decoded JWT",
           //   session
           // );
           if (session && 'sub' in session && session.sub) {
@@ -103,7 +103,7 @@ export const authorize = async (
           } else {
           }
         } catch (error) {
-          console.log('[worker] [credentials] [authorize] [sessionToken] JWT decode error');
+          console.log('[api] [credentials] [authorize] [sessionToken] JWT decode error');
           console.error(error);
           // If session can't be verified, treat as no session
         }
@@ -113,7 +113,7 @@ export const authorize = async (
           session = userAndSession.session;
           user = userAndSession.user;
           if (session && user) {
-            console.log('[worker] [credentials] [authorize]  by getSessionAndUser', user);
+            console.log('[api] [credentials] [authorize]  by getSessionAndUser', user);
             return user;
           }
         }
@@ -122,9 +122,9 @@ export const authorize = async (
     if (userByAccount) {
       if (user) {
         // If the user is already signed in with this account, we don't need to do anything
-        console.log(`[worker] [credentials] [authorize] user by account already signed in`);
+        console.log(`[api] [credentials] [authorize] user by account already signed in`);
         console.log(user);
-        console.log(`[worker] [credentials] [authorize] session`);
+        console.log(`[api] [credentials] [authorize] session`);
         console.log(session);
         if (userByAccount.id === user.id) return user;
         throw new OAuthAccountNotLinked('The account is already associated with another user', {
@@ -143,11 +143,11 @@ export const authorize = async (
             db
           );
       user = userByAccount;
-      console.log(`[worker] [credentials] [authorize] user by account`);
+      console.log(`[api] [credentials] [authorize] user by account`);
       console.log(user);
-      console.log(`[worker] [credentials] [authorize] session`);
+      console.log(`[api] [credentials] [authorize] session`);
       console.log(session);
-      console.log(`[worker] [credentials] [authorize] isNewUser -> ${isNewUser}`);
+      console.log(`[api] [credentials] [authorize] isNewUser -> ${isNewUser}`);
       return user;
     } else {
       if (user) {
@@ -155,10 +155,10 @@ export const authorize = async (
         // with another user account then we can go ahead and link the accounts safely.
         await linkAccount(user.id, db);
         console.log(
-          `[worker] [credentials] [authorize] user already signed in but account not linked`
+          `[api] [credentials] [authorize] user already signed in but account not linked`
         );
         console.log(user);
-        console.log(`[worker] [credentials] [authorize] session`);
+        console.log(`[api] [credentials] [authorize] session`);
         console.log(session);
         return user;
       }
@@ -200,7 +200,7 @@ export const authorize = async (
           );
         }
         if (!user) return null;
-        console.log('[worker] [credentials] [authorize] created user', user);
+        console.log('[api] [credentials] [authorize] created user', user);
         // const session = await q.createSession(
         session = useJwtSession
           ? {}
@@ -213,7 +213,7 @@ export const authorize = async (
               db
             );
 
-        console.log('[worker] [credentials] [authorize] session', session);
+        console.log('[api] [credentials] [authorize] session', session);
         return user;
       }
       return null;
