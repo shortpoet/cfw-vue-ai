@@ -8,7 +8,7 @@ import toml from 'toml';
 import json2toml from 'json2toml';
 // import fs from 'node:fs';
 import { exec, execSync, spawn } from 'node:child_process';
-import chalk from 'chalk';
+import colors from 'kleur';
 import { Arrayable, Config, WrangleConfig, WranglerToml } from './types';
 import * as log from './log';
 
@@ -31,7 +31,7 @@ export {
 export { exists };
 
 export function assert(input: unknown, msg: string, isFile?: boolean, exitCode = 2): void | false {
-  // console.log(chalk.magenta(`[wrangle] [util] asserting ${input}`));
+  // console.log(colors.magenta(`[wrangle] [util] asserting ${input}`));
   // console.log(exists(input as string));
   // (isFile && exists(input as string)) || !!input || error(msg, 0);
   (isFile && exists(input as string) && !!input) || (!isFile && !!input) || error(msg, exitCode);
@@ -58,28 +58,32 @@ const formatBindingId = (
   opts: Pick<Config, 'appName' | 'env' | 'bindingNameUI' | 'bindingNameDb'>,
   isUI: boolean
 ) => {
-  console.log(chalk.yellow(`[wrangle] [util] formatting binding id`));
+  console.log(colors.yellow(`[wrangle] [util] formatting binding id`));
   // console.log(opts.appName);
   // console.log(opts.env);
   // console.log(opts.bindingNameUI);
   // console.log(opts.bindingNameDb);
   return isUI
-    ? `${opts.appName}-ui-${opts.env}-${opts.bindingNameUI}`
+    ? `${opts.appName}-${opts.env}-${opts.bindingNameUI}`
     : `${opts.appName}-preview-${opts.env}-${opts.bindingNameDb}`;
 };
 
-function executeWranglerCommand(command: string, opts: Pick<Config, 'env' | 'wranglerFile'>) {
+function executeWranglerCommand(
+  command: string,
+  opts: Pick<Config, 'env' | 'wranglerFile' | 'goLive'>
+) {
   command = `--env ${opts.env} ${command} --config ${opts.wranglerFile}`;
-  console.log(
-    chalk.magenta(
-      `\n========\n[wrangle] [kv] executing wrangler command: \nnpx wrangler ${command}`
-    )
-  );
+  console.log(colors.magenta(`\n========\n[wrangle] [kv] executing wrangler command:`));
+  console.log(colors.green(`\nnpx wrangler ${command}`));
+  console.log(colors.magenta(`========\n`));
+  if (!opts.goLive) {
+    console.log(colors.yellow(`[wrangle] [kv] goLive is false, skipping wrangler command`));
+    return '{}';
+  }
   const execution = execSync(`npx wrangler ${command}`, {
     encoding: 'utf8',
     shell: '/bin/bash',
   });
-  console.log(chalk.magenta(`========\n`));
   return execution;
 }
 
@@ -110,7 +114,7 @@ const writeToml = async (data: any, conf: Pick<Config, 'wranglerFile' | 'debug'>
 
 const writeFile = async (file: string, data: string) => {
   try {
-    // console.log(chalk.magenta(`[wrangle] [util] writing ${file}`));
+    // console.log(colors.magenta(`[wrangle] [util] writing ${file}`));
     await write(file, data);
   } catch (error) {
     console.error(error);

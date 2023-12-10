@@ -7,7 +7,7 @@ import { Config, Options, WranglerToml, WrangleConfig } from '../types';
 import { __appDir, __rootDir, __wranglerDir } from '@cfw-vue-ai/types/src/root';
 import { assert, formatBindingId, getToml, writeToml } from '../util';
 import { setSecrets } from '../secret/secret';
-import { setBindings } from '../cf/kv';
+// import { setBindings } from '../cf/name';
 // import * as log from '../log';
 
 const __dataDir = `${__appDir}/data`;
@@ -52,7 +52,8 @@ async function assertTomlEnv(conf: Pick<Config, 'env' | 'wranglerFile' | 'appNam
   // if (!config['env'][`${env}`]['name']) {
   //   config['env'][`${env}`]['name'] = appName;
   // }
-  config['env'][`${env}`] = { ...defaultEnvConfig, ...config['env'][`${env}`] };
+  config['env'][`${env}`] =
+    env != 'dev' ? { ...defaultEnvConfig, ...config['env'][`${env}`] } : config['env'][`${env}`];
   if (config['vars']) config['env'][`${env}`]['vars'] = config['vars'];
   // console.log(config);
   await writeToml(config, { wranglerFile, debug });

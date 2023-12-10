@@ -7,7 +7,6 @@ main = "./build/worker.mjs"
 bucket = "../ui/build/client"
 [dev]
 port = 3000
-name = "cfw-vue-ai"
 [[env.dev.d1_databases]]
 binding = "CFW_VUE_AI_DB_V1"
 database_name = "undefined-preview-dev-undefined"
