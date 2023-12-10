@@ -3,21 +3,31 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "preserveConstEnums": true,
-    "skipLibCheck": false,
+    "moduleResolution": "node",
+    "noEmit": true,
     "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
+      "esnext"
     ],
     "types": [
-      "node"
+      "@types/node",
+    ],
+    "typeRoots": [
+      "node_modules"
     ]
   },
   "include": [
+    "**/*.ts",
     "../bindings.d.ts"
-  ]
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }
