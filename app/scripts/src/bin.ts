@@ -1,17 +1,19 @@
 import sade from 'sade';
-import * as test from './commands/test';
+import * as kv from './commands/kv';
 
-sade('wrangle')
-  .version('$$VERSION$$') // Note: Inject via build step
+const cli = sade('cfw')
+  .version('0.0.1')
+  // .version('$$VERSION$$') // Note: Inject via build step
   .option('-C, --cwd', 'The relative working directory', '.')
-
-  .command('test [dir] [output]')
-  .describe('Test the utility')
-  .option('-e, --env', 'The environment to test', 'dev')
+  .option('-e, --env', 'The environment to list', 'dev')
   .option('-d, --debug', 'Debug mode', false)
-  .action(test.list)
 
-  .parse(process.argv, {
-    boolean: ['single', 'quiet'],
-    string: ['only', 'ignore', 'profile'],
-  });
+  .command('kv list')
+  .alias('kv ls')
+  .describe('List all KV namespaces')
+  .action(kv.list);
+
+cli.parse(process.argv, {
+  boolean: ['debug', 'single', 'quiet'],
+  string: ['env', 'dir', 'output', 'only', 'ignore', 'profile'],
+});

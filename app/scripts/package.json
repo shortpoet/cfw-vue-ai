@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.2",
   "description": "",
-  "source": "src/index.ts",
+  "source": "src/bin.ts",
   "scripts": {
     "hello": "echo 'Hello World!'",
     "bundle": "rollup -c",

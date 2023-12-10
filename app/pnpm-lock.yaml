@@ -174,7 +174,7 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0
       sade:
-        specifier: ^1.8.1
+        specifier: ^1.7.4
         version: 1.8.1
       terser:
         specifier: ^5.26.0

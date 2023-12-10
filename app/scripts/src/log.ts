@@ -6,7 +6,7 @@ export const ARROW = '   ~> ';
 export const SPACER = ' '.repeat(6);
 const CFW = colors.bold('[WRANGLE]');
 
-function print(color: keyof colors.Kleur, msg: string): void {
+export function print(color: keyof colors.Kleur, msg: string): void {
   console.log(
     colors[color](CFW),
     msg.includes('\n') ? msg.replace(/(\r?\n)/g, '$1' + SPACER) : msg

@@ -12,7 +12,7 @@ import {
   deleteNamespace,
   getPreview,
   setBindings,
-} from '../scripts/src/kv';
+} from '../scripts/src/cf/kv';
 import {
   command,
   getToml,
