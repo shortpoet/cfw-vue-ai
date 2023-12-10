@@ -1,7 +1,6 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "esnext",
     "module": "esnext",
     "allowSyntheticDefaultImports": true,
@@ -9,12 +8,25 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noEmit": true,
-    "lib": ["esnext"],
-    "types": ["@types/node", "@cloudflare/workers-types"],
-    "typeRoots": ["node_modules"]
+    "lib": [
+      "esnext"
+    ],
+    "types": [
+      "@types/node",
+      "@cloudflare/workers-types"
+    ],
+    "typeRoots": [
+      "node_modules"
+    ]
   },
-  "include": ["**/*.ts", "../bindings.d.ts", "../script/db.ts"],
-  "exclude": ["node_modules", "dist"],
+  "include": [
+    "**/*.ts",
+    "../bindings.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"

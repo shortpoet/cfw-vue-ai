@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 import { Config, Options } from '../types';
 
-import { __wranglerDir } from '../root';
+import { __wranglerDir } from '@cfw-vue-ai/types';
 import { assert } from '../util';
 
 export function getConfig(opts: Options): Config {

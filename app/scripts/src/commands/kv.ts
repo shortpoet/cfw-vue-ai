@@ -9,8 +9,7 @@ export async function list(opts: Options) {
   log.info('Retrieving Config');
   log.print('green', `${colors.cyan(log.ARROW)} opts`);
   console.info(JSON.stringify(opts));
-  console.log(opts);
-  return;
+  // console.log(opts);
   const { cwd, dir, env, debug, only, ignore, envFile, wranglerFile } = getConfig(opts);
 
   log.info('Retrieving KV namespaces:');
