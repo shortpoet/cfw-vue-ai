@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Env } from './wrangle';
-import { command, readFile, writeFile } from './util';
+import { command, readFile, writeFile } from '../scripts/src/util';
 import chalk from 'chalk';
 
 export { writeSecretToKv, setSecretFile, setSecrets, assertPassUnlocked };
@@ -13,9 +13,7 @@ async function assertPassUnlocked() {
   try {
     res = (await command('pass test/unlocked')).trim() === 'true' ? true : false;
   } catch (error) {
-    console.log(
-      chalk.red(`[wrangle] [secret] error: pass is locked. Please unlock pass first.`)
-    );
+    console.log(chalk.red(`[wrangle] [secret] error: pass is locked. Please unlock pass first.`));
   }
   return res;
 }
@@ -42,26 +40,17 @@ async function setSecrets(secrets, secretsFilePath, env, tomlPath, generateLengt
 
 async function getOrCreateSecret(secretName, passKey, generateLength = 32) {
   let secret;
-  console.log(
-    chalk.magenta(`[wrangle] [secret] getOrCreateSecret ${secretName} ${passKey}`)
-  );
+  console.log(chalk.magenta(`[wrangle] [secret] getOrCreateSecret ${secretName} ${passKey}`));
   secret = await passGet(passKey);
   if (!secret) {
-    chalk.yellow(
-      `[wrangle] [secret] secret ${secretName} not found. Generating new secret`
-    );
+    chalk.yellow(`[wrangle] [secret] secret ${secretName} not found. Generating new secret`);
     secret = generateSecret(generateLength);
     await passWrite(passKey, secret);
   }
   return secret;
 }
 
-async function setSecretFile(
-  secretName: string,
-  secretValue: string,
-  env: Env,
-  filePath: string
-) {
+async function setSecretFile(secretName: string, secretValue: string, env: Env, filePath: string) {
   const existingSecrets = await readFile(filePath);
   const lines = existingSecrets.split('\n').filter((line) => line.trim() !== '');
   const keyValuePairs = lines.map((line) => {

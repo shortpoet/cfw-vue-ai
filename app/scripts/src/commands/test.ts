@@ -3,19 +3,14 @@ import * as utils from '../util';
 import * as log from '../log';
 import { getNamespaces } from '../kv';
 
-type WrangleConfig = {
-  env: 'dev' | 'preview' | 'uat' | 'prod';
-  envFile: string;
-  debug: boolean;
-};
 interface Argv {
   env?: 'dev' | 'preview' | 'uat' | 'prod';
   debug?: boolean;
 }
 
 export async function list(opts: Argv) {
-  const env = opts.env || 'dev';
-  const debug = opts.debug || false;
+  const env = opts?.env || 'dev';
+  const debug = opts?.debug || false;
   const envFile =
     env === 'prod'
       ? '.env.prod'
@@ -24,21 +19,29 @@ export async function list(opts: Argv) {
         env === 'uat'
         ? '.env.uat'
         : '.env.preview';
+  const wranglerFile =
+    env === 'prod'
+      ? 'wrangler.prod.toml'
+      : env === 'preview'
+        ? 'wrangler.preview.toml'
+        : env === 'uat'
+          ? 'wrangler.uat.toml'
+          : 'wrangler.toml';
 
   log.info('Retrieving KV namespaces:');
-  const items = await getNamespaces({ env, envFile, debug });
-  // const GAP = '    ',
-  //   TH = colors.dim().bold().italic;
-  // log.success(TH('ID') + ' '.repeat(30) + GAP + TH('Title'));
+  const items = await getNamespaces({ env, envFile, debug, wranglerFile });
+  const GAP = '    ',
+    TH = colors.dim().bold().italic;
+  log.success(TH('ID') + ' '.repeat(30) + GAP + TH('Title'));
 
-  // let i = 0,
-  //   arr = items.result,
-  //   tmp = ''; // ID => 32 chars
-  // for (; i < arr.length; i++) {
-  //   if (tmp) tmp += '\n';
-  //   tmp += (arr[i].supports_url_encoding ? colors.cyan : colors.red)(log.ARROW);
-  //   tmp += arr[i].id + GAP + arr[i].title;
-  // }
+  let i = 0,
+    arr = items,
+    tmp = ''; // ID => 32 chars
+  for (; i < arr.length; i++) {
+    if (tmp) tmp += '\n';
+    tmp += (arr[i].supports_url_encoding ? colors.cyan : colors.red)(log.ARROW);
+    tmp += arr[i].id + GAP + arr[i].title;
+  }
 
-  console.log(items);
+  console.log(tmp);
 }

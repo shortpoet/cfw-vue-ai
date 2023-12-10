@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import sade from 'sade';
 import * as test from './commands/test';
 
@@ -10,6 +9,7 @@ sade('wrangle')
   .describe('Test the utility')
   .option('-e, --env', 'The environment to test', 'dev')
   .option('-d, --debug', 'Debug mode', false)
+  .action(test.list)
 
   .parse(process.argv, {
     boolean: ['single', 'quiet'],

@@ -1,19 +1,14 @@
-import chalk from "chalk";
-import { Env } from "./wrangle";
-import {
-  getToml,
-  writeToml,
-  executeWranglerCommand,
-  formatBindingId,
-} from "./util";
+import chalk from 'chalk';
+import { Env } from './wrangle';
+import { getToml, writeToml, executeWranglerCommand, formatBindingId } from '../scripts/src/util';
 
 export { assertDatabase };
 
 function getDatabases(env: Env) {
   try {
-    return JSON.parse(executeWranglerCommand("d1 list --json", env.env));
+    return JSON.parse(executeWranglerCommand('d1 list --json', env.env));
   } catch (error) {
-    if (error.toString().includes("SyntaxError")) {
+    if (error.toString().includes('SyntaxError')) {
       return [];
     } else {
       throw error;
@@ -23,7 +18,7 @@ function getDatabases(env: Env) {
 
 function getDatabase(name: string, env: Env) {
   const n = getDatabases(env);
-  console.log(chalk.cyan("[wrangle] [db] get name", name));
+  console.log(chalk.cyan('[wrangle] [db] get name', name));
   return n.find((i) => i.name === name) || {};
 }
 
@@ -31,20 +26,18 @@ function createDatabase(databaseName: string, env: Env) {
   console.log(chalk.green(`[wrangle] [db] creating database ${databaseName}`));
   const res = executeWranglerCommand(`d1 create ${databaseName}`, env.env);
   if (!res) {
-    throw new Error("no response");
+    throw new Error('no response');
   }
-  if (res.includes("error")) {
+  if (res.includes('error')) {
     throw new Error(res);
   }
   const database = res.match(/(?<=database_id = ).*/g);
   if (!database) {
-    throw new Error("no database id in response");
+    throw new Error('no database id in response');
   }
-  const databaseId = database[0].replace(/"/g, "");
+  const databaseId = database[0].replace(/"/g, '');
   console.log(
-    chalk.green(
-      `[wrangle] [db] created database [name] ${databaseName} [id] ${databaseId}`
-    )
+    chalk.green(`[wrangle] [db] created database [name] ${databaseName} [id] ${databaseId}`)
   );
   console.log(res);
   return databaseId;
@@ -54,9 +47,9 @@ function deleteDatabase(databaseName: string, env: Env) {
   console.log(chalk.green(`[wrangle] [db] deleting database ${databaseName}`));
   const res = executeWranglerCommand(`d1 delete ${databaseName}`, env.env);
   if (!res) {
-    throw new Error("no response");
+    throw new Error('no response');
   }
-  if (res.includes("error")) {
+  if (res.includes('error')) {
     throw new Error(res);
   }
   console.log(res);
@@ -69,22 +62,19 @@ function createMigration(databaseName: string, subCommand: string, env: Env) {
       `[wrangle] [db] creating migration for [database name] ${databaseName} [mig name] ${subCommand}`
     )
   );
-  const res = executeWranglerCommand(
-    `d1 migrations create ${databaseName} ${subCommand}`,
-    env.env
-  );
+  const res = executeWranglerCommand(`d1 migrations create ${databaseName} ${subCommand}`, env.env);
   if (!res) {
-    throw new Error("no response");
+    throw new Error('no response');
   }
-  if (res.includes("error")) {
+  if (res.includes('error')) {
     throw new Error(res);
   }
   console.log(res);
   const migration = res.match(/'(.*)'!/g);
   if (!migration) {
-    throw new Error("no migration id in response");
+    throw new Error('no migration id in response');
   }
-  const migrationId = migration[0].replace(/'\!/g, "");
+  const migrationId = migration[0].replace(/'\!/g, '');
   console.log(
     chalk.green(
       `[wrangle] [db] created migration [name] ${subCommand} for database [name] ${databaseName}`
@@ -95,22 +85,17 @@ function createMigration(databaseName: string, subCommand: string, env: Env) {
 }
 
 function applyMigration(databaseName: string, env: Env, debug?: boolean) {
-  console.log(
-    chalk.green(`[wrangle] [db] applying to database [name] ${databaseName}`)
-  );
-  let localSwitch = "";
-  if (env.env === "preview") {
+  console.log(chalk.green(`[wrangle] [db] applying to database [name] ${databaseName}`));
+  let localSwitch = '';
+  if (env.env === 'preview') {
     localSwitch = `--local`;
   }
 
-  const res = executeWranglerCommand(
-    `d1 migrations apply ${databaseName} ${localSwitch}`,
-    env.env
-  );
+  const res = executeWranglerCommand(`d1 migrations apply ${databaseName} ${localSwitch}`, env.env);
   if (!res) {
-    throw new Error("no response");
+    throw new Error('no response');
   }
-  if (res.includes("error")) {
+  if (res.includes('error')) {
     throw new Error(res);
   }
   console.log(res);
@@ -126,7 +111,7 @@ async function executeD1Sql(
 ) {
   let cmd;
   let base = `d1 execute`;
-  if (env.env === "preview") {
+  if (env.env === 'preview') {
     base = `${base} --local`;
   }
   if (sql) {
@@ -136,13 +121,13 @@ async function executeD1Sql(
     cmd = `${base} ${databaseName} --file ${file}`;
   }
   if (!cmd) {
-    throw new Error("no d1 execute command");
+    throw new Error('no d1 execute command');
   }
   const res = executeWranglerCommand(cmd, env.env);
   if (!res) {
-    throw new Error("no response");
+    throw new Error('no response');
   }
-  if (res.includes("error")) {
+  if (res.includes('error')) {
     throw new Error(res);
   }
   console.log(res);
@@ -172,51 +157,45 @@ async function assertDatabase(
   databaseId = database.uuid;
   console.log(databaseId);
 
-  if (!databaseId && dbCommand !== "delete") {
-    console.log(
-      chalk.green(`[wrangle] [db] creating database ${databaseName}`)
-    );
+  if (!databaseId && dbCommand !== 'delete') {
+    console.log(chalk.green(`[wrangle] [db] creating database ${databaseName}`));
     databaseId = createDatabase(databaseName, env);
   }
-  console.log(
-    chalk.green(
-      `[wrangle] [db] databaseId ${databaseId} for binding ${bindingName}`
-    )
-  );
+  console.log(chalk.green(`[wrangle] [db] databaseId ${databaseId} for binding ${bindingName}`));
   writeDatabaseToToml(
     bindingName,
     databaseId,
     databaseName,
     tomlPath,
     env,
-    dbCommand === "delete",
+    dbCommand === 'delete',
     debug
   );
 
-  const isDelete = dbCommand === "delete" && !!databaseId;
+  const isDelete = dbCommand === 'delete' && !!databaseId;
 
   switch (true) {
-    case dbCommand === "create":
+    case dbCommand === 'create':
       if (!subCommand) {
-        throw new Error("no migration name");
+        throw new Error('no migration name');
       }
       createMigration(databaseName, subCommand, env);
       break;
-    case dbCommand === "apply":
+    case dbCommand === 'apply':
       applyMigration(databaseName, env, debug);
       break;
-    case dbCommand === "sql":
+    case dbCommand === 'sql':
       executeD1Sql(databaseName, env, undefined, subCommand, debug);
       break;
-    case dbCommand === "file":
-      dbCommand = dbCommand?.split(":")[1];
+    case dbCommand === 'file':
+      dbCommand = dbCommand?.split(':')[1];
       executeD1Sql(databaseName, env, subCommand, undefined, debug);
       break;
     case isDelete:
       deleteDatabase(databaseName, env);
       break;
     case dbCommand !== undefined && isDelete:
-      throw new Error("invalid migration command");
+      throw new Error('invalid migration command');
     default:
       return;
       break;
@@ -242,32 +221,28 @@ function writeDatabaseToToml(
 
   const config = getToml(tomlPath);
   if (!config) {
-    throw new Error("no config");
+    throw new Error('no config');
   }
   // console.log(chalk.magenta(`[wrangle] [db] db before:`));
 
-  let databases = config["env"][`${env_name}`]["d1_databases"];
+  let databases = config['env'][`${env_name}`]['d1_databases'];
   if (!databases) {
     databases = [];
   }
 
   if (deleteDb) {
     console.log(
-      chalk.yellow(
-        `[wrangle] [db] deleting binding ${bindingName} from toml ${tomlPath}`
-      )
+      chalk.yellow(`[wrangle] [db] deleting binding ${bindingName} from toml ${tomlPath}`)
     );
     databases = databases.filter((i) => i.binding !== bindingName);
     if (databases.length === 0) {
-      delete config["env"][`${env_name}`]["d1_databases"];
+      delete config['env'][`${env_name}`]['d1_databases'];
     }
   } else {
     const database = databases.find((i) => i.binding === bindingName);
     if (database && database.database_id === databaseId) {
       console.log(
-        chalk.yellow(
-          `[wrangle] [db] binding ${bindingName} already exists in toml ${tomlPath}`
-        )
+        chalk.yellow(`[wrangle] [db] binding ${bindingName} already exists in toml ${tomlPath}`)
       );
       return;
     }
@@ -276,7 +251,7 @@ function writeDatabaseToToml(
       database_name: databaseName,
       database_id: databaseId,
     });
-    config["env"][`${env_name}`]["d1_databases"] = databases;
+    config['env'][`${env_name}`]['d1_databases'] = databases;
   }
   // console.log(chalk.magenta(`[wrangle] [db] config after:`));
   // console.log(config["env"][`${env_name}`]);

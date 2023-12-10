@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 // const { minify } = require('terser');
-// const { transpileModule } = require('typescript');
-// const tsconfig = require('./tsconfig.json');
+const { transpileModule } = require('typescript');
+const tsconfig = require('./tsconfig.json');
 const pkg = require('./package.json');
 
 const resolve = {
@@ -33,18 +33,18 @@ const resolve = {
 //   },
 // };
 
-// const typescript = {
-//   name: 'typescript',
-//   transform(code, file) {
-//     if (!/\.ts$/.test(file)) return code;
-//     // @ts-ignore
-//     let output = transpileModule(code, { ...tsconfig, fileName: file });
-//     return {
-//       code: output.outputText.replace('$$VERSION$$', pkg.version),
-//       map: output.sourceMapText || null,
-//     };
-//   },
-// };
+const typescript = {
+  name: 'typescript',
+  transform(code, file) {
+    if (!/\.ts$/.test(file)) return code;
+    // @ts-ignore
+    let output = transpileModule(code, { ...tsconfig, fileName: file });
+    return {
+      code: output.outputText.replace('$$VERSION$$', pkg.version),
+      map: output.sourceMapText || null,
+    };
+  },
+};
 
 module.exports = {
   input: 'src/bin.ts',
@@ -53,10 +53,10 @@ module.exports = {
     file: 'wrangle.js',
     banner: '#!/usr/bin/env node',
     esModule: false,
-    interop: false,
+    interop: 'auto',
     strict: false,
     freeze: false,
   },
   external: [...require('module').builtinModules, ...Object.keys(pkg.dependencies)],
-  plugins: [resolve],
+  plugins: [resolve, typescript],
 };

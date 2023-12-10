@@ -12,8 +12,15 @@ import {
   deleteNamespace,
   getPreview,
   setBindings,
-} from './kv';
-import { command, getToml, readFile, writeFile, writeToml, formatBindingId } from './util';
+} from '../scripts/src/kv';
+import {
+  command,
+  getToml,
+  readFile,
+  writeFile,
+  writeToml,
+  formatBindingId,
+} from '../scripts/src/util';
 import { assertPassUnlocked, setSecretFile, setSecrets } from './secret';
 import { assertDatabase } from './db';
 

@@ -27,6 +27,8 @@ type Mutable<T> = {
   -readonly [K in keyof T]-?: T[K];
 };
 
+declare module 'json2toml';
+
 declare global {
   // const __STATIC_CONTENT: KVNamespace;
   // const __STATIC_CONTENT_MANIFEST: AssetManifestType;
