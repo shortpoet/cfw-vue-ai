@@ -13,7 +13,11 @@ export function print(color: keyof colors.Kleur, msg: string): void {
   );
 }
 
-export const info = (msg: string) => print('white', msg);
+export const info = (msg: string) => {
+  console.log(colors.cyan(ARROW), 'info');
+  print('white', msg);
+};
+
 export const success = (msg: string) => print('green', msg);
 export const warn = (msg: string) => print('yellow', msg);
 

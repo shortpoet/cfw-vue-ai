@@ -10,8 +10,8 @@ import AutoImport from 'unplugin-auto-import/vite';
 import path from 'node:path';
 import { defineConfig, loadEnv, UserConfig } from 'vite';
 import { InlineConfig } from 'vitest';
-import { fileURLToPath } from 'node:url';
-// import { nodePolyfills } from "vite-plugin-node-polyfills";
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+
 import dotenv from 'dotenv';
 const envDir = path.resolve(process.cwd(), '..');
 const conf = dotenv.config({ path: `${envDir}` });
@@ -53,6 +53,27 @@ export default ({ mode }: { mode: string }) => {
         include: [/\.vue$/, /\.md$/],
       }),
       vike(),
+      nodePolyfills({
+        // To add only specific polyfills, add them here. If no option is passed, adds all polyfills
+        include: ['path', 'url'],
+        // To exclude specific polyfills, add them to this list. Note: if include is provided, this has no effect
+        exclude: [
+          // 'http', // Excludes the polyfill for `http` and `node:http`.
+        ],
+        // Whether to polyfill specific globals.
+        globals: {
+          Buffer: true, // can also be 'build', 'dev', or false
+          global: true,
+          process: true,
+        },
+        // Override the default polyfills for specific modules.
+        overrides: {
+          // Since `fs` is not supported in browsers, we can use the `memfs` package to polyfill it.
+          fs: 'memfs',
+        },
+        // Whether to polyfill `node:` protocol imports.
+        protocolImports: true,
+      }),
       AutoImport({
         imports: [
           'vue',
@@ -95,7 +116,6 @@ export default ({ mode }: { mode: string }) => {
         },
       }),
     ],
-
     server: {
       port: parseInt(env.VITE_PORT || '3000'),
       hmr: {
@@ -111,9 +131,50 @@ export default ({ mode }: { mode: string }) => {
       // },
     },
 
+    // optimizeDeps: {
+    //   esbuildOptions: {
+    //     // Node.js global to browser globalThis
+    //     define: {
+    //       global: 'globalThis',
+    //     },
+    //     // Enable esbuild polyfill plugins
+    //     plugins: [
+    //       NodeGlobalsPolyfillPlugin({
+    //         process: true,
+    //         buffer: true,
+    //       }),
+    //       NodeModulesPolyfillPlugin(),
+    //     ],
+    //   },
+    // },
+    // build: {
+    //   rollupOptions: {
+    //     plugins: [
+    //       // Enable rollup polyfills plugin
+    //       // used during production bundling
+    //       rollupNodePolyFill(),
+    //     ],
+    //   },
+    // },
+
+    // resolve: {
+    //   alias: {
+    //     './runtimeConfig': './runtimeConfig.browser',
+    //   },
+    // },
+
     build: {
       outDir: 'build',
       target: 'esnext',
+      // rollupOptions: {
+      //   plugins: [
+      //     injectRp.default.bind({
+      //       Buffer: ['Buffer', 'Buffer'],
+      //       process: ['process', 'process'],
+      //       url: ['url', 'url'],
+      //     }),
+      //   ],
+      // },
     },
     test: vitestConfig,
   });

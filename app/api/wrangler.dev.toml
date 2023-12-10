@@ -1,0 +1,20 @@
+name = "cfw-vue-ai"
+compatibility_date = "2023-11-21"
+node_compat = false
+workers_dev = false
+main = "./build/worker.mjs"
+[site]
+bucket = "../ui/build/client"
+[dev]
+port = 3000
+[env.dev.vars]
+VITE_LOG_LEVEL = "debug"
+VITE_PORT = 3000
+NODE_ENV = "development"
+WORKER_ENVIRONMENT = "dev"
+VITE_APP_NAME = "cfw-vue-ai"
+VITE_API_VERSION = "0.0.1"
+VITE_UI_VERSION = "0.0.1"
+VITE_APP_URL = "http://localhost:3000"
+VITE_API_URL = "http://localhost:3333"
+SSR_BASE_PATHS = "about,index"

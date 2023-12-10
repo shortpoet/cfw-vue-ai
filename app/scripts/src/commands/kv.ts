@@ -9,11 +9,9 @@ export async function list(opts: Options) {
   log.info('Retrieving Config');
   log.print('green', `${colors.cyan(log.ARROW)} opts`);
   console.info(JSON.stringify(opts));
-  // console.log(opts);
-  const { cwd, dir, env, debug, only, ignore, envFile, wranglerFile } = getConfig(opts);
-
+  const conf = await getConfig(opts);
   log.info('Retrieving KV namespaces:');
-  const items = await getNamespaces({ env, envFile, debug, wranglerFile });
+  const items = await getNamespaces(conf);
   const GAP = '    ',
     TH = colors.dim().bold().italic;
   log.success(TH('ID') + ' '.repeat(30) + GAP + TH('Title'));

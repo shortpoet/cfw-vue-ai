@@ -41,45 +41,45 @@ type Env = {
 
 export { KV_DEBUG, Env, __rootDir };
 
-function getArgs() {
-  let env = 'preview';
-  let cmdstring = 'all';
-  let debug = false;
+// function getArgs() {
+//   let env = 'preview';
+//   let cmdstring = 'all';
+//   let debug = false;
 
-  const args = process.argv.filter(Boolean);
-  let state: string | null = null;
-  for (const arg of args) {
-    if (arg === '--debug') {
-      debug = true;
-      continue;
-    }
-    if (arg === '--env') {
-      state = 'ENV';
-      continue;
-    }
-    if (arg === '--cmds') {
-      state = 'CMDS';
-      continue;
-    }
-    if (state === 'ENV') {
-      env = arg;
-      state = null;
-    }
-    if (state === 'CMDS') {
-      cmdstring = arg;
-      state = null;
-    }
-  }
+//   const args = process.argv.filter(Boolean);
+//   let state: string | null = null;
+//   for (const arg of args) {
+//     if (arg === '--debug') {
+//       debug = true;
+//       continue;
+//     }
+//     if (arg === '--env') {
+//       state = 'ENV';
+//       continue;
+//     }
+//     if (arg === '--cmds') {
+//       state = 'CMDS';
+//       continue;
+//     }
+//     if (state === 'ENV') {
+//       env = arg;
+//       state = null;
+//     }
+//     if (state === 'CMDS') {
+//       cmdstring = arg;
+//       state = null;
+//     }
+//   }
 
-  // if (!env) {
-  //   throw new Error("[build-worker] CLI argument --entry missing.");
-  // }
-  // if (!cmds) {
-  //   throw new Error("[build-worker] CLI argument --out missing.");
-  // }
+// if (!env) {
+//   throw new Error("[build-worker] CLI argument --entry missing.");
+// }
+// if (!cmds) {
+//   throw new Error("[build-worker] CLI argument --out missing.");
+// }
 
-  return { env, cmdstring, debug };
-}
+//   return { env, cmdstring, debug };
+// }
 
 async function setGitconfig(bindingNameUI, appName, env, gitDataPath, tomlPath, debug) {
   const bindingId = formatBindingId(bindingNameUI, env, appName);
@@ -101,61 +101,61 @@ async function setGitconfig(bindingNameUI, appName, env, gitDataPath, tomlPath, 
   writeFile(gitDataPath, commitStr);
 }
 
-async function setVars(_env: Env, envVars: Record<string, string>, ssrDir, tomlPath, secrets) {
-  const ssrDirs = fs
-    .readdirSync(ssrDir)
-    .map((dir) => path.join(ssrDir, dir).split('/').pop())
-    .join(',');
+// async function setVars(_env: Env, envVars: Record<string, string>, ssrDir, tomlPath, secrets) {
+//   const ssrDirs = fs
+//     .readdirSync(ssrDir)
+//     .map((dir) => path.join(ssrDir, dir).split('/').pop())
+//     .join(',');
 
-  const config = getToml(tomlPath);
-  if (!config) {
-    throw new Error(`no config found at ${tomlPath}`);
-  }
-  console.log(chalk.green(`[wrangle] Setting vars for ${_env.env} -> ${tomlPath}`));
+//   const config = getToml(tomlPath);
+//   if (!config) {
+//     throw new Error(`no config found at ${tomlPath}`);
+//   }
+//   console.log(chalk.green(`[wrangle] Setting vars for ${_env.env} -> ${tomlPath}`));
 
-  const env = _env.env;
-  Object.keys(secrets).forEach((key) => {
-    delete config[key];
-  });
-  const newVars = {
-    ...config['env'][`${env}`]['vars'],
-    ...envVars,
-    SSR_BASE_PATHS: ssrDirs,
-  };
-  Object.keys(secrets).forEach((key) => {
-    delete newVars[key];
-  });
-  console.log('[wrangle] newVars', newVars);
-  writeToml(
-    {
-      ...config,
-      env: {
-        ...config['env'],
-        [`${env}`]: {
-          ...config['env'][`${env}`],
-          vars: newVars,
-        },
-      },
-    },
-    tomlPath
-  );
-}
+//   const env = _env.env;
+//   Object.keys(secrets).forEach((key) => {
+//     delete config[key];
+//   });
+//   const newVars = {
+//     ...config['env'][`${env}`]['vars'],
+//     ...envVars,
+//     SSR_BASE_PATHS: ssrDirs,
+//   };
+//   Object.keys(secrets).forEach((key) => {
+//     delete newVars[key];
+//   });
+//   console.log('[wrangle] newVars', newVars);
+//   writeToml(
+//     {
+//       ...config,
+//       env: {
+//         ...config['env'],
+//         [`${env}`]: {
+//           ...config['env'][`${env}`],
+//           vars: newVars,
+//         },
+//       },
+//     },
+//     tomlPath
+//   );
+// }
 
-function assertPathExists(filePaths) {
-  if (!Array.isArray(filePaths)) {
-    filePaths = [filePaths];
-  }
-  for (const filePath of filePaths) {
-    const [path, write] = filePath;
-    if (!fs.existsSync(path)) {
-      if (write) {
-        writeFile(path, '');
-        return;
-      }
-      throw new Error(`[wrangle] no file at ${path}`);
-    }
-  }
-}
+// function assertPathExists(filePaths) {
+//   if (!Array.isArray(filePaths)) {
+//     filePaths = [filePaths];
+//   }
+//   for (const filePath of filePaths) {
+//     const [path, write] = filePath;
+//     if (!fs.existsSync(path)) {
+//       if (write) {
+//         writeFile(path, '');
+//         return;
+//       }
+//       throw new Error(`[wrangle] no file at ${path}`);
+//     }
+//   }
+// }
 
 async function assertTomlEnv(tomlPath, env) {
   const env_name = env.env;

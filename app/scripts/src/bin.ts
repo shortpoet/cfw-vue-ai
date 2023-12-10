@@ -1,5 +1,7 @@
 import sade from 'sade';
 import * as kv from './commands/kv';
+import * as vars from './commands/vars';
+import * as git from './commands/git';
 
 const cli = sade('cfw')
   .version('0.0.1')
@@ -11,7 +13,15 @@ const cli = sade('cfw')
   .command('kv list')
   .alias('kv ls')
   .describe('List all KV namespaces')
-  .action(kv.list);
+  .action(kv.list)
+
+  .command('vars set')
+  .describe('Set KV vars')
+  .action(vars.set)
+
+  .command('git set')
+  .describe('Set git config')
+  .action(git.set);
 
 cli.parse(process.argv, {
   boolean: ['debug', 'single', 'quiet'],

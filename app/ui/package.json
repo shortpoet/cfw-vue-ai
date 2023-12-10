@@ -49,6 +49,7 @@
     "unplugin-vue-components": "^0.26.0",
     "unplugin-vue-markdown": "^0.25.2",
     "vike": "^0.4.147",
+    "vite-plugin-node-polyfills": "^0.17.0",
     "vitest": "^0.34.6",
     "vue": "^3.3.9"
   }

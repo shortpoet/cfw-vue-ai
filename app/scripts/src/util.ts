@@ -5,11 +5,12 @@ import { existsSync as exists } from 'fs';
 import path, { dirname, parse, join, resolve } from 'path';
 import { error } from './log';
 import toml from 'toml';
-// import json2toml from 'json2toml';
+import json2toml from 'json2toml';
 // import fs from 'node:fs';
 import { exec, execSync, spawn } from 'node:child_process';
 import chalk from 'chalk';
-import { Arrayable, WrangleConfig } from './types';
+import { Arrayable, Config, WrangleConfig, WranglerToml } from './types';
+import * as log from './log';
 
 // @ts-ignore - Node 14.14
 export const rmdir = fs.rm || fs.rmdir;
@@ -19,7 +20,7 @@ export const ls = fs.readdir;
 
 export {
   getToml,
-  // writeToml,
+  writeToml,
   command,
   writeFile,
   readFile,
@@ -30,7 +31,10 @@ export {
 export { exists };
 
 export function assert(input: unknown, msg: string, isFile?: boolean): asserts input {
-  (isFile && exists(input as string)) || !!input || error(msg);
+  // console.log(chalk.magenta(`[wrangle] [util] asserting ${input}`));
+  // console.log(exists(input as string));
+  (isFile && exists(input as string)) || !!input || error(msg, 0);
+  // (isFile && exists(input as string) && !!input) || (!isFile && !!input) || error(msg, 0);
 }
 
 export function group(str: Arrayable<string>): Set<string> {
@@ -50,15 +54,13 @@ export async function load<T = unknown>(str: string, dir = '.'): Promise<T | fal
   }
 }
 
-const formatBindingId = (binding: string, env: WrangleConfig, appName: string) =>
-  `${appName}-preview-${env.env}-${binding}`;
+const formatBindingId = (opts: Partial<Config>, isUi: boolean) =>
+  isUi
+    ? `${opts.appName}-ui-${opts.env}-${opts.bindingNameUI}`
+    : `${opts.appName}-preview-${opts.env}-${opts.bindingNameDb}`;
 
-function executeWranglerCommand(
-  command: string,
-  env: WrangleConfig['env'],
-  wranglerFile: WrangleConfig['wranglerFile']
-) {
-  command = `--env ${env} ${command} --config ${wranglerFile}`;
+function executeWranglerCommand(command: string, opts: Config) {
+  command = `--env ${opts.env} ${command} --config ${opts.wranglerFile}`;
   console.log(
     chalk.magenta(
       `\n========\n[wrangle] [kv] executing wrangler command: \nnpx wrangler ${command}`
@@ -83,23 +85,19 @@ function command(cmd: string): Promise<string> {
   });
 }
 
-async function getToml(tomlPath: string): Promise<Record<string, any> | undefined> {
-  try {
-    return toml.parse(await read(tomlPath, 'utf8'));
-  } catch (error) {
-    console.error(error);
-  }
+async function getToml(tomlPath: string): Promise<WranglerToml> {
+  return toml.parse(await read(tomlPath, 'utf8'));
 }
 
-// const writeToml = (data: any, tomlPath: string) => {
-//   const backupPath = tomlPath.replace('wrangler.toml', 'wrangler.bak.toml');
-//   try {
-//     fs.writeFileSync(backupPath, fs.readFileSync(tomlPath, 'utf8'));
-//     fs.writeFileSync(tomlPath, json2toml(data));
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+const writeToml = async (data: any, conf: Pick<Config, 'wranglerFile' | 'debug'>) => {
+  const { wranglerFile, debug } = conf;
+  log.print('blue', `[util] writing toml file: "${wranglerFile}"`);
+  if (debug) console.log(data);
+  const backupPath = wranglerFile.replace('wrangler.toml', 'wrangler.bak.toml');
+  log.print('blue', `[util] backing up toml file: "${backupPath}"`);
+  await writeFile(backupPath, await readFile(wranglerFile));
+  await writeFile(wranglerFile, json2toml(data));
+};
 
 const writeFile = async (file: string, data: string) => {
   try {
