@@ -5,7 +5,7 @@ import { Config } from '../types';
 export function createMigration(
   databaseName: string,
   migrationName: string,
-  opts: Pick<Config, 'env' | 'debug' | 'wranglerFile'>
+  opts: Pick<Config, 'env' | 'debug' | 'wranglerFile' | 'databaseName' | 'goLive'>
 ) {
   console.log(
     colors.green(
@@ -36,7 +36,7 @@ export function createMigration(
 
 export function applyMigration(
   databaseName: string,
-  opts: Pick<Config, 'env' | 'debug' | 'wranglerFile' | 'databaseName'>
+  opts: Pick<Config, 'env' | 'debug' | 'wranglerFile' | 'databaseName' | 'goLive'>
 ) {
   console.log(colors.green(`[wrangle] [db] applying to database [name] ${databaseName}`));
   let localSwitch = '';

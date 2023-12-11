@@ -110,7 +110,7 @@ const writeToml = async (
   // await writeFile(backupPath, await readFile(wranglerFile));
   await writeFile(`${wranglerFile}`, JSON.stringify(data, null, 2));
   const toml = json2toml(data);
-  console.log(toml);
+  if (debug) console.log(toml);
   let lines = toml.split('\n');
   // console.log(lines);
   // const ENV_LINE = `[env.${env}]`;

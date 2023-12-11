@@ -14,11 +14,7 @@ export async function assertTomlEnv(
   if (!config) {
     throw new Error('no config');
   }
-  console.log(config);
-  if (!config['env']) {
-    log.print('green', `[toml] [config] Creating env:`);
-    config['env'] = {};
-  }
+  // console.log(config);
   const defaultConfig = {
     name: appName,
     compatibility_date: '2023-11-21',
@@ -30,22 +26,24 @@ export async function assertTomlEnv(
       // entry_point: 'index.html',
       // include: ['dist/*'],
     },
-    // dev: {
-    //   port: 3000,
-    //   // hot: true,
-    //   // watch: {
-    //   //   ignore: ['node_modules/**/*'],
-    //   // },
-    // },
+    dev: {
+      port: 3000,
+      // hot: true,
+      // watch: {
+      //   ignore: ['node_modules/**/*'],
+      // },
+    },
+    env: {},
   };
-  // config = { ...defaultConfig, ...config };
+  config = { ...defaultConfig, ...config };
   const defaultEnvConfig = {
     name: appName,
     // route: `https://${appName}.workers.dev/*`,
   };
-  // if (!config['env'][`${env}`]['name']) {
-  //   config['env'][`${env}`]['name'] = appName;
-  // }
+  if (!config['env'][`${env}`]) {
+    log.print('green', `[toml] [config] Creating env:`);
+    config['env'][`${env}`] = defaultEnvConfig;
+  }
   // config['env'][`${env}`] =
   //   env != 'dev' ? { ...defaultEnvConfig, ...config['env'][`${env}`] } : config['env'][`${env}`];
   if (config['vars']) config['env'][`${env}`]['vars'] = config['vars'];

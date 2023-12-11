@@ -23,16 +23,16 @@ export async function list(opts: Options) {
 export async function apply(opts: Options) {
   log.print('green', `${colors.cyan(log.ARROW)} opts`);
   console.info(JSON.stringify(opts));
-  const { env, debug, envFile, wranglerFile, appName, databaseName, bindingNameDb } =
+  const { env, debug, envFile, wranglerFile, appName, databaseName, bindingNameDb, goLive } =
     await getConfig(opts);
-  const conf = { env, envFile, debug, wranglerFile, appName, databaseName, bindingNameDb };
+  const conf = { env, envFile, debug, wranglerFile, appName, databaseName, bindingNameDb, goLive };
   const _conf = await getConfig(opts);
-  console.log(_conf);
+  // console.log(_conf);
   // assertDatabase(conf);
   log.info('[command] [db] Applying Migration:');
   // migration smoothly sasserted by sade
-  return;
-  applyMigration(opts.migration!, conf);
+  // return;
+  applyMigration(databaseName, conf);
 }
 
 export async function deleteDb(opts: Options) {

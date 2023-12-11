@@ -63,8 +63,7 @@ export async function getConfig(opts: Options): Promise<Config> {
   //   true
   // );
 
-  // await assertTomlEnv({ env, wranglerFile, appName, debug });
-  // assert(appName, `[wrangle] [config] No app name found`, false);
+  await assertTomlEnv({ env, wranglerFile, appName, debug });
 
   const bindingNameBase = `${appName.toUpperCase().replace(/-/g, '_')}`;
   const bindingNameSuffixes = [
