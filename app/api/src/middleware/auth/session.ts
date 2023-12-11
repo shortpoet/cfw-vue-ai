@@ -12,8 +12,8 @@ export const withSession =
     // log(`[api] [middleware] [auth] [withSession] -> ${req.method} -> ${req.url}`);
     if (required) log(`[api] [middleware] [auth] [withSession]  -> required -> ${required} `);
     const session = await getSessionItty(req, res, env);
-    // log(`[api] [middleware] [auth] [withSession] -> session ->`);
-    // logObjs([session]);
+    log(`[api] [middleware] [auth] [withSession] -> session ->`);
+    logObjs([session]);
     // if (!session) {
     //   log(`[api] [middleware] [auth] [withSession] -> !session ->`);
     //   return unauthorizedResponse('Unauthorized - no session', res);
@@ -54,7 +54,7 @@ export const withAuth =
     const authBypass = false;
     if (!session || !user) {
       // if ((!session || !user) && !authBypass) {
-      // log(`[api] [middleware] [auth] [withAuth] -> !session || !user ->`);
+      log(`[api] [middleware] [auth] [withAuth] -> !session || !user ->`);
       return unauthorizedResponse(
         JSON.stringify(
           { msg: `[api] [middleware] [auth] [withAuth] Unauthorized - no session` },

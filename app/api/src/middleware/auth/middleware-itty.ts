@@ -101,9 +101,9 @@ export const authMiddlewareItty = async (
       '/api/health/debug',
     ];
 
+    const session = await getSessionItty(req, res, env);
+    res.session = session;
     if (ACTIONS.includes(action as AuthAction) && isApi) {
-      const session = await getSessionItty(req, res, env);
-      res.session = session;
       log(`[api] auth.middleware.itty -> auth action -> ${action}`);
       const response = await createAuthRequest(req, res, env, optionsInit);
       const logNoBody = Object.entries(response).reduce((acc, [key, value]) => {

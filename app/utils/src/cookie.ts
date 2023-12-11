@@ -15,7 +15,7 @@ function getCookie(cookies: string, name: string): string {
 const getCookieAuthToken = (
   request: Request | Response,
   headerName = 'cookie',
-  cookieName = 'next-auth.session-token'
+  cookieName = 'authjs.session-token'
 ): string | null => {
   const cookieHeader = request.headers.get(headerName);
   if (!cookieHeader) return null;
@@ -33,10 +33,10 @@ interface NextAuthCookies {
 const getAuthCookies = (
   cookieHeader: string,
   cookieNames = {
-    sessionToken: 'next-auth.session-token',
-    csrfToken: 'next-auth.csrf-token',
-    callbackUrl: 'next-auth.callback-url',
-    pkceCodeVerifier: 'next-auth.pkce.code_verifier',
+    sessionToken: 'authjs.session-token',
+    csrfToken: 'authjs.csrf-token',
+    callbackUrl: 'authjs.callback-url',
+    pkceCodeVerifier: 'authjs.pkce.code_verifier',
   }
 ): NextAuthCookies => {
   const sessionToken = getCookie(cookieHeader, cookieNames.sessionToken);
