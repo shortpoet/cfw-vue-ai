@@ -42,6 +42,12 @@ const logObjs = (objs: any[]) => {
 const logWorkerStart = (request: Request) => {
   const url = new URL(request.url);
   const { cf, headers } = request;
+  let ct;
+  if (headers) {
+    // console.log(`[api] main.fetch -> headers ->`);
+    // tryLogHeaders(request, 'main.fetch');
+    ct = headers.get('Content-Type');
+  }
   if (!isAssetURL(url)) {
     console.log(
       chalk.green(`
@@ -49,7 +55,7 @@ const logWorkerStart = (request: Request) => {
         \n[api] START main.fetch ->
         \n[${new Date().toLocaleTimeString()}] -> ${
           request.method
-        } -> ${url} -> content-type: ${headers.get('Content-Type')}\n
+        } -> ${url} -> content-type: ${ct}\n
     `)
     );
     if (cf) {

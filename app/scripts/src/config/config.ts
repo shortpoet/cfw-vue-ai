@@ -14,7 +14,7 @@ import { assertTomlEnv } from './toml';
 const __dataDir = `${__appDir}/data`;
 export const gitDataPath = `${__dataDir}/git.json`;
 export const ssrDir = `${__appDir}/ui/src/pages`;
-export const secretsFilePath = `${__rootDir}/.dev.vars`;
+export const secretsFilePath = `${__wranglerDir}/.dev.vars`;
 
 export async function getConfig(opts: Options): Promise<Config> {
   opts.cwd = resolve(opts.cwd as Options['cwd']);
@@ -55,14 +55,6 @@ export async function getConfig(opts: Options): Promise<Config> {
     JMAP_TOKEN: `Mail/fastmail/ai-maps-email-send-token`,
   };
 
-  // TODO add to build
-  // await setSecrets(secrets, secretsFilePath, { env, debug, wranglerFile });
-  // assert(
-  //   secretsFilePath,
-  //   `[wrangle] [config] Secret file does not exist: "${secretsFilePath}"`,
-  //   true
-  // );
-
   await assertTomlEnv({ env, wranglerFile, appName, debug });
 
   const bindingNameBase = `${appName.toUpperCase().replace(/-/g, '_')}`;
@@ -70,7 +62,7 @@ export async function getConfig(opts: Options): Promise<Config> {
     'UI',
     // "SESSIONS", "USERS", "MAPS"
   ];
-  const bindingNameDb = `${bindingNameBase}_DB_V1`;
+  const bindingNameDb = `${bindingNameBase}_DB`;
   const bindingNameUI = `${bindingNameBase}_UI`;
   const bindingIdDb = formatBindingId(
     { appName, env, bindingNameUI, bindingNameDb },

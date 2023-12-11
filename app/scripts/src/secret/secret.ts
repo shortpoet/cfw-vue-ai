@@ -51,7 +51,7 @@ async function setSecrets(
 
 async function getOrCreateSecret(secretName: string, passKey: string, generateLength = 32) {
   let secret;
-  console.log(colors.magenta(`[wrangle] [secret] getOrCreateSecret ${secretName} ${passKey}`));
+  console.log(colors.cyan(`[wrangle] [secret] getOrCreateSecret ${secretName} ${passKey}`));
   secret = await passGet(passKey);
   if (!secret) {
     colors.yellow(`[wrangle] [secret] secret ${secretName} not found. Generating new secret`);

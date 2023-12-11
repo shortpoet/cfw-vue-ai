@@ -30,7 +30,7 @@
     "serve": "pnpm serv serve",
     "========= Api": "",
     "w:build": "pnpm scripts build",
-    "w:dev": "pnpm api dev",
+    "w:dev": "pnpm api dev:qa",
     "w:deploy": "pnpm api deploy",
     "========= Ui": "",
     "v:build": "pnpm ui build",

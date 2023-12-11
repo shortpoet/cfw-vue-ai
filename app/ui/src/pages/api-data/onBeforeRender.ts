@@ -48,6 +48,7 @@ async function onBeforeRender(
       headers: {
         ...pathMapping[urlPathname].options.headers,
         'X-CSRF-Token': csrfToken,
+        'authjs.csrf-token': csrfToken,
       },
     } as RequestConfig;
 

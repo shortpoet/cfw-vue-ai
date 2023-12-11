@@ -62,9 +62,17 @@ const deriveAuthConfig = async (
 
   const providers = deriveAuthProviders(env);
   const adapter = deriveDatabaseAdapter(env) as ReturnType<typeof KyselyAdapter>;
+  // const secret = 'secret';
   const { secret } = await deriveSecretsFromEnv(env);
+  console.log(secret);
   const isAuthAvailable = () => !!secret && providers.length > 0 && !!adapter;
-  const isGlobalReadOnly = () => !isAuthAvailable() && !!process.env.CLOUDY_READ_ONLY;
+  console.log(isAuthAvailable());
+  console.log(adapter);
+  if (!isAuthAvailable()) {
+    log(`[api] auth.config -> isAuthAvailable -> ${isAuthAvailable()} \n`);
+  }
+  const isGlobalReadOnly = () => !isAuthAvailable();
+  // const isGlobalReadOnly = () => !isAuthAvailable() && !!process.env.CLOUDY_READ_ONLY;
   options.secret ??= secret;
   // options.trustHost ??= shouldTrustHost();
   return {
@@ -168,10 +176,13 @@ const deriveAuthConfig = async (
           console.log(user);
           console.log('isAdmin');
           console.log(user?.roles?.includes(UserRole.Admin));
+          console.log('token');
+          console.log(token);
+          const sessionToken = req.session?.sessionToken || '';
           return user
             ? {
                 ...session,
-                sessionToken: token.sessionToken,
+                sessionToken,
                 token,
                 user: { ...session.user, ...user, token },
               }

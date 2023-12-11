@@ -7,9 +7,9 @@ export const deriveSecretsFromEnv = async (env: Env) => {
 
   if (!NEXTAUTH_SECRET || !GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
     log(`[api] auth.config -> missing secret or env vars in env -> trying to get from KV`);
-    const secret = await env.CFW_VUE_AI_KV_UI.get('NEXTAUTH_SECRET');
-    const GITHUB_CLIENT_ID = await env.CFW_VUE_AI_KV_UI.get('GITHUB_CLIENT_ID');
-    const GITHUB_CLIENT_SECRET = await env.CFW_VUE_AI_KV_UI.get('GITHUB_CLIENT_SECRET');
+    const secret = await env.CFW_VUE_AI_UI.get('NEXTAUTH_SECRET');
+    const GITHUB_CLIENT_ID = await env.CFW_VUE_AI_UI.get('GITHUB_CLIENT_ID');
+    const GITHUB_CLIENT_SECRET = await env.CFW_VUE_AI_UI.get('GITHUB_CLIENT_SECRET');
     if (!secret || !GITHUB_CLIENT_ID || !GITHUB_CLIENT_SECRET) {
       const which = [!secret, !GITHUB_CLIENT_ID, !GITHUB_CLIENT_SECRET]
         .map((b) => b.toString())

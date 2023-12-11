@@ -72,4 +72,5 @@ export const withCfHeaders =
       }
     }
     res.headers.set('x-api-env', env.NODE_ENV);
+    console.log(`[api] middlware.withCfHeaders ->  END`);
   };

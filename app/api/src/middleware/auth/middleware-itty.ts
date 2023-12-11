@@ -43,7 +43,10 @@ export const createAuthRequest = async (
   log(`[api] [middleware] [auth] [itty] createAuthRequest -> NEW \n`);
   // console.log(req.headers);
   const parsedUrl = new URL(req.url);
-  const referrer = req.headers.get('referer');
+  let referrer;
+  if (req.headers) {
+    referrer = req.headers.get('referer');
+  }
   const origin = `${parsedUrl.origin}/`;
   let callbackUrl;
   if (referrer && !referrer.includes('/api/auth') && referrer !== origin) {
@@ -65,7 +68,9 @@ export const createAuthRequest = async (
   };
   const request = new Request(parsedUrl, init);
   // logObjs([authConfig, init]);
-  console.log(request.headers.get('cookie'));
+  // console.log('cookie -> ', request.headers.get('cookie'));
+  // console.log('set-cookie -> ', request.headers.get('set-cookie'));
+  // console.log(authConfig);
   const response = await Auth(request, authConfig);
   return response;
 };

@@ -61,7 +61,7 @@ declare global {
     SSR_BASE_PATHS: string;
 
     // CLOUDFLARE
-    CFW_VUE_AI_KV_UI: KVNamespace;
+    CFW_VUE_AI_UI: KVNamespace;
 
     __STATIC_CONTENT: KVNamespace;
     __STATIC_CONTENT_MANIFEST: AssetManifestType | string;

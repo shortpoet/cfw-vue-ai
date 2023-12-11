@@ -28,16 +28,17 @@ export const healthRes = async (env: Env) => {
   if (!env) {
     throw new Error('env is undefined');
   }
-  const hasNamespace = env.CFW_VUE_AI_KV_UI !== undefined;
+  const hasNamespace = env.CFW_VUE_AI_UI !== undefined;
   const gitInfo =
     isWorker() && hasNamespace
-      ? JSON.parse((await (env.CFW_VUE_AI_KV_UI as KVNamespace).get('gitInfo')) || '')
+      ? JSON.parse((await (env.CFW_VUE_AI_UI as KVNamespace).get('gitInfo')) || '')
       : (await import('@cfw-vue-ai/db/src/data.json')).default;
 
   const healthRes: HealthCheck = {
     status: 'OK',
     version: await getManifest(env),
-    uptime: msToTime(process.uptime()),
+    uptime: 'TODO',
+    // uptime: msToTime(process.uptime()),
     worker_env: env.WORKER_ENVIRONMENT,
     timestamp: new Date(Date.now()),
     gitInfo: gitInfo,
@@ -102,7 +103,7 @@ export const debugRes = async (
     env: parse
       ? {
           ...envLog,
-          CFW_VUE_AI_KV_UI: await parseEnv(env.CFW_VUE_AI_KV_UI as KVNamespace),
+          CFW_VUE_AI_UI: await parseEnv(env.CFW_VUE_AI_UI as KVNamespace),
           // CFW_VUE_AI_KV_USERS: await parseEnv(env.CFW_VUE_AI_KV_USERS as KVNamespace),
           // CFW_VUE_AI_KV_SESSIONS: await parseEnv(env.CFW_VUE_AI_KV_SESSIONS as KVNamespace),
         }

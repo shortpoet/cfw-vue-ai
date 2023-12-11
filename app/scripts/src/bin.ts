@@ -3,7 +3,9 @@ import * as kv from './commands/kv';
 import * as vars from './commands/vars';
 import * as git from './commands/git';
 import * as db from './commands/db';
+import * as secret from './commands/secret';
 import build from './commands/build';
+import go from './commands/go';
 
 const cli = sade('cfw')
   .version('0.0.1')
@@ -34,6 +36,10 @@ const cli = sade('cfw')
   .describe('Set KV vars')
   .action(vars.set)
 
+  .command('secret set')
+  .describe('Set KV secrets')
+  .action(secret.set)
+
   .command('git set')
   .describe('Set git config')
   .action(git.set)
@@ -53,17 +59,23 @@ const cli = sade('cfw')
 
   .command('db delete')
   .describe('Delete D1 databases')
-  .action(db.deleteDb);
+  .action(db.deleteDb)
 
-// .command('build [dir] [output]')
-// .describe('Compile the Worker(s) within a directory.')
-// .option('-C, --cwd', 'The relative working directory', '.')
-// .option('-e, --env', 'The environment to list', 'dev')
-// .option('-d, --dir', 'The directory containing Worker scripts', 'workers')
-// .option('-o, --only', 'The list of Worker names to build; overrides `--ignore` list!')
-// .option('-i, --ignore', 'The list of Worker names to skip')
-// .option('-s, --single', 'The target is a single Worker')
-// .action(build);
+  .command('build')
+  .describe('Compile the Worker(s) within a directory.')
+  .option('-C, --cwd', 'The relative working directory', '.')
+  .option('-e, --env', 'The environment to list', 'dev')
+  // .option('-d, --dir', 'The directory containing Worker scripts', 'api')
+  .option('-o, --only', 'The list of Worker names to build; overrides `--ignore` list!')
+  .option('-i, --ignore', 'The list of Worker names to skip')
+  .option('-s, --single', 'The target is a single Worker')
+  .action(build)
+
+  .command('go')
+  .describe('Go live')
+  .option('-C, --cwd', 'The relative working directory', '.')
+  .option('-e, --env', 'The environment to list', 'dev')
+  .action(go);
 
 cli.parse(process.argv, {
   boolean: ['debug', 'single', 'quiet', 'goLive'],

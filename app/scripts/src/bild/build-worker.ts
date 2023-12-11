@@ -1,18 +1,29 @@
-import esbuild from 'esbuild';
+import esbuild, { Format, Platform } from 'esbuild';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import { fileURLToPath } from 'node:url';
 
-function buildWorker({ entry, out, debug, external } = {}) {
+function buildWorker({
+  entry,
+  out,
+  debug,
+  external,
+}: {
+  entry: string;
+  out: string;
+  debug: boolean;
+  external: string[];
+}) {
   const plugins = [NodeModulesPolyfillPlugin()];
   const define = {
     plugins,
-    platform: 'browser',
+    platform: 'browser' as Platform,
     conditions: ['worker', 'browser'],
     entryPoints: [entry],
     sourcemap: true,
     outfile: out,
     external,
-    logLevel: 'warning',
-    format: 'esm',
+    logLevel: 'warning' as esbuild.LogLevel,
+    format: 'esm' as Format,
     target: 'esnext',
     minify: !debug,
     bundle: true,
@@ -28,9 +39,11 @@ function buildWorker({ entry, out, debug, external } = {}) {
   return esbuild.build(define);
 }
 
-build(getArgs());
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  build(getArgs());
+}
 
-export async function build({ entry, out, debug }) {
+export async function build({ entry, out, debug }: { entry: string; out: string; debug: boolean }) {
   const external = [
     // "@vueuse/core",
     // "vue-demi",

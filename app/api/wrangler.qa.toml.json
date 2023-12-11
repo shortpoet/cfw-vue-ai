@@ -40,9 +40,9 @@
       },
       "d1_databases": [
         {
-          "binding": "CFW_VUE_AI_DB_V1",
-          "database_name": "cfw-vue-ai-qa-CFW_VUE_AI_DB_V1",
-          "database_id": "a6fa06e8-4355-4cb3-9322-ec181bd1dfdd"
+          "binding": "CFW_VUE_AI_DB",
+          "database_name": "cfw-vue-ai-qa-CFW_VUE_AI_DB",
+          "database_id": "b602a72a-288d-4518-ba99-54cb3a0c611e"
         }
       ]
     }
