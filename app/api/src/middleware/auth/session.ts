@@ -52,7 +52,8 @@ export const withAuth =
     // log(`[api] [middleware] [auth] [withAuth]-> user -> ${user}`);
     // log(`[api] [middleware] [auth] [withAuth]-> role -> ${role}`);
     const authBypass = false;
-    if ((!session || !user) && !authBypass) {
+    if (!session || !user) {
+      // if ((!session || !user) && !authBypass) {
       // log(`[api] [middleware] [auth] [withAuth] -> !session || !user ->`);
       return unauthorizedResponse(
         JSON.stringify(
@@ -66,8 +67,8 @@ export const withAuth =
     if (
       roles.length &&
       userRoles &&
-      !userRoles.some((role) => roles.includes(role)) &&
-      !authBypass
+      !userRoles.some((role) => roles.includes(role))
+      //  && !authBypass
     ) {
       // log(
       //   `[api] [middleware] [auth] [withAuth] -> roles.length && !roles.includes(role) ->`
