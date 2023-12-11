@@ -170,7 +170,8 @@ export async function getSessionItty(
     // const red = await response.body?.getReader().read();
     // console.log(red);
     // console.log(red.value);
-    const session: Session | any = await response.body.json();
+    // @ts-expect-error: CFRequest Internal has non json method
+    const session: Session | any = await response.json();
     // const session: Session | any = await response.body.getReader().json();
     log(`[api] [middleware] [auth] [itty] getSessionItty.response -> session`);
     console.log(session);
