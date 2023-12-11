@@ -172,7 +172,7 @@ export async function updateUser(
   const roleUser = await getRoleUser(id, db);
   const temp: Omit<User, 'roles'> = { ...roleUser, ...result };
   let out: any;
-  console.log(`[db] [queries] createUser -> result -> \n`);
+  console.log(`[db] [queries] updateUser -> result -> \n`);
   propertiesToFormat.forEach((property) => {
     if (property === 'created_at' || property === 'updated_at' || property === 'emailVerified') {
       out = format.to(temp, property);

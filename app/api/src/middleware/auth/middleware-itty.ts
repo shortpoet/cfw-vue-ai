@@ -171,6 +171,7 @@ export async function getSessionItty(
     // console.log(red);
     // console.log(red.value);
     const session: Session | any = await response.body.json();
+    // const session: Session | any = await response.body.getReader().json();
     log(`[api] [middleware] [auth] [itty] getSessionItty.response -> session`);
     console.log(session);
     if (!session || !Object.keys(session).length) return null;

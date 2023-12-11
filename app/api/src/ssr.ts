@@ -28,6 +28,8 @@ async function handleSsr(request: Request, res: Response, env: Env, ctx: Executi
     sessionToken,
     pkceCodeVerifier,
   };
+  console.log(`[api] [ssr] handleSsr -> pageContextInit ->`);
+  logObjs([pageContextInit]);
   const pageContext = await renderPage(pageContextInit);
   const { httpResponse } = pageContext;
   if (!httpResponse) {

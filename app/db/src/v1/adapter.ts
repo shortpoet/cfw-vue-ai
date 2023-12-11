@@ -2,7 +2,6 @@ import { Adapter } from '@auth/core/adapters';
 import { Kysely } from 'kysely';
 
 import { Database } from './db';
-import { Env } from 'types';
 import {
   createSession,
   createUser,
@@ -17,7 +16,7 @@ import {
   unlinkAccount,
   updateSession,
   updateUser,
-  useVerificationToken
+  useVerificationToken,
 } from './queries';
 
 export function KyselyAdapter(db: Kysely<Database>, options = {}, env: Env): Adapter {
@@ -63,6 +62,6 @@ export function KyselyAdapter(db: Kysely<Database>, options = {}, env: Env): Ada
     },
     async useVerificationToken({ identifier, token }) {
       return await useVerificationToken({ identifier, token }, db);
-    }
+    },
   };
 }
