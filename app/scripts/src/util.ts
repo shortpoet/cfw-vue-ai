@@ -58,14 +58,9 @@ const formatBindingId = (
   opts: Pick<Config, 'appName' | 'env' | 'bindingNameUI' | 'bindingNameDb'>,
   isUI: boolean
 ) => {
-  console.log(colors.yellow(`[wrangle] [util] formatting binding id`));
-  // console.log(opts.appName);
-  // console.log(opts.env);
-  // console.log(opts.bindingNameUI);
-  // console.log(opts.bindingNameDb);
   return isUI
     ? `${opts.appName}-${opts.env}-${opts.bindingNameUI}`
-    : `${opts.appName}-preview-${opts.env}-${opts.bindingNameDb}`;
+    : `${opts.appName}-${opts.env}-${opts.bindingNameDb}`;
 };
 
 function executeWranglerCommand(
@@ -99,17 +94,32 @@ function command(cmd: string): Promise<string> {
 }
 
 async function getToml(tomlPath: string): Promise<WranglerToml> {
+  return JSON.parse(await read(tomlPath, 'utf8'));
   return toml.parse(await read(tomlPath, 'utf8'));
 }
 
-const writeToml = async (data: any, conf: Pick<Config, 'wranglerFile' | 'debug'>) => {
-  const { wranglerFile, debug } = conf;
+const writeToml = async (
+  data: any,
+  conf: Pick<Config, 'wranglerFile' | 'debug' | 'env' | 'appName'>
+) => {
+  const { wranglerFile, debug, env, appName } = conf;
   if (debug) log.print('blue', `[util] writing toml file: "${wranglerFile}"`);
   if (debug) console.log(data);
-  const backupPath = wranglerFile.replace('wrangler.toml', 'wrangler.bak.toml');
+  const backupPath = wranglerFile.replace(`${env}.toml`, `${env}.bak.toml`);
   if (debug) log.print('blue', `[util] backing up toml file: "${backupPath}"`);
-  await writeFile(backupPath, await readFile(wranglerFile));
-  await writeFile(wranglerFile, json2toml(data));
+  // await writeFile(backupPath, await readFile(wranglerFile));
+  await writeFile(`${wranglerFile}`, JSON.stringify(data, null, 2));
+  const toml = json2toml(data);
+  console.log(toml);
+  let lines = toml.split('\n');
+  // console.log(lines);
+  // const ENV_LINE = `[env.${env}]`;
+  // const NAME_LINE = `name = "${appName}"`;
+  // if (lines.indexOf(ENV_LINE) === -1) lines.push(ENV_LINE);
+  // const nextLine = lines.indexOf(ENV_LINE) + 1;
+  // if (nextLine && nextLine !== NAME_LINE) lines.splice(nextLine, 0, NAME_LINE);
+  const tomlString = lines.join('\n');
+  // await writeFile(wranglerFile, tomlString);
 };
 
 const writeFile = async (file: string, data: string) => {

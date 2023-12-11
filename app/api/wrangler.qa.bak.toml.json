@@ -1,0 +1,50 @@
+{
+  "name": "cfw-vue-ai",
+  "compatibility_date": "2023-11-21",
+  "node_compat": false,
+  "workers_dev": false,
+  "main": "./build/worker.mjs",
+  "site": {
+    "bucket": "../ui/build/client"
+  },
+  "dev": {
+    "port": 3000
+  },
+  "env": {
+    "qa": {
+      "name": "cfw-vue-ai",
+      "kv_namespaces": [
+        {
+          "binding": "CFW_VUE_AI_UI",
+          "id": "758c35a97a364c55ae9a6f24cc3db7de",
+          "preview_id": "ccb3ac00267742b0b749fb4790e8161b"
+        }
+      ],
+      "vars": {
+        "NODE_ENV": "development",
+        "WORKER_ENVIRONMENT": "qa",
+        "VITE_PORT": "3000",
+        "VITE_LOG_LEVEL": "debug",
+        "VITE_APP_NAME": "cfw-vue-ai",
+        "VITE_API_VERSION": "0.0.1",
+        "VITE_UI_VERSION": "0.0.1",
+        "VITE_APP_URL": "http://localhost:3000",
+        "VITE_API_URL": "http://localhost:3000",
+        "NEXTAUTH_URL": "http://localhost:3000/api/auth",
+        "LOG_LEVEL": "debug",
+        "EMAIL_SERVER_HOST": "smtp.fastmail.com",
+        "EMAIL_SERVER_PORT": "465",
+        "EMAIL_SERVER_USER": "cfw-vue-ai-signups@shortpoet.com",
+        "EMAIL_FROM": "cfw-vue-ai-signups@shortpoet.com",
+        "SSR_BASE_PATHS": "about,api-data,auth,index"
+      },
+      "d1_databases": [
+        {
+          "binding": "CFW_VUE_AI_DB_V1",
+          "database_name": "cfw-vue-ai-qa-CFW_VUE_AI_DB_V1",
+          "database_id": "317fe9f5-0683-45f0-b4db-4c8f56dada2e"
+        }
+      ]
+    }
+  }
+}

@@ -3,13 +3,13 @@ import { executeWranglerCommand } from '../util';
 
 export async function executeD1Sql(
   databaseName: string,
-  opts: Pick<Config, 'env' | 'debug' | 'wranglerFile'>,
+  opts: Pick<Config, 'env' | 'debug' | 'wranglerFile' | 'goLive'>,
   file?: string,
   sql?: string
 ) {
   let cmd;
   let base = `d1 execute`;
-  if (opts.env === 'preview' || opts.env === 'dev') {
+  if (opts.env === 'qa' || opts.env === 'dev') {
     base = `${base} --local`;
   }
   if (sql) {

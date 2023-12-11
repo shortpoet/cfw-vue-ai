@@ -1,7 +1,7 @@
 import colors from 'kleur';
 import * as utils from '../util';
 import * as log from '../log';
-import { getConfig } from './config';
+import { getConfig } from '../config/config';
 import { Argv, Options } from '../types';
 import { deleteNamespace, getNamespaces } from '../cf/namespace';
 import { setBindings } from '../cf/kv';

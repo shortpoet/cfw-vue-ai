@@ -2,7 +2,7 @@ import colors from 'kleur';
 
 import { Options } from '../types';
 import * as log from '../log';
-import { getConfig } from './config';
+import { getConfig } from '../config/config';
 
 export default async function (opts: Options) {
   log.info('Retrieving Config');

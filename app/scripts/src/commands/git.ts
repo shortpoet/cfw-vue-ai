@@ -1,7 +1,7 @@
 import colors from 'kleur';
 import * as log from '../log';
 import { setVars } from '../cf/vars';
-import { getConfig, gitDataPath } from './config';
+import { getConfig, gitDataPath } from '../config/config';
 import { Options } from '../types';
 import { __appDir, __rootDir, __wranglerDir } from '@cfw-vue-ai/types';
 import { assert } from '../util';

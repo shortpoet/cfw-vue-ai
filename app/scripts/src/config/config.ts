@@ -7,6 +7,7 @@ import { Config, Options, WranglerToml, WrangleConfig } from '../types';
 import { __appDir, __rootDir, __wranglerDir } from '@cfw-vue-ai/types/src/root';
 import { assert, formatBindingId, getToml, writeToml } from '../util';
 import { setSecrets } from '../secret/secret';
+import { assertTomlEnv } from './toml';
 // import { setBindings } from '../cf/name';
 // import * as log from '../log';
 
@@ -14,50 +15,6 @@ const __dataDir = `${__appDir}/data`;
 export const gitDataPath = `${__dataDir}/git.json`;
 export const ssrDir = `${__appDir}/ui/src/pages`;
 export const secretsFilePath = `${__rootDir}/.dev.vars`;
-
-async function assertTomlEnv(conf: Pick<Config, 'env' | 'wranglerFile' | 'appName' | 'debug'>) {
-  const { env, wranglerFile, appName, debug } = conf;
-  let config = await getToml(conf.wranglerFile);
-  if (!config) {
-    throw new Error('no config');
-  }
-  if (!config['env']) {
-    log.print('green', `[toml] [config] Creating env:`);
-    config['env'] = {};
-  }
-  const defaultConfig = {
-    name: appName,
-    compatibility_date: '2023-11-21',
-    node_compat: false,
-    workers_dev: false,
-    main: './build/worker.mjs',
-    site: {
-      bucket: '../ui/build/client',
-      // entry_point: 'index.html',
-      // include: ['dist/*'],
-    },
-    dev: {
-      port: 3000,
-      // hot: true,
-      // watch: {
-      //   ignore: ['node_modules/**/*'],
-      // },
-    },
-  };
-  config = { ...defaultConfig, ...config };
-  const defaultEnvConfig = {
-    name: appName,
-    // route: `https://${appName}.workers.dev/*`,
-  };
-  // if (!config['env'][`${env}`]['name']) {
-  //   config['env'][`${env}`]['name'] = appName;
-  // }
-  config['env'][`${env}`] =
-    env != 'dev' ? { ...defaultEnvConfig, ...config['env'][`${env}`] } : config['env'][`${env}`];
-  if (config['vars']) config['env'][`${env}`]['vars'] = config['vars'];
-  // console.log(config);
-  await writeToml(config, { wranglerFile, debug });
-}
 
 export async function getConfig(opts: Options): Promise<Config> {
   opts.cwd = resolve(opts.cwd as Options['cwd']);
@@ -72,7 +29,8 @@ export async function getConfig(opts: Options): Promise<Config> {
   const only = opts.only;
   const ignore = opts.ignore;
 
-  const wranglerFile = env === 'dev' ? `${dir}/wrangler.toml` : `${dir}/wrangler.${env}.toml`;
+  const wranglerFile =
+    env === 'dev' ? `${dir}/wrangler.toml.json` : `${dir}/wrangler.${env}.toml.json`;
   const envFile = env === 'dev' ? `${__appDir}/.env` : `${__appDir}/.env.${env}`;
 
   assert(envFile, `[wrangle] [config] Env file does not exist: "${envFile}"`, true);
@@ -105,7 +63,7 @@ export async function getConfig(opts: Options): Promise<Config> {
   //   true
   // );
 
-  await assertTomlEnv({ env, wranglerFile, appName, debug });
+  // await assertTomlEnv({ env, wranglerFile, appName, debug });
   // assert(appName, `[wrangle] [config] No app name found`, false);
 
   const bindingNameBase = `${appName.toUpperCase().replace(/-/g, '_')}`;

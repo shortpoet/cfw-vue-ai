@@ -4,11 +4,14 @@ import { formatBindingId, getToml, writeToml } from '../util';
 
 export async function writeDatabaseToToml(
   databaseId: string,
-  opts: Pick<Config, 'env' | 'debug' | 'wranglerFile' | 'bindingNameDb' | 'databaseName'>,
+  opts: Pick<
+    Config,
+    'env' | 'debug' | 'wranglerFile' | 'bindingNameDb' | 'databaseName' | 'appName'
+  >,
   deleteDb: boolean = false,
   debug: boolean = false
 ) {
-  const { bindingNameDb, wranglerFile, env, databaseName } = opts;
+  const { bindingNameDb, wranglerFile, env, databaseName, appName } = opts;
   console.log(
     colors.green(
       `[wrangle] [db] Writing binding ${bindingNameDb} to toml ${wranglerFile}
@@ -20,6 +23,8 @@ export async function writeDatabaseToToml(
   if (!config) {
     throw new Error('[wrangle] [db] no config');
   }
+  console.log(colors.magenta(`[wrangle] [db] config before:`));
+  console.log(config);
 
   let databases = config['env'][`${env}`]['d1_databases'];
   if (!databases) {
@@ -51,7 +56,8 @@ export async function writeDatabaseToToml(
     });
     config['env'][`${env}`]['d1_databases'] = databases;
   }
-  // console.log(colors.magenta(`[wrangle] [db] config after:`));
+  console.log(colors.magenta(`[wrangle] [db] config after:`));
+  console.log(config);
   // console.log(config["env"][`${env_name}`]);
-  writeToml(config, { wranglerFile, debug });
+  writeToml(config, { wranglerFile, debug, appName, env });
 }

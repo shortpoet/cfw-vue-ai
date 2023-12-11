@@ -43,6 +43,10 @@ const cli = sade('cfw')
   .describe('List all D1 databases')
   .action(db.list)
 
+  .command('db create')
+  .describe('Create D1 databases')
+  .action(db.create)
+
   .command('db apply')
   .describe('Apply D1 database migrations')
   .action(db.apply)
