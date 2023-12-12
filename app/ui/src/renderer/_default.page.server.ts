@@ -25,7 +25,10 @@ async function onBeforeRender(pageContext: PageContext) {
   // const isAdmin = user?.role === "admin";
   let redirectTo: string | undefined;
 
-  const protectedRoutes = ['/api-data/health', '/api-data/healthE'];
+  const protectedRoutes = [
+    '/api-data/health',
+    // '/api-data/healthE'
+  ];
 
   const path = pageContext.urlPathname;
 
