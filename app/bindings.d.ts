@@ -117,7 +117,7 @@ declare global {
     credsAuth?: CredsAuth | null;
   }
 
-  interface Response extends Response {}
+  // interface Response extends Response {}
 
   interface Response extends CFResponse {
     cf?: ResponseCfProperties;

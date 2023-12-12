@@ -68,9 +68,6 @@ export const createAuthRequest = async (
   };
   const request = new Request(parsedUrl, init);
   // logObjs([authConfig, init]);
-  // console.log('cookie -> ', request.headers.get('cookie'));
-  // console.log('set-cookie -> ', request.headers.get('set-cookie'));
-  // console.log(authConfig);
   const response = await Auth(request, authConfig);
   return response;
 };
@@ -101,10 +98,10 @@ export const authMiddlewareItty = async (
       '/api/health/debug',
     ];
 
-    const session = await getSessionItty(req, res, env);
-    res.session = session;
     if (ACTIONS.includes(action as AuthAction) && isApi) {
       log(`[api] auth.middleware.itty -> auth action -> ${action}`);
+      const session = await getSessionItty(req, res, env);
+      res.session = session;
       const response = await createAuthRequest(req, res, env, optionsInit);
       const logNoBody = Object.entries(response).reduce((acc, [key, value]) => {
         if (key === 'body') return acc;
@@ -127,11 +124,15 @@ export const authMiddlewareItty = async (
           log(
             `[api] [middleware] [auth] [itty] handleNextAuth -> callback -> POST -> credentials callback SET ON RESPONSE -> ${newCookie}\n`
           );
-          res.headers.append('Set-Cookie', newCookie);
+          response.headers = {
+            ...response?.headers,
+            'set-cookie': newCookie,
+          };
         }
       }
-      res.session = session ?? null;
-      return response;
+      const resp = new Response(response.body, response);
+      resp.session = session ?? null;
+      return resp;
     }
     return;
   } catch (error) {
@@ -152,24 +153,22 @@ export async function getSessionItty(
   const optionsInit: Partial<AuthConfig> = { prefix };
   const { authConfig, isAuthAvailable } = await deriveAuthConfig(req, res, env, optionsInit);
   const url = new URL(`${prefix}/session`, req.url);
-  let response;
   try {
     const request = new Request(url, { headers: req.headers });
-    // console.log(req.headers);
     if (!isAuthAvailable()) {
       throw new Error('Auth is not available');
     }
     log(
-      `[api] [middleware] [auth] [itty] getSessionItty.authRequest -> ${req.method}://.${url.pathname}`
+      `[worker] [middleware] [auth] [itty] getSessionItty.authRequest -> ${req.method}://.${url.pathname}`
     );
-    response = await Auth(request, authConfig);
-    const { status = 200 } = response;
+    // DUMPS
+    // console.log(req);
+    const response = await Auth(request, authConfig);
+    // console.log('response');
+    // DUMPS
     // console.log(response);
-    // console.log(response.body);
-    // read body
-    // const red = await response.body?.getReader().read();
-    // console.log(red);
-    // console.log(red.value);
+
+    const { status = 200 } = response;
     // @ts-expect-error: CFRequest Internal has non json method
     const session: Session | any = await response.json();
     // const session: Session | any = await response.body.getReader().json();
@@ -187,6 +186,7 @@ export async function getSessionItty(
       // if (csrfToken) set("csrf-token", csrfToken.split("|")[0]);
       // if (callbackUrl) set("callback-url", callbackUrl);
       return session;
+      return session?.user?.id ? session.user : null;
     }
     throw new Error(session.message);
   } catch (error) {

@@ -179,7 +179,6 @@ const deriveAuthConfig = async (
           return user
             ? {
                 ...session,
-                sessionToken,
                 token,
                 user: { ...session.user, ...user, token },
               }
