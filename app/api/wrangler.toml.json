@@ -12,7 +12,25 @@
   },
   "env": {
     "dev": {
-      "name": "cfw-vue-ai"
+      "name": "cfw-vue-ai",
+      "vars": {
+        "NODE_ENV": "development",
+        "WORKER_ENVIRONMENT": "dev",
+        "VITE_PORT": "3000",
+        "VITE_LOG_LEVEL": "debug",
+        "VITE_APP_NAME": "cfw-vue-ai",
+        "VITE_API_VERSION": "0.0.1",
+        "VITE_UI_VERSION": "0.0.1",
+        "VITE_APP_URL": "http://localhost:3000",
+        "VITE_API_URL": "http://localhost:3333",
+        "NEXTAUTH_URL": "http://localhost:3333/api/auth",
+        "LOG_LEVEL": "debug",
+        "EMAIL_SERVER_HOST": "smtp.fastmail.com",
+        "EMAIL_SERVER_PORT": "465",
+        "EMAIL_SERVER_USER": "cfw-vue-ai-signups@shortpoet.com",
+        "EMAIL_FROM": "cfw-vue-ai-signups@shortpoet.com",
+        "SSR_BASE_PATHS": "about,api-data,auth,index"
+      }
     }
   }
 }

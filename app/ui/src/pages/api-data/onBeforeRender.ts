@@ -52,7 +52,7 @@ async function onBeforeRender(
       },
     } as RequestConfig;
 
-    use session token
+    // use session token
 
     ({ dataLoading, error, data } = await useFetch(pathMapping[urlPathname].route, opts));
 
