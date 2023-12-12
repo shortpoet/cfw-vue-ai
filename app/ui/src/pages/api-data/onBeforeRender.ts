@@ -48,13 +48,10 @@ async function onBeforeRender(
       headers: {
         ...pathMapping[urlPathname].options.headers,
         'X-CSRF-Token': csrfToken,
-        'authjs.csrf-token': csrfToken,
-        'authjs.session-token': sessionToken,
+        // 'authjs.csrf-token': csrfToken,
+        // 'authjs.session-token': sessionToken,
       },
     } as RequestConfig;
-
-    // use session token
-
     console.log(`[ui] [api-data] [onBeforeRender] opts`);
     console.log(opts);
     ({ dataLoading, error, data } = await useFetch(pathMapping[urlPathname].route, opts));

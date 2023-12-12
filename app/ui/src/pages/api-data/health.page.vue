@@ -13,7 +13,6 @@
   
 <script setup lang="ts">
 import { usePageContext } from '../../composables';
-const { pageProps } = usePageContext() ||
-  { pageProps: { apiData: undefined, apiDataLoading: true, apiDataError: undefined } };
-const { apiData, apiDataLoading, apiDataError } = pageProps;
+const { pageProps } = usePageContext();
+const { apiData, apiDataLoading, apiDataError } = pageProps ?? {};
 </script>
