@@ -62,12 +62,9 @@ const deriveAuthConfig = async (
 
   const providers = deriveAuthProviders(env);
   const adapter = deriveDatabaseAdapter(env) as ReturnType<typeof KyselyAdapter>;
-  // const secret = 'secret';
   const { secret } = await deriveSecretsFromEnv(env);
-  console.log(secret);
   const isAuthAvailable = () => !!secret && providers.length > 0 && !!adapter;
-  console.log(isAuthAvailable());
-  console.log(adapter);
+  console.log(`[api] auth.config -> isAuthAvailable -> ${isAuthAvailable()} \n`);
   if (!isAuthAvailable()) {
     log(`[api] auth.config -> isAuthAvailable -> ${isAuthAvailable()} \n`);
   }

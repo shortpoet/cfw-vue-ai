@@ -19,13 +19,14 @@ async function render(pageContext: PageContext) {
   const { Page, pageProps } = pageContext;
   if (!Page) throw new Error('Client-side render() hook expects pageContext.Page to be defined');
 
-  const { session, redirectTo, cf, urlPathname } = pageContext;
+  const { session, redirectTo, cf, urlPathname, sessionToken } = pageContext;
 
   console.log(`[ui] [client] [render] START\n`);
   console.log(`[ui] [client] [render] urlPathname: ${urlPathname}`);
   console.log(`[ui] [client] [render] session: ->`);
   console.log(session);
   console.log(`[ui] [client] [render] redirectTo: ${redirectTo}`);
+  console.log(`[ui] [client] [render] sessionToken: ${sessionToken}`);
   console.log(`[ui] [client] [render] cf: ->`);
   console.log(cf);
 

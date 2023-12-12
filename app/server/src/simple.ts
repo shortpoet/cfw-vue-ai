@@ -4,12 +4,12 @@ import { error, json } from 'itty-router';
 import path from 'node:path';
 import { corsify, Api } from '@cfw-vue-ai/api/src/router';
 import { mapHttpHeaders, serverLogStart, ctx, serverLogEnd } from './util';
-import { __rootDir, __appDir } from '@cfw-vue-ai/types/src/root';
+import { __rootDir, __appDir, __wranglerDir } from '@cfw-vue-ai/types/src/root';
 
 // const envDir = path.resolve(process.cwd(), '.');
 const conf = dotenv.config({ path: `${__appDir}/.env` });
 const parsed = conf.parsed;
-const vars = dotenv.config({ path: `${__rootDir}/.dev.vars` });
+const vars = dotenv.config({ path: `${__wranglerDir}/.dev.vars` });
 const parsedDev = vars.parsed;
 if (!parsed || !parsedDev) {
   const which = [!parsed, !parsedDev];

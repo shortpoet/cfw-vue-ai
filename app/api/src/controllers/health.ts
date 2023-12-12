@@ -29,10 +29,15 @@ export const healthRes = async (env: Env) => {
     throw new Error('env is undefined');
   }
   const hasNamespace = env.CFW_VUE_AI_UI !== undefined;
-  const gitInfo =
-    isWorker() && hasNamespace
-      ? JSON.parse((await (env.CFW_VUE_AI_UI as KVNamespace).get('gitInfo')) || '')
-      : (await import('@cfw-vue-ai/db/src/data.json')).default;
+  let gitInfo;
+  try {
+    gitInfo =
+      isWorker() && hasNamespace
+        ? JSON.parse((await (env.CFW_VUE_AI_UI as KVNamespace).get('gitInfo')) || '')
+        : (await import('@cfw-vue-ai/db/src/data.json')).default;
+  } catch (error) {
+    console.error(`[api] [controllers] [health] [healthRes] gitInfo error: ${error}`);
+  }
 
   const healthRes: HealthCheck = {
     status: 'OK',
@@ -75,13 +80,17 @@ export const healthCheckRes = async (req: Request, env: Env) => {
 const parseEnv = async (kv: KVNamespace) => {
   const envVars = await kv.list();
   const out: any = {};
-  for (let [k, v] of Object.entries(envVars.keys)) {
-    let logObj = escapeNestedKeys(JSON.parse((await kv.get(v.name)) || ''), [
-      'token',
-      'accessToken',
-    ]);
+  try {
+    for (let [k, v] of Object.entries(envVars.keys)) {
+      let logObj = escapeNestedKeys(JSON.parse((await kv.get(v.name)) || ''), [
+        'token',
+        'accessToken',
+      ]);
 
-    out[v.name] = logObj;
+      out[v.name] = logObj;
+    }
+  } catch (error) {
+    console.error(`[api] [controllers] [health] [parseEnv] error: ${error}`);
   }
   return out;
 };

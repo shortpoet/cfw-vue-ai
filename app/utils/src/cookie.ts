@@ -9,6 +9,7 @@ function parseCookie(cookie: string): { [key: string]: string } {
 
 function getCookie(cookies: string, name: string): string {
   const parsed = parseCookie(cookies);
+  // console.log('parsed -> ', parsed);
   return parsed[name];
 }
 

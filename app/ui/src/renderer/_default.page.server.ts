@@ -11,7 +11,7 @@ export { onBeforeRender };
 
 async function onBeforeRender(pageContext: PageContext) {
   console.log(`[ui] [server] [onBeforeRender] START\n`);
-  const { session, cf, callbackUrl, csrfToken, isAdmin, urlPathname } = pageContext;
+  const { session, cf, callbackUrl, csrfToken, isAdmin, urlPathname, sessionToken } = pageContext;
   console.log(`[ui] [server] [onBeforeRender] urlPathname: ${urlPathname}`);
   // console.log(`[ui] [server] [onBeforeRender] session: ->`);
   // console.log(session);
@@ -19,6 +19,7 @@ async function onBeforeRender(pageContext: PageContext) {
   // console.log(cf);
   // console.log(`[ui] [server] [onBeforeRender] callbackUrl: ${callbackUrl}`);
   console.log(`[ui] [server] [onBeforeRender] csrfToken: ${csrfToken}`);
+  console.log(`[ui] [server] [onBeforeRender] sessionToken: ${sessionToken}`);
   const user = pageContext.session?.user;
   const isLoggedIn = user !== null && user !== undefined;
   // const isAdmin = user?.role === "admin";

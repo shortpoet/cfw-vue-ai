@@ -43,8 +43,8 @@ const protectedRoutes = {
 router
   .options('*', preflight)
   .all('*', withCfHeaders())
-  .all('*', authMiddleware)
-  // .all('*', withSession())
+  .all('/auth/*', authMiddleware)
+  .all('*', withSession())
   .all('/db-v1/*', auth_dbv1_router)
   .all('/health/*', health_router)
   .get('/json-data', (req: IRequest, res: Response, env: Env, ctx: ExecutionContext) => {

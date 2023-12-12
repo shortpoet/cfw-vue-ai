@@ -66,8 +66,8 @@ const logWorkerStart = (request: Request) => {
         console.log(
           `[api] main.fetch -> round trip time from client to edge colo ${colo} is ${clientTcpRtt} ms
            [api] main.fetch -> headers:
-          `
-          // headers
+          `,
+          headers
         );
       }
     }

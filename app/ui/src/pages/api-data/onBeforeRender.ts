@@ -49,6 +49,7 @@ async function onBeforeRender(
         ...pathMapping[urlPathname].options.headers,
         'X-CSRF-Token': csrfToken,
         'authjs.csrf-token': csrfToken,
+        'authjs.session-token': sessionToken,
       },
     } as RequestConfig;
 
