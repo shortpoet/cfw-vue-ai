@@ -1,6 +1,6 @@
-import http from "http";
-import chalk from "chalk";
-import { ExecutionContext } from "@cloudflare/workers-types";
+import http from 'http';
+import chalk from 'chalk';
+import { ExecutionContext } from '@cloudflare/workers-types';
 export { mapHttpHeaders, parseFormData, serverLogStart, serverLogEnd, ctx };
 
 interface MappedHeaders {
@@ -15,16 +15,48 @@ const mapHttpHeaders = (headers: http.IncomingHttpHeaders): MappedHeaders => {
   for (const key in headers) {
     if (headers.hasOwnProperty(key)) {
       const value = headers[key];
-      if (typeof value === "string") {
-        if (key === "content-type") {
+      if (typeof value === 'string') {
+        if (key === 'content-type') {
+          contentType = value;
+        }
+        if (key === 'content-length') {
+          continue;
+        }
+        if (key === 'access-control-allow-origin') {
+          value === '*';
+        }
+        mappedHeaders[key] = value;
+      } else if (Array.isArray(value)) {
+        if (key === 'content-type') {
+          contentType = value.join(',');
+        }
+        if (key === 'content-length') {
+          continue;
+        }
+        if (key === 'access-control-allow-origin') {
+        }
+        mappedHeaders[key] = value.join(',');
+      }
+    }
+  }
+  return { mappedHeaders, contentType };
+};
+const mapHttpHeaders_2 = (headers: http.IncomingHttpHeaders): MappedHeaders => {
+  const mappedHeaders: HeadersInit = {};
+  let contentType: string | undefined;
+  for (const key in headers) {
+    if (headers.hasOwnProperty(key)) {
+      const value = headers[key];
+      if (typeof value === 'string') {
+        if (key === 'content-type') {
           contentType = value;
         }
         mappedHeaders[key] = value;
       } else if (Array.isArray(value)) {
-        if (key === "content-type") {
-          contentType = value.join(",");
+        if (key === 'content-type') {
+          contentType = value.join(',');
         }
-        mappedHeaders[key] = value.join(",");
+        mappedHeaders[key] = value.join(',');
       }
     }
   }
@@ -61,10 +93,10 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`)
 };
 function parseFormData(data: string): { [key: string]: string } {
   const formData: { [key: string]: string } = {};
-  const keyValuePairs = data.split("&");
+  const keyValuePairs = data.split('&');
 
   for (const pair of keyValuePairs) {
-    const [key, value] = pair.split("=");
+    const [key, value] = pair.split('=');
     formData[decodeURIComponent(key)] = decodeURIComponent(value);
   }
 

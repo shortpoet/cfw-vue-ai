@@ -22,7 +22,7 @@ export const withSession =
       `[api] [middleware] [auth] [withSession] -> setting res.session to session from itty res ->`
     );
     res.session = session;
-    const db = getDatabaseFromEnv(env);
+    const db = await getDatabaseFromEnv(env);
     if (!db || !session?.sessionToken) return;
     const dbSession = await q.getSession(session.sessionToken, db);
     if (dbSession) {

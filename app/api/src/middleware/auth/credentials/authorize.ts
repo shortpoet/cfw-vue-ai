@@ -66,7 +66,7 @@ export const authorize = async (
   };
   console.log('credentials.authorize.request');
   try {
-    const db = getDatabaseFromEnv(env);
+    const db = await getDatabaseFromEnv(env);
     if (!db) return null;
     const useJwtSession = SESSION_STRATEGY === (SessionStrategy.JWT as SessionStrategy);
     const userByAccount = await q.getUserByAccount(

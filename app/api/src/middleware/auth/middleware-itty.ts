@@ -124,10 +124,11 @@ export const authMiddlewareItty = async (
           log(
             `[api] [middleware] [auth] [itty] handleNextAuth -> callback -> POST -> credentials callback SET ON RESPONSE -> ${newCookie}\n`
           );
-          response.headers = {
-            ...response?.headers,
-            'set-cookie': newCookie,
-          };
+          response.headers.set('set-cookie', newCookie);
+          // response.headers = {
+          //   ...response?.headers,
+          //   'set-cookie': newCookie,
+          // };
         }
       }
       const resp = new Response(response.body, response);
@@ -169,7 +170,6 @@ export async function getSessionItty(
     // console.log(response);
 
     const { status = 200 } = response;
-    // @ts-expect-error: CFRequest Internal has non json method
     const session: Session | any = await response.json();
     // const session: Session | any = await response.body.getReader().json();
     log(`[api] [middleware] [auth] [itty] getSessionItty.response -> session`);

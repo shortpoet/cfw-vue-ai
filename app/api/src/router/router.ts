@@ -18,7 +18,9 @@ import { health_router } from 'api/router';
 
 const FILE_LOG_LEVEL = 'error';
 
-const { preflight, corsify } = createCors();
+const { preflight, corsify } = createCors({
+  origins: ['http://localhost:3000', 'https://cfw-vue-ai.pages.dev', 'http://localhost:3333'],
+});
 
 export { corsify };
 
@@ -43,7 +45,7 @@ const protectedRoutes = {
 router
   .options('*', preflight)
   .all('*', withCfHeaders())
-  .all('*', authMiddleware)
+  .all('/auth/*', authMiddleware)
   .all('*', withSession())
   .all('/db-v1/*', auth_dbv1_router)
   .all('/health/*', health_router)

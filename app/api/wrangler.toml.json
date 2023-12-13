@@ -30,7 +30,14 @@
         "EMAIL_SERVER_USER": "cfw-vue-ai-signups@shortpoet.com",
         "EMAIL_FROM": "cfw-vue-ai-signups@shortpoet.com",
         "SSR_BASE_PATHS": "about,api-data,auth,index"
-      }
+      },
+      "d1_databases": [
+        {
+          "binding": "CFW_VUE_AI_DB_LOCAL",
+          "database_name": "local-CFW_VUE_AI_DB_LOCAL",
+          "database_id": "CFW_VUE_AI_DB_LOCAL"
+        }
+      ]
     }
   }
 }

@@ -11,12 +11,20 @@ export * from './db';
 export * from './adapter';
 export { q };
 
-const getDatabaseFromEnv = (env: Env) => {
+const getDatabaseFromEnv = async (env: Env) => {
+  const localBinding = env.CFW_VUE_AI_DB_BINDING_NAME || 'local-CFW_VUE_AI_DB_LOCAL';
+  console.log(`[db] getDatabaseFromEnv -> localBinding: ${localBinding}`);
   const d1 =
-    env.WORKER_ENVIRONMENT === 'dev'
-      ? binding<D1Database>(env.CFW_VUE_AI_DB_BINDING_NAME || 'CFW_VUE_AI_DB_LOCAL')
-      : env.CFW_VUE_AI_DB;
+    env.WORKER_ENVIRONMENT === 'dev' ? binding<D1Database>(localBinding) : env.CFW_VUE_AI_DB;
   if (d1) {
+    console.log(`[db] getDatabaseFromEnv -> env: ${env.WORKER_ENVIRONMENT}`);
+    console.log(`[db] getDatabaseFromEnv -> d1:`);
+    console.log(d1);
+    // const res = await d1.prepare(`SELECT * FROM Users`).all();
+    // console.log(`[db] getDatabaseFromEnv -> res:`);
+    // console.log(res);
+    // if (!res) return undefined;
+
     return new Kysely<Database>({
       dialect: new D1Dialect({ database: d1 }),
       // plugins: [new CamelCasePlugin()],
@@ -26,8 +34,8 @@ const getDatabaseFromEnv = (env: Env) => {
   return undefined;
 };
 
-const deriveDatabaseAdapter = (env: Env) => {
-  const db = getDatabaseFromEnv(env);
+const deriveDatabaseAdapter = async (env: Env) => {
+  const db = await getDatabaseFromEnv(env);
   if (db) {
     return KyselyAdapter(db, {}, env);
   }

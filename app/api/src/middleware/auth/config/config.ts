@@ -61,7 +61,7 @@ const deriveAuthConfig = async (
   log(`[api] auth.config -> \n`);
 
   const providers = deriveAuthProviders(env);
-  const adapter = deriveDatabaseAdapter(env) as ReturnType<typeof KyselyAdapter>;
+  const adapter = (await deriveDatabaseAdapter(env)) as ReturnType<typeof KyselyAdapter>;
   const { secret } = await deriveSecretsFromEnv(env);
   const isAuthAvailable = () => !!secret && providers.length > 0 && !!adapter;
   console.log(`[api] auth.config -> isAuthAvailable -> ${isAuthAvailable()} \n`);
@@ -98,7 +98,7 @@ const deriveAuthConfig = async (
             const [action, type] = parsedUrl.pathname.slice(prefix.length + 1).split('/');
             console.log(action);
             console.log(type);
-            const db = getDatabaseFromEnv(env);
+            const db = await getDatabaseFromEnv(env);
             if (!db) return false;
             const cookieName = SESSION_COOKIE_NAME;
             const sessionToken = getCookieAuthToken(req, 'cookie', cookieName) || '';
@@ -152,7 +152,7 @@ const deriveAuthConfig = async (
         jwt: async ({ token, user, account, session }) => {
           log(`[api] auth.config -> callbacks.jwt -> \n`);
           logObjs([token, user, account, session]);
-          const db = getDatabaseFromEnv(env);
+          const db = await getDatabaseFromEnv(env);
           if (!db) return token;
           const sessionToken = req.session?.sessionToken || '';
           // return null;
@@ -203,7 +203,7 @@ const deriveAuthConfig = async (
           const _account = await q.getAccountByUserId(user.id, env);
           // console.log(_account);
           if (user) {
-            const db = getDatabaseFromEnv(env);
+            const db = await getDatabaseFromEnv(env);
             if (!db) return;
             const roleUser = await q.getRoleUser(user.id, db);
             log(`[api] auth.config -> callbacks.signIn -> SET user and session on REQ\n`);

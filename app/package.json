@@ -20,7 +20,7 @@
     "prepare": "cd .. && husky install app/.husky",
     "========= Wskp": "",
     "api": "pnpm --filter api",
-    "db": "pnpm --filter api",
+    "db": "pnpm --filter db",
     "types": "pnpm --filter types",
     "scripts": "pnpm --filter scripts",
     "serv": "pnpm --filter server",

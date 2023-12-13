@@ -5,7 +5,12 @@ import path from 'node:path';
 import { corsify, Api } from '@cfw-vue-ai/api/src/router';
 import { mapHttpHeaders, serverLogStart, ctx, serverLogEnd } from './util';
 import { __rootDir, __appDir, __wranglerDir } from '@cfw-vue-ai/types/src/root';
+import { unstable_dev } from 'wrangler';
+import type { UnstableDevWorker } from 'wrangler';
 
+const worker: UnstableDevWorker = await unstable_dev(`${__wranglerDir}/src/index.ts`, {
+  experimental: { disableExperimentalWarning: true },
+});
 // const envDir = path.resolve(process.cwd(), '.');
 const conf = dotenv.config({ path: `${__appDir}/.env` });
 const parsed = conf.parsed;
@@ -46,12 +51,19 @@ const server = http.createServer(async (req, res) => {
       headers: mappedHeaders,
       // body: req.read(),
     });
-    const response = new Response();
+    // const response = new Response();
     // const response = new Response("", { cf: req.cf });
-    const resp = await Api.handle(apiReq, response, process.env, ctx)
-      .then(json)
-      .catch(error)
-      .then(corsify);
+    // const resp = await Api.handle(apiReq, response, process.env, ctx)
+    //   .then(json)
+    //   .catch(error)
+    //   .then(corsify);
+
+    const resp = await worker.fetch(new URL(req.url, 'http://' + req.headers.host), {
+      method: req.method,
+      headers: mappedHeaders,
+      duplex: 'half',
+      // body: req.read(),
+    });
 
     if (!resp) {
       res.statusCode = 404;

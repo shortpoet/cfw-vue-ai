@@ -128,7 +128,7 @@ export async function getUserByAccount(
 
 export const getUserById = async (id: string, env: Env) => {
   console.log(`[db] [queries] getUserById -> id -> ${id}`);
-  const db = getDatabaseFromEnv(env);
+  const db = await getDatabaseFromEnv(env);
   if (!db) return undefined;
 
   const resp = await db.selectFrom('User').selectAll().where('id', '=', id).executeTakeFirst();
@@ -139,7 +139,7 @@ export const getUserById = async (id: string, env: Env) => {
 
 export const getAllUsers = async (env: Env) => {
   console.log(`[db] [queries] getAllUsers -> \n`);
-  const db = getDatabaseFromEnv(env);
+  const db = await getDatabaseFromEnv(env);
   if (!db) return undefined;
   const resp = await db.selectFrom('User').selectAll().execute();
   return resp;
@@ -189,7 +189,7 @@ export const setUserIsAdmin = async (
   env: Env
 ) => {
   console.log(`[db] [queries] setUserIsAdmin -> id -> ${id} -> isAdmin -> ${isAdmin}`);
-  const db = getDatabaseFromEnv(env);
+  const db = await getDatabaseFromEnv(env);
   if (!db) return undefined;
 
   const currentRoleAssignments = (await getUserRoles(id, db)).map((r) => r.role);
@@ -202,7 +202,7 @@ export const setUserIsAdmin = async (
 
 export const getUserByEmail = async (email: string, env: Env) => {
   console.log(`[db] [queries] getUserByEmail -> email -> ${email}`);
-  const db = getDatabaseFromEnv(env);
+  const db = await getDatabaseFromEnv(env);
   if (!db) return null;
   const result =
     (await db

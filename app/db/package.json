@@ -9,10 +9,10 @@
     "file": "tsx ../scripts/wrangle.ts --cmds db:file:./sql/db_v1.sql",
     "serve": "cross-env PORT=3333 tsx watch ./src/simple.ts",
     "dev": "tsx watch ./src/build.ts --watch --refreshPort 45348",
-    "proxy": "pnpm exec cf-bindings-proxy --d1=AI_MAPS_DB_V1_LOCAL --local",
-    "proxy:d1:execute": "pnpm exec wrangler d1 execute AI_MAPS_DB_V1_LOCAL --local --config=../../wrangler.dev.toml --command",
-    "proxy:mig:list": "pnpm exec wrangler d1 migrations list AI_MAPS_DB_V1_LOCAL --local --config=../../wrangler.dev.toml",
-    "proxy:mig:apply": "pnpm exec wrangler d1 migrations apply AI_MAPS_DB_V1_LOCAL --local --config=../../wrangler.dev.toml"
+    "proxy": "pnpm exec cf-bindings-proxy --local --d1=local-CFW_VUE_AI_DB_LOCAL",
+    "proxy:exec": "pnpm exec wrangler d1 execute local-CFW_VUE_AI_DB_LOCAL --local --config=../api/wrangler.dev.toml --command",
+    "proxy:mig:list": "pnpm exec wrangler d1 migrations list local-CFW_VUE_AI_DB_LOCAL --local --config=../api/wrangler.dev.toml",
+    "proxy:mig:apply": "pnpm exec wrangler d1 migrations apply local-CFW_VUE_AI_DB_LOCAL --local --config=../api/wrangler.dev.toml"
   },
   "keywords": [],
   "author": "CarlosSoriano",

@@ -7,7 +7,7 @@ const { to, from } = format;
 const isSqlite = true;
 
 export const getAccount = async (id: string, env: Env) => {
-  const db = getDatabaseFromEnv(env);
+  const db = await getDatabaseFromEnv(env);
   if (!db) return undefined;
 
   const result =
@@ -17,7 +17,7 @@ export const getAccount = async (id: string, env: Env) => {
 };
 
 export const getAccountByUserId = async (userId: string, env: Env) => {
-  const db = getDatabaseFromEnv(env);
+  const db = await getDatabaseFromEnv(env);
   if (!db) return undefined;
 
   const result =
@@ -28,7 +28,7 @@ export const getAccountByUserId = async (userId: string, env: Env) => {
 };
 
 export const updateAccount = async (id: string, data: Partial<Database['Account']>, env: Env) => {
-  const db = getDatabaseFromEnv(env);
+  const db = await getDatabaseFromEnv(env);
   if (!db) return undefined;
 
   const resp = await db.updateTable('Account').set(data).where('id', '=', id).executeTakeFirst();
