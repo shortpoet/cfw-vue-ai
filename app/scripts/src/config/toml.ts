@@ -26,13 +26,13 @@ export async function assertTomlEnv(
       // entry_point: 'index.html',
       // include: ['dist/*'],
     },
-    dev: {
-      port: 3000,
-      // hot: true,
-      // watch: {
-      //   ignore: ['node_modules/**/*'],
-      // },
-    },
+    // dev: {
+    //   port: 3000,
+    //   // hot: true,
+    //   // watch: {
+    //   //   ignore: ['node_modules/**/*'],
+    //   // },
+    // },
     env: {},
   };
   config = { ...defaultConfig, ...config };

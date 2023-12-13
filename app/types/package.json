@@ -10,7 +10,7 @@
   "author": "CarlosSoriano",
   "license": "ISC",
   "devDependencies": {
-    "@auth/core": "^0.18.0",
+    "@auth/core": "0.18.0",
     "@cfw-vue-ai/types": "workspace:*",
     "@cloudflare/kv-asset-handler": "^0.3.0",
     "@cloudflare/workers-types": "^4.20231025.0",

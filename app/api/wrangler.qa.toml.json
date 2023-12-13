@@ -7,9 +7,6 @@
   "site": {
     "bucket": "../ui/build/client"
   },
-  "dev": {
-    "port": 3000
-  },
   "env": {
     "qa": {
       "name": "cfw-vue-ai",
@@ -46,5 +43,8 @@
         }
       ]
     }
+  },
+  "dev": {
+    "port": 3000
   }
 }

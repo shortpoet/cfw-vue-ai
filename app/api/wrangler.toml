@@ -3,14 +3,8 @@ compatibility_date = "2023-11-21"
 node_compat = true
 workers_dev = true
 main = "./build/worker.mjs"
-[site]
-bucket = "../ui/build/client"
-[dev]
-port = 3000
-[[env.dev.d1_databases]]
-binding = "CFW_VUE_AI_DB_V1"
-database_name = "cfw-vue-ai-preview-dev-CFW_VUE_AI_DB_V1"
-database_id = "25bd0658-0b31-47a3-8b60-3f69feb2cced"
+[env.dev]
+name = "cfw-vue-ai"
 [env.dev.vars]
 NODE_ENV = "development"
 WORKER_ENVIRONMENT = "dev"

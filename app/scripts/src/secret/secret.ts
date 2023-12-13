@@ -30,7 +30,11 @@ async function setSecrets(
 
   const hasSecretFile = assert(secretsFilePath, `[wrangle] [config] No secret file`, true, 0);
   if (!hasSecretFile) {
-    console.log(colors.yellow(`[wrangle] [secret] No secret file found. Creating new file`));
+    console.log(
+      colors.yellow(
+        `[wrangle] [secret] No secret file found. Creating new file at ${secretsFilePath}`
+      )
+    );
     writeFile(secretsFilePath, '');
   }
 

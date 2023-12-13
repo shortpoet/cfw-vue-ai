@@ -7,9 +7,6 @@
   "site": {
     "bucket": "../ui/build/client"
   },
-  "dev": {
-    "port": 3000
-  },
   "env": {
     "dev": {
       "name": "cfw-vue-ai",
@@ -31,11 +28,18 @@
         "EMAIL_FROM": "cfw-vue-ai-signups@shortpoet.com",
         "SSR_BASE_PATHS": "about,api-data,auth,index"
       },
+      "kv_namespaces": [
+        {
+          "binding": "CFW_VUE_AI_UI",
+          "id": "4dc052dad17e4a809fc8c8b7dc6d847b",
+          "preview_id": "9261b146dd464646b03a964f8312d9d6"
+        }
+      ],
       "d1_databases": [
         {
-          "binding": "CFW_VUE_AI_DB_LOCAL",
-          "database_name": "local-CFW_VUE_AI_DB_LOCAL",
-          "database_id": "CFW_VUE_AI_DB_LOCAL"
+          "binding": "CFW_VUE_AI_DB",
+          "database_name": "cfw-vue-ai-dev-CFW_VUE_AI_DB",
+          "database_id": "4259c5e4-498b-4457-8995-2021af99a1da"
         }
       ]
     }

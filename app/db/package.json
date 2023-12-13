@@ -27,7 +27,7 @@
   "dependencies": {
     "@cfw-vue-ai/types": "workspace:*",
     "@cfw-vue-ai/utils": "workspace:*",
-    "@auth/core": "^0.18.0",
+    "@auth/core": "0.18.0",
     "@auth/kysely-adapter": "^0.1.5",
     "kysely": "^0.26.3",
     "kysely-d1": "^0.3.0"

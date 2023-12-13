@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev --live-reload",
+    "dev": "wrangler dev --live-reload --env dev --config wrangler.toml.json",
     "dev:qa": "wrangler dev --live-reload --env qa --config wrangler.qa.toml.json",
     "dev:uat": "wrangler dev --live-reload --env uat --config wrangler.uat.toml.json",
     "dev:prod": "wrangler dev --live-reload --env prod --config wrangler.prod.toml.json",
