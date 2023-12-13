@@ -43,7 +43,7 @@ const protectedRoutes = {
 router
   .options('*', preflight)
   .all('*', withCfHeaders())
-  .all('/auth/*', authMiddleware)
+  .all('*', authMiddleware)
   .all('*', withSession())
   .all('/db-v1/*', auth_dbv1_router)
   .all('/health/*', health_router)
