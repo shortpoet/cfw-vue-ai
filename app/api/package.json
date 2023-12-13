@@ -24,7 +24,7 @@
     "wrangler": "^3.19.0"
   },
   "dependencies": {
-    "@auth/core": "^0.18.4",
+    "@auth/core": "0.18.0",
     "@cfw-vue-ai/db": "workspace:^",
     "@cloudflare/itty-router-openapi": "^1.0.5",
     "kysely": "^0.26.3",

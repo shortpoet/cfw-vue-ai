@@ -37,10 +37,10 @@ export const withAuth =
   async (req: Request, res: Response, env: Env, ctx: ExecutionContext) => {
     roles = [...roles, UserRole.Admin];
     const log = logger(FILE_LOG_LEVEL, env);
-    log(`[api] [middleware] [auth] [withAuth] -> ${req.method} -> ${req.url}`);
-    // log(`[api] [middleware] [auth] [withAuth] -> REQ.session ->`);
+    log(`[worker] [middleware] [auth] [withAuth] -> ${req.method} -> ${req.url}`);
+    // log(`[worker] [middleware] [auth] [withAuth] -> REQ.session ->`);
     // console.log(req.session);
-    // log(`[api] [middleware] [auth] [withAuth] -> RES.session ->`);
+    // log(`[worker] [middleware] [auth] [withAuth] -> RES.session ->`);
     // console.log(res.session);
     let sanitizedToken: string | null = null;
     const session = res.session;
@@ -48,35 +48,28 @@ export const withAuth =
 
     const user = session?.user;
     const userRoles = user?.roles;
-    // log(`[api] [middleware] [auth] [withAuth]-> session -> ${session}`);
-    // log(`[api] [middleware] [auth] [withAuth]-> user -> ${user}`);
-    // log(`[api] [middleware] [auth] [withAuth]-> role -> ${role}`);
-    const authBypass = false;
+    // log(`[worker] [middleware] [auth] [withAuth]-> session -> ${session}`);
+    // log(`[worker] [middleware] [auth] [withAuth]-> user -> ${user}`);
+    // log(`[worker] [middleware] [auth] [withAuth]-> role -> ${role}`);
     if (!session || !user) {
-      // if ((!session || !user) && !authBypass) {
-      log(`[api] [middleware] [auth] [withAuth] -> !session || !user ->`);
+      // log(`[worker] [middleware] [auth] [withAuth] -> !session || !user ->`);
       return unauthorizedResponse(
         JSON.stringify(
-          { msg: `[api] [middleware] [auth] [withAuth] Unauthorized - no session` },
+          { msg: `[worker] [middleware] [auth] [withAuth] Unauthorized - no session` },
           null,
           2
         ),
         res
       );
     }
-    if (
-      roles.length &&
-      userRoles &&
-      !userRoles.some((role) => roles.includes(role))
-      //  && !authBypass
-    ) {
+    if (roles.length && userRoles && !userRoles.some((role) => roles.includes(role))) {
       // log(
-      //   `[api] [middleware] [auth] [withAuth] -> roles.length && !roles.includes(role) ->`
+      //   `[worker] [middleware] [auth] [withAuth] -> roles.length && !roles.includes(role) ->`
       // );
       // logObjs([roles, role]);
       return unauthorizedResponse(
         JSON.stringify(
-          { msg: `[api] [middleware] [auth] [withAuth] Unauthorized - invalid role` },
+          { msg: `[worker] [middleware] [auth] [withAuth] Unauthorized - invalid role` },
           null,
           2
         ),
